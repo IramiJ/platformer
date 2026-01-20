@@ -37,6 +37,15 @@ All code, logic, and graphics were created by me.
 
 ---
 
+## Installation
+
+Make sure Python is installed, then install pygame:
+
+```bash
+pip install pygame
+```
+---
+
 ## Run
 
 ```bash
