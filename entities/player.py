@@ -15,6 +15,7 @@ class Player(entity):
         self.animation_database = {}
         self.scroll = [0,0]
         self.movement = [0, 0]
+        self.animation_frames = {}
     def dying(self):
         if self.rect.y > 500:
             self.rect.x = 0

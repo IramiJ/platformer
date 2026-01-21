@@ -1,6 +1,6 @@
 
 
-import pygame, sys, os
+import pygame, sys
 pygame.init()
 from ui.Font_renderer import Font
 from ui.shopping import Shop
@@ -9,7 +9,7 @@ from world.tilemap import *
 from entities.entity import *
 from entities.player import Player
 from core.settings import Settings
-from entities.animations import draw_constants
+from entities.animations import draw_constants, load_animation
 
 clock = pygame.time.Clock()
 #WINDOW-------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -22,36 +22,16 @@ player = Player(0,304,16,16)
 #GAME MAP-------------------------------------------------------------------------------------------------------------------------------------------------------------
 dict = load_tiles('assets/tiles')
 map = read_csv('map0.csv')
-#COLLISIONS-----------------------------------------------------------------------------------------------------------------------------------------------------------
-
-#ANIMATOINS-----------------------------------------------------------------------------------------------------------------------------------------------------------
-global animation_frames
-animation_frames = {}
-def load_animation(path,dur):
-    global animation_frames
-    animation_name = path.split('/')[-1]
-    animation_frame_data = []
-    n = 0
-    for frame in dur:
-        animation_frame_id = animation_name + str(n)
-        img_loc = path + '/' + animation_frame_id + '.png'
-        animation_image = pygame.image.load(img_loc).convert()
-        animation_image.set_colorkey((0,0,0))
-        animation_frames[animation_frame_id] = animation_image.copy()
-        for i in range(frame):
-            animation_frame_data.append(animation_frame_id)
-        n +=1 
-    return animation_frame_data
-player.animation_database['idle'] = load_animation('assets/char/idle', [15, 15])
-player.animation_database['run'] = load_animation('assets/char/run', [5,5,5,5])
-
+#ANIMATIONS-----------------------------------------------------------------------------------------------------------------------------------------------------------
+player.animation_database['idle'] = load_animation('assets/char/idle', [15, 15], player)
+player.animation_database['run'] = load_animation('assets/char/run', [5,5,5,5], player)
+#OTHERS-------------------------------------------------------------------------------------------------------------------------------------------------------------
+small_font = Font('assets/fonts/small_font.png')
+large_font = Font('assets/fonts/large_font.png')
 coins = []
 coin_amount = 1000
 for i in range(5):
     coins.append(simple_entity('assets/collectables/coin.png', [160*i, 308]))
-#OTHERS-------------------------------------------------------------------------------------------------------------------------------------------------------------
-small_font = Font('assets/fonts/small_font.png')
-large_font = Font('assets/fonts/large_font.png')
 shop = Shop()
 #MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
 while True:              
@@ -119,7 +99,7 @@ while True:
     if player.frame >= len(player.animation_database[player.action]):
         player.frame = 0
     player.img_id = player.animation_database[player.action][player.frame]
-    player.img = animation_frames[player.img_id]
+    player.img = player.animation_frames[player.img_id]
     display.blit(pygame.transform.flip(player.img,player.flip,False), [player.rect.x-player.scroll[0], player.rect.y-player.scroll[1]])
     draw_constants(display)
     large_font.render(display,str(coin_amount), (16,0))
