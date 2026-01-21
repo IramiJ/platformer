@@ -1,0 +1,32 @@
+import os, csv, pygame
+
+
+def load_map(path):
+    f = open(path + '.txt', 'r')
+    data = f.read()
+    f.close()
+    data = data.split('\n')
+    map = []
+    for row in data:
+        map.append(list(row))
+    return map
+def read_csv(filename):
+    map = []
+    with open(os.path.join(filename)) as data:
+        data = csv.reader(data, delimiter=',')
+        for row in data:
+            map.append(list(row))
+    return map
+def last_x(map):
+    counter = -1
+    for i in map[0]:
+        counter += 1
+    return counter * 16
+def load_tiles(path):
+    dict = {}
+    files = os.listdir(path)
+    for file in files:
+        name = str(int(file.split('.')[0]) - 1)
+        dict[name] = pygame.image.load(path + '/' + file).convert()
+        dict[name].set_colorkey((0,0,0))
+    return dict

@@ -1,0 +1,1 @@
+player.movement = [0, 0]

@@ -1,5 +1,5 @@
 import pygame, os, time
-from Font_renderer import Font
+from ui.Font_renderer import Font
 pygame.init()
 small_font = Font('assets/fonts/small_font.png')
 large_font = Font('assets/fonts/large_font.png')
@@ -37,7 +37,7 @@ class Shop():
                 if mouse_rect.colliderect(item_boxes[item]):
                     if currency >= int(prices[item]) and buy_cooldown == 0:
                         currency -= int(prices[item])
-                        buy_cooldown = 30
+                        buy_cooldown = 0
                         buff_list.append(item)
                     else:
                         pass
