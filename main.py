@@ -10,6 +10,9 @@ from entities.entity import *
 from entities.player import Player
 from core.settings import Settings
 from entities.animations import draw_constants, load_animation
+from entities.player_movements import player_movements
+from world.scrolling import player_scrolling
+from core.kb_event_handling import kb_events
 
 clock = pygame.time.Clock()
 #WINDOW-------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -21,7 +24,7 @@ pygame.display.set_caption(Settings.caption)
 player = Player(0,304,16,16)
 #GAME MAP-------------------------------------------------------------------------------------------------------------------------------------------------------------
 dict = load_tiles('assets/tiles')
-map = read_csv('map0.csv')
+map = read_csv('maps/map0.csv')
 #ANIMATIONS-----------------------------------------------------------------------------------------------------------------------------------------------------------
 player.animation_database['idle'] = load_animation('assets/char/idle', [15, 15], player)
 player.animation_database['run'] = load_animation('assets/char/run', [5,5,5,5], player)
@@ -44,56 +47,12 @@ while True:
                 coin_amount += 2
             else:
                 coin_amount += 1
-    if player.rect.x < 150:
-        player.scroll[0] += player.rect.x - player.scroll[0] -150 + (150-player.rect.x) 
-    elif player.rect.x + 16 > last_x(map) - 150:
-        player.scroll[0] += player.rect.x - player.scroll[0] -300 + (last_x(map)-player.rect.x) 
-    else:
-        player.scroll[0] += player.rect.x - player.scroll[0] -150
-    player.scroll[1] += player.rect.y - player.scroll[1] - 100
+    player_scrolling(player, map)
     tile_rects = []
-    y = 0
-    for row in map:
-        x = 0
-        for tile in row:
-            if tile != '-1':
-                display.blit(dict[tile], (x*16-player.scroll[0], y*16-player.scroll[1]))
-                if tile != '9' and tile != '10' and tile != '11':
-                    tile_rects.append(pygame.Rect(x*16,y*16,16,16))
-            x += 1
-        y += 1
+    display_map(display, player, tile_rects, map, dict)
 
-    player.y_momentum += 0.2
 
-    player.movement = [0, 0]
-    if player.moving_right:
-        player.movement[0] += player.velocity
-    if player.moving_left:
-        player.movement[0] -= player.velocity
-    player.movement[1] += player.y_momentum
-    player.y_momentum += 0.2
-    if player.y_momentum > 7:
-        player.y_momentum = 7
-    
-    if player.movement[0] > 0:
-        player.change_action('run')
-        player.flip = False
-    if player.movement[0] < 0:
-        player.change_action('run')
-        player.flip = True
-    if player.movement[0] == 0:
-        player.change_action('idle')
-
-    player.rect, collisions = move(player.rect, player.movement, tile_rects)
-
-    if collisions['bottom']:
-        player.y_momentum = 0
-        player.air_timer = 0
-    else:
-        player.air_timer += 1
-
-    if collisions['top']:
-        player.y_momentum = 0
+    player_movements(player, tile_rects)
 
     player.frame += 1
     if player.frame >= len(player.animation_database[player.action]):
@@ -104,25 +63,7 @@ while True:
     draw_constants(display)
     large_font.render(display,str(coin_amount), (16,0))
     player.dying()
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_RIGHT:
-                player.moving_right = True
-            if event.key == pygame.K_LEFT:
-                player.moving_left = True
-            if event.key == pygame.K_SPACE:
-                if player.air_timer < 6:
-                    player.y_momentum = player.jump_momentum
-            if event.key == pygame.K_b:
-                shop.change_displaying()
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_RIGHT:
-                player.moving_right = False
-            if event.key == pygame.K_LEFT:
-                player.moving_left = False
+    kb_events(player, shop)
     if shop.displaying:
         shop.render(display)
         player.moving_right = False
@@ -132,4 +73,4 @@ while True:
     surf = pygame.transform.scale(display,Settings.window_size)
     screen.blit(surf, (0,0))
     pygame.display.update()
-    clock.tick(60)
+    clock.tick(Settings.fps)
