@@ -33,12 +33,16 @@ small_font = Font('assets/fonts/small_font.png')
 large_font = Font('assets/fonts/large_font.png')
 coins = []
 coin_amount = 1000
+'''
 for i in range(5):
     coins.append(simple_entity('assets/collectables/coin.png', [160*i, 308]))
+'''
+coins.append(simple_entity('assets/collectables/coin.png', [160, 308]))
 shop = Shop()
 #MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
 while True:              
     display.fill((0,0,0))
+    player_scrolling(player, map)
     for coin in coins:
         coin.render(display, player.scroll)
         if coin.collision_test(player.rect):
@@ -47,13 +51,10 @@ while True:
                 coin_amount += 2
             else:
                 coin_amount += 1
-    player_scrolling(player, map)
+    
     tile_rects = []
     display_map(display, player, tile_rects, map, dict)
-
-
     player_movements(player, tile_rects)
-
     player.frame += 1
     if player.frame >= len(player.animation_database[player.action]):
         player.frame = 0

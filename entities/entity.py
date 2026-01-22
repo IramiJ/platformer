@@ -15,7 +15,7 @@ class entity():
         self.movement = [0,0]
         self.animation_database = {}
     def change_action(self,new_action):
-        if self.action != new_action:
+        if self.action != new_action: 
             self.action = new_action
             self.frame = 0
 
