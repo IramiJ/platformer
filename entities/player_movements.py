@@ -7,7 +7,6 @@ def player_movements(player, tile_rects):
         player.dash_timer -= 1
         if player.dash_timer <= 0:
             player.dashing = False
-
     else:   
         if player.moving_right:
             player.movement[0] += player.velocity
@@ -17,6 +16,8 @@ def player_movements(player, tile_rects):
     player.y_momentum += 0.4
     if player.y_momentum > 7:
         player.y_momentum = 7
+    if player.dash_cooldown > 0:
+        player.dash_cooldown -= 1
     
     if player.movement[0] > 0:
         player.change_action('run')
@@ -41,6 +42,7 @@ def player_movements(player, tile_rects):
     
 
 def dash(player):
-    if not player.dashing:           
+    if not player.dashing and player.dash_cooldown == 0:           
         player.dashing = True
         player.dash_timer = player.dash_duration
+        player.dash_cooldown = 100
