@@ -13,6 +13,7 @@ from entities.animations import draw_constants, load_animation
 from entities.player_movements import player_movements
 from world.scrolling import player_scrolling
 from core.kb_event_handling import kb_events
+from entities.tail import Tail
 
 clock = pygame.time.Clock()
 #WINDOW-------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -30,6 +31,7 @@ player.animation_database['idle'] = load_animation('assets/char/idle', [15, 15],
 player.animation_database['run'] = load_animation('assets/char/run', [5,5,5,5], player)
 cd = entity(player.x, player.y + 15, 16, 16)
 cd.animation_database['idle'] = load_animation('assets/cooldown/idle', [8 for x in range(15)], cd)
+tail = Tail('assets/tail/grey.png',[player.rect.x-2, player.rect.y+8])
 #OTHERS-------------------------------------------------------------------------------------------------------------------------------------------------------------
 small_font = Font('assets/fonts/small_font.png')
 large_font = Font('assets/fonts/large_font.png')
@@ -57,7 +59,7 @@ while True:
     
     tile_rects = []
     display_map(display, player, tile_rects, map, dict)
-    player_movements(player, tile_rects, display, cd)
+    player_movements(player, tile_rects, display, cd, tail)
     player.frame += 1
     if player.frame >= len(player.animation_database[player.action]):
         player.frame = 0

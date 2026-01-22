@@ -5,8 +5,7 @@ from entities.tail import Tail
 from core.settings import Settings
 import pygame
 
-def player_movements(player, tile_rects, display, cd):
-    t = Tail('assets/tail/grey.png', (50, 320))
+def player_movements(player, tile_rects, display, cd, tail):
     player.movement = [0, 0]
     if player.dashing:
         player.movement[0] = player.dash_speed * (-1 if player.flip else 1)
@@ -16,11 +15,16 @@ def player_movements(player, tile_rects, display, cd):
     else:   
         if player.moving_right:
             player.movement[0] += player.velocity
-            t.render(display, player.scroll)
+            tail.show = True
+            tail.loc[0] = player.rect.x - 1 + player.movement[0]
         if player.moving_left:
             player.movement[0] -= player.velocity
-            t.render(display, player.scroll)
+            tail.loc[0] = player.rect.x + 17 + player.movement[0]
+            tail.show = True
         player.movement[1] += player.y_momentum
+    if tail.show:
+        tail.draw(display, player.scroll)
+        tail.dur -= 1
     player.y_momentum += 0.4
     if player.y_momentum > 7:
         player.y_momentum = 7
