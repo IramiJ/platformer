@@ -3,7 +3,7 @@ from entities.entity import entity
 from entities.animations import load_animation
 from entities.tail import Tail
 from core.settings import Settings
-import pygame
+import pygame, math
 
 def player_movements(player, tile_rects, display, cd, tail):
     player.movement = [0, 0]
@@ -22,6 +22,7 @@ def player_movements(player, tile_rects, display, cd, tail):
             tail.loc[0] = player.rect.x + 17 + player.movement[0]
             tail.show = True
         player.movement[1] += player.y_momentum
+        tail.loc[1] = player.rect.y + 8 - round(math.sin((tail.dur/Settings.fps)*4*math.pi))
     if tail.show:
         tail.draw(display, player.scroll)
         tail.dur -= 1
