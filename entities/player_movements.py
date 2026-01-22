@@ -1,9 +1,12 @@
 from world.collisions import move
 from entities.entity import entity
 from entities.animations import load_animation
+from entities.tail import Tail
+from core.settings import Settings
 import pygame
 
 def player_movements(player, tile_rects, display, cd):
+    t = Tail('assets/tail/grey.png', (50, 320))
     player.movement = [0, 0]
     if player.dashing:
         player.movement[0] = player.dash_speed * (-1 if player.flip else 1)
@@ -13,8 +16,10 @@ def player_movements(player, tile_rects, display, cd):
     else:   
         if player.moving_right:
             player.movement[0] += player.velocity
+            t.render(display, player.scroll)
         if player.moving_left:
             player.movement[0] -= player.velocity
+            t.render(display, player.scroll)
         player.movement[1] += player.y_momentum
     player.y_momentum += 0.4
     if player.y_momentum > 7:
@@ -32,7 +37,6 @@ def player_movements(player, tile_rects, display, cd):
         player.flip = True
     if player.movement[0] == 0:
         player.change_action('idle')
-
     player.rect, collisions = move(player.rect, player.movement, tile_rects)
 
     if collisions['bottom']:
