@@ -2,11 +2,18 @@ from world.collisions import move
 
 def player_movements(player, tile_rects):
     player.movement = [0, 0]
-    if player.moving_right:
-        player.movement[0] += player.velocity
-    if player.moving_left:
-        player.movement[0] -= player.velocity
-    player.movement[1] += player.y_momentum
+    if player.dashing:
+        player.movement[0] = player.dash_speed * (-1 if player.flip else 1)
+        player.dash_timer -= 1
+        if player.dash_timer <= 0:
+            player.dashing = False
+
+    else:   
+        if player.moving_right:
+            player.movement[0] += player.velocity
+        if player.moving_left:
+            player.movement[0] -= player.velocity
+        player.movement[1] += player.y_momentum
     player.y_momentum += 0.4
     if player.y_momentum > 7:
         player.y_momentum = 7
@@ -30,3 +37,10 @@ def player_movements(player, tile_rects):
 
     if collisions['top']:
         player.y_momentum = 0
+    
+    
+
+def dash(player):
+    if not player.dashing:           
+        player.dashing = True
+        player.dash_timer = player.dash_duration

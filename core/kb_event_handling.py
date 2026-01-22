@@ -1,4 +1,5 @@
 import pygame, sys
+from entities.player_movements import dash
 def kb_events(player, shop):
     for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -14,6 +15,8 @@ def kb_events(player, shop):
                         player.y_momentum = player.jump_momentum
                 if event.key == pygame.K_b:
                     shop.change_displaying()
+                if event.key == pygame.K_e:
+                    dash(player)
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_RIGHT:
                     player.moving_right = False

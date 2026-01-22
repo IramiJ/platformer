@@ -16,6 +16,10 @@ class Player(entity):
         self.scroll = [0,0]
         self.movement = [0, 0]
         self.animation_frames = {}
+        self.dashing = False
+        self.dash_timer = 0
+        self.dash_duration = 10
+        self.dash_speed = 6
     def dying(self):
         if self.rect.y > 500:
             self.rect.x = 0

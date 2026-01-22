@@ -42,6 +42,7 @@ shop = Shop()
 #MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
 while True:              
     display.fill((0,0,0))
+    
     player_scrolling(player, map)
     for coin in coins:
         coin.render(display, player.scroll)
