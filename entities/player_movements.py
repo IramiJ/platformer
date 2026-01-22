@@ -45,4 +45,4 @@ def dash(player):
     if not player.dashing and player.dash_cooldown == 0:           
         player.dashing = True
         player.dash_timer = player.dash_duration
-        player.dash_cooldown = 100
+        player.dash_cooldown = 120
