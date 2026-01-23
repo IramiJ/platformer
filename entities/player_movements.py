@@ -15,17 +15,20 @@ def player_movements(player, tile_rects, display, cd, tail):
     else:   
         if player.moving_right:
             player.movement[0] += player.velocity
-            tail.show = True
+            for point in tail.points:
+                point.show = True
             tail.loc[0] = player.rect.x - 1 + player.movement[0]
         if player.moving_left:
             player.movement[0] -= player.velocity
             tail.loc[0] = player.rect.x + 17 + player.movement[0]
-            tail.show = True
+            for point in tail.points:
+                point.show = True
         player.movement[1] += player.y_momentum
-        tail.loc[1] = player.rect.y + 8 - round(math.sin((tail.dur/Settings.fps)*4*math.pi))
-    if tail.show:
-        tail.draw(display, player.scroll)
-        tail.dur -= 1
+        tail.loc[1] = player.rect.y + 8
+    for point in tail.points:
+        if point.show:
+            point.draw(display, player.scroll)
+            point.dur -= 1
     player.y_momentum += 0.4
     if player.y_momentum > 7:
         player.y_momentum = 7
