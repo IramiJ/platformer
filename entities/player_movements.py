@@ -29,6 +29,7 @@ def player_movements(player, tile_rects, display, cd, tail):
         if point.show:
             point.draw(display, player.scroll)
             point.dur -= 1
+    tail.update_points()
     player.y_momentum += 0.4
     if player.y_momentum > 7:
         player.y_momentum = 7
