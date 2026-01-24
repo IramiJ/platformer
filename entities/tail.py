@@ -19,10 +19,11 @@ class Tail():
             self.update_left()
         self.update -= 1
         if self.update == 0:
-            for i in range(len(self.points)):
-                self.points[i].loc[1] = self.loc[1] + self.sin_pos(i)
             self.shift += math.pi/2
             self.update = Settings.fps / 10
+        for i in range(len(self.points)):
+            self.points[i].loc[1] = self.loc[1] + self.sin_pos(i)
+            
     def update_right(self):
         for i in range(len(self.points)):
             self.points[i].loc[0] = self.loc[0]-i
