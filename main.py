@@ -59,13 +59,16 @@ while True:
     
     tile_rects = []
     display_map(display, player, tile_rects, map, dict)
-    player_movements(player, tile_rects, display, cd, tail)
+    
     player.frame += 1
     if player.frame >= len(player.animation_database[player.action]):
         player.frame = 0
     player.img_id = player.animation_database[player.action][player.frame]
     player.img = player.animation_frames[player.img_id]
+    
     display.blit(pygame.transform.flip(player.img,player.flip,False), [player.rect.x-player.scroll[0], player.rect.y-player.scroll[1]])
+    player_movements(player, tile_rects, display, cd, tail)
+    
     draw_constants(display)
     large_font.render(display,str(coin_amount), (16,0))
     player.dying()

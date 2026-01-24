@@ -8,6 +8,7 @@ import pygame, math
 def player_movements(player, tile_rects, display, cd, tail):
     player.movement = [0, 0]
     if player.dashing:
+        player.y_momentum = 0
         player.movement[0] = player.dash_speed * (-1 if player.flip else 1)
         player.dash_timer -= 1
         if player.dash_timer <= 0:
@@ -18,18 +19,16 @@ def player_movements(player, tile_rects, display, cd, tail):
             for point in tail.points:
                 point.show = True
             tail.loc[0] = player.rect.x - 1 + player.movement[0]
+            tail.dir = 'r'
         if player.moving_left:
             player.movement[0] -= player.velocity
             tail.loc[0] = player.rect.x + 17 + player.movement[0]
             for point in tail.points:
                 point.show = True
+            tail.dir = 'l'
         player.movement[1] += player.y_momentum
         tail.loc[1] = player.rect.y + 8
-    tail.update_points()
-    for i in range(len(tail.points)):
-        if tail.points[i].show:
-            tail.points[i].draw(display, player.scroll)
-            tail.points[i].dur -= i
+    
     
     player.y_momentum += 0.4
     if player.y_momentum > 7:
@@ -57,6 +56,13 @@ def player_movements(player, tile_rects, display, cd, tail):
 
     if collisions['top']:
         player.y_momentum = 0
+    
+    tail.update_points()
+    for i in range(len(tail.points)):
+        if tail.points[i].show:
+            tail.points[i].draw(display, player.scroll)
+            tail.points[i].dur -= i
+    tail.update -= 1
     
     
 
