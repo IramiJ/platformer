@@ -62,7 +62,6 @@ def player_movements(player, tile_rects, display, cd, tail):
         if tail.points[i].show:
             tail.points[i].draw(display, player.scroll)
             tail.points[i].dur -= i
-    tail.update -= 1
     
     
 
