@@ -14,6 +14,7 @@ from entities.player.player_movements import player_movements
 from world.scrolling import player_scrolling
 from core.kb_event_handling import kb_events
 from entities.player.tail import Tail
+from entities.enemies.patroller import Patroller
 
 clock = pygame.time.Clock()
 #WINDOW-------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -41,6 +42,8 @@ for i in range(5):
 '''
 coins.append(simple_entity('assets/collectables/coin.png', [160, 308]))
 shop = Shop()
+
+enem = Patroller(48, 304, 16, 16)
 #MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
 while True:              
     display.fill((0,0,0))
@@ -58,11 +61,13 @@ while True:
     tile_rects = []
     display_map(display, player, tile_rects, map, dict)
     
-    player.draw()
-    
-    display.blit(pygame.transform.flip(player.img,player.flip,False), [player.rect.x-player.scroll[0], player.rect.y-player.scroll[1]])
+    player.update_frames()
+    player.draw(display)
     player_movements(player, tile_rects, display, cd, tail)
-    
+
+    enem.update_frames()
+    enem.render(display, player.scroll)
+
     draw_constants(display)
     large_font.render(display,str(coin_amount), (16,0))
     display.blit(pygame.image.load("assets/hp_bar/hp_bar.png"), (280, 0))
