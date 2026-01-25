@@ -1,5 +1,5 @@
 from entities.entity import entity
-#from entities.animations import load_animation
+from entities.animations import load_animation
 
 class Player(entity):
     def __init__(self,x,y,width,height):
@@ -22,6 +22,8 @@ class Player(entity):
         self.dash_speed = 6
         self.dash_cooldown = 0
         self.hp = 5
+        self.animation_database['idle'] = load_animation('assets/char/idle', [15, 15], self)
+        self.animation_database['run'] = load_animation('assets/char/run', [5,5,5,5], self)
     def dying(self):
         if self.rect.y > 500:
             self.rect.x = 0
@@ -34,3 +36,9 @@ class Player(entity):
                 self.jump_momentum = -15
             elif buff == 'double_coins':
                 self.double_coin_buff = True
+    def draw(self):
+        self.frame += 1
+        if self.frame >= len(self.animation_database[self.action]):
+            self.frame = 0
+        self.img_id = self.animation_database[self.action][self.frame]
+        self.img = self.animation_frames[self.img_id]
