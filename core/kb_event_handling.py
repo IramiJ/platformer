@@ -1,5 +1,5 @@
 import pygame, sys
-from entities.player_movements import dash
+from entities.player.player_movements import dash
 def kb_events(player, shop):
     for event in pygame.event.get():
             if event.type == pygame.QUIT:

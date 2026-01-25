@@ -7,13 +7,13 @@ from ui.shopping import Shop
 from world.collisions import move
 from world.tilemap import *
 from entities.entity import *
-from entities.player import Player
+from entities.player.player import Player
 from core.settings import Settings
 from entities.animations import draw_constants, load_animation
-from entities.player_movements import player_movements
+from entities.player.player_movements import player_movements
 from world.scrolling import player_scrolling
 from core.kb_event_handling import kb_events
-from entities.tail import Tail
+from entities.player.tail import Tail
 
 clock = pygame.time.Clock()
 #WINDOW-------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -71,6 +71,7 @@ while True:
     
     draw_constants(display)
     large_font.render(display,str(coin_amount), (16,0))
+    display.blit(pygame.image.load("assets/hp_bar/hp_bar.png"), (280, 0))
     player.dying()
     kb_events(player, shop)
     if shop.displaying:

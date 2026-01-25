@@ -1,7 +1,7 @@
 from world.collisions import move
 from entities.entity import entity
 from entities.animations import load_animation
-from entities.tail import Tail
+from entities.player.tail import Tail
 from core.settings import Settings
 import pygame, math
 

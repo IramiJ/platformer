@@ -21,6 +21,7 @@ class Player(entity):
         self.dash_duration = 10
         self.dash_speed = 6
         self.dash_cooldown = 0
+        self.hp = 5
     def dying(self):
         if self.rect.y > 500:
             self.rect.x = 0
