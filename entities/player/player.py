@@ -25,6 +25,7 @@ class Player(entity):
         self.hp = 5
         self.animation_database['idle'] = load_animation('assets/char/idle', [15, 15], self)
         self.animation_database['run'] = load_animation('assets/char/run', [5,5,5,5], self)
+        self.dmg_cd = 0
     def dying(self):
         if self.rect.y > 500:
             self.rect.x = 0
@@ -45,3 +46,11 @@ class Player(entity):
         self.img = self.animation_frames[self.img_id]
     def draw(self, display):
         display.blit(pygame.transform.flip(self.img,self.flip,False), [self.rect.x-self.scroll[0], self.rect.y-self.scroll[1]])
+    def attack(self, enemy):
+        if self.dmg_cd == 0:
+            if self.dashing:
+                if self.rect.colliderect(enemy.rect):
+                    enemy.hp -= 1
+                    self.dmg_cd = self.dash_cooldown
+        else:
+            self.dmg_cd -= 1

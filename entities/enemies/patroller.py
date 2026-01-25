@@ -38,7 +38,7 @@ class Patroller(Enemy):
             
             self.attack_cd -= 1
         else:
-            if self.rect.colliderect(player.rect):
+            if self.rect.colliderect(player.rect) and not player.dashing:
                 player.hp -= 1
                 self.attack_cd = 30
                 print("attack")

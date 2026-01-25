@@ -68,6 +68,8 @@ while True:
     patroller.update_frames()
     patroller.render(display, player.scroll)
 
+    patroller.attack(player)
+    player.attack(patroller)
     draw_constants(display)
     large_font.render(display,str(coin_amount), (16,0))
     display.blit(pygame.image.load("assets/hp_bar/hp_bar.png"), (280, 0))
@@ -80,7 +82,6 @@ while True:
         coin_amount = shop.buy(coin_amount,player.buffs)
     player.apply_buffs()
     surf = pygame.transform.scale(display,Settings.window_size)#
-    patroller.attack(player)
     screen.blit(surf, (0,0))
     pygame.display.update()
     clock.tick(Settings.fps)
