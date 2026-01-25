@@ -5,7 +5,7 @@ class Enemy(entity):
     def __init__(self,x,y,width,height):
         super().__init__(x,y,width,height)
         self.hp = 3
-        self.velocity = 2
+        self.velocity = 1
     def update_frames(self):
         self.frame += 1
         if self.frame >= len(self.animation_database[self.action]):

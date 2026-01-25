@@ -65,6 +65,7 @@ while True:
     player.draw(display)
     player_movements(player, tile_rects, display, cd, tail)
 
+    enem.move()
     enem.update_frames()
     enem.render(display, player.scroll)
 
