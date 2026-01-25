@@ -13,6 +13,7 @@ class Patroller(Enemy):
         self.hp_bar = simple_entity('assets/hp_bar/enemy_hp_bar.png', [self.x, self.y-20])
         self.direction = 'r'
         self.velocity = 1
+        self.attack_cd = 0
 
     def render(self, display, scroll):
         self.draw(display, scroll)
@@ -32,3 +33,13 @@ class Patroller(Enemy):
             else:
                 self.movement[0] -= self.velocity
         self.rect.x += self.movement[0]
+    def attack(self, player):
+        if self.attack_cd > 0:
+            
+            self.attack_cd -= 1
+        else:
+            if self.rect.colliderect(player.rect):
+                player.hp -= 1
+                self.attack_cd = 30
+                print("attack")
+                print(player.hp)

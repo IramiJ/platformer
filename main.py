@@ -4,7 +4,6 @@ import pygame, sys
 pygame.init()
 from ui.Font_renderer import Font
 from ui.shopping import Shop
-from world.collisions import move
 from world.tilemap import *
 from entities.entity import *
 from entities.player.player import Player
@@ -43,7 +42,7 @@ for i in range(5):
 coins.append(simple_entity('assets/collectables/coin.png', [160, 308]))
 shop = Shop()
 
-enem = Patroller(48, 304, 16, 16)
+patroller = Patroller(88, 304, 16, 16)
 #MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
 while True:              
     display.fill((0,0,0))
@@ -65,9 +64,9 @@ while True:
     player.draw(display)
     player_movements(player, tile_rects, display, cd, tail)
 
-    enem.move()
-    enem.update_frames()
-    enem.render(display, player.scroll)
+    patroller.move()
+    patroller.update_frames()
+    patroller.render(display, player.scroll)
 
     draw_constants(display)
     large_font.render(display,str(coin_amount), (16,0))
@@ -80,7 +79,8 @@ while True:
         player.moving_left = False
         coin_amount = shop.buy(coin_amount,player.buffs)
     player.apply_buffs()
-    surf = pygame.transform.scale(display,Settings.window_size)
+    surf = pygame.transform.scale(display,Settings.window_size)#
+    patroller.attack(player)
     screen.blit(surf, (0,0))
     pygame.display.update()
     clock.tick(Settings.fps)

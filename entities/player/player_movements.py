@@ -64,6 +64,8 @@ def player_movements(player, tile_rects, display, cd, tail):
             tail.points[i].dur -= i
     
     
+    
+    
 
 def dash(player):
     if not player.dashing and player.dash_cooldown == 0:           
