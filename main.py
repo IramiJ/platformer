@@ -7,6 +7,7 @@ from ui.shopping import Shop
 from world.tilemap import *
 from entities.entity import *
 from entities.player.player import Player
+from entities.hp_bar import Hp_bar
 from core.settings import Settings
 from entities.animations import draw_constants, load_animation
 from entities.player.player_movements import player_movements
@@ -30,6 +31,7 @@ map = read_csv('maps/map0.csv')
 cd = entity(player.x, player.y + 15, 16, 16)
 cd.animation_database['idle'] = load_animation('assets/cooldown/idle', [8 for x in range(15)], cd)
 tail = Tail('assets/tail/grey.png',[player.rect.x-2, player.rect.y+8])
+hp_bar = Hp_bar("assets/hp_bar/hp_bar_bg.png","assets/hp_bar/hp_bar_frame.png", 280, 0)
 #OTHERS-------------------------------------------------------------------------------------------------------------------------------------------------------------
 small_font = Font('assets/fonts/small_font.png')
 large_font = Font('assets/fonts/large_font.png')
@@ -43,6 +45,8 @@ coins.append(simple_entity('assets/collectables/coin.png', [160, 308]))
 shop = Shop()
 
 patroller = Patroller(88, 304, 16, 16)
+
+enemies = [patroller]
 #MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
 while True:              
     display.fill((0,0,0))
@@ -63,16 +67,18 @@ while True:
     player.update_frames()
     player.draw(display)
     player_movements(player, tile_rects, display, cd, tail)
+    for enemy in enemies:
+        enemy.move()
+        enemy.update_frames()
+        enemy.render(display, player.scroll)
+        enemy.attack(player)
+        player.attack(enemy)
+    enemies = [e for e in enemies if e.alive]
 
-    patroller.move()
-    patroller.update_frames()
-    patroller.render(display, player.scroll)
-
-    patroller.attack(player)
-    player.attack(patroller)
+    
     draw_constants(display)
     large_font.render(display,str(coin_amount), (16,0))
-    display.blit(pygame.image.load("assets/hp_bar/hp_bar.png"), (280, 0))
+    hp_bar.draw(display, 5, player.hp)
     player.dying()
     kb_events(player, shop)
     if shop.displaying:
@@ -81,7 +87,7 @@ while True:
         player.moving_left = False
         coin_amount = shop.buy(coin_amount,player.buffs)
     player.apply_buffs()
-    surf = pygame.transform.scale(display,Settings.window_size)#
+    surf = pygame.transform.scale(display,Settings.window_size)
     screen.blit(surf, (0,0))
     pygame.display.update()
     clock.tick(Settings.fps)

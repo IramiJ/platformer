@@ -50,7 +50,7 @@ class Player(entity):
         if self.dmg_cd == 0:
             if self.dashing:
                 if self.rect.colliderect(enemy.rect):
-                    enemy.hp -= 1
+                    enemy.take_dmg()
                     self.dmg_cd = self.dash_cooldown
         else:
             self.dmg_cd -= 1
