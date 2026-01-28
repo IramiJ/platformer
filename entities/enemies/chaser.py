@@ -9,10 +9,8 @@ class Chaser(Enemy):
         self.spawn_point = (self.x, self.y)
         self.aggro_range = 100
         self.action = 'run'
-#        self.animation_database['idle'] = load_animation('assets/enemies/chaser/idle', [15,15,15,15], self)
-#        self.animation_database['run'] = load_animation('assets/enemies/chaser/run', [15,15,15,15], self)
-        self.animation_database['idle'] = load_animation('assets/enemies/patroller/run', [15,15,15,15], self) #test use of patroller sprite
-        self.animation_database['run'] = load_animation('assets/enemies/patroller/run', [15,15,15,15], self)
+        self.animation_database['idle'] = load_animation('assets/enemies/chaser/idle', [15,15,15,15], self)
+        self.animation_database['run'] = load_animation('assets/enemies/chaser/run', [15,15,15,15], self)
         self.hp_bar = Hp_bar('assets/hp_bar/enemy_hp_bar_bg.png','assets/hp_bar/enemy_hp_bar_frame.png',self.x,self.y-20)
         self.direction = 'r'
         self.velocity = 1
@@ -28,21 +26,6 @@ class Chaser(Enemy):
         self.hp_bar.draw(display, 3, self.hp)
     def move(self, player):
         self.movement = [0, 0]
-        '''
-        if self.direction == 'r':
-            if self.rect.x >= self.spawn_point[0] + self.distance:
-                self.direction = 'l'
-                self.flip = True
-            else:
-                self.movement[0] += self.velocity
-        if self.direction == 'l':
-            if self.rect.x <= self.spawn_point[0] - self.distance:
-                self.direction = 'r'
-                self.flip = False
-            else:
-                self.movement[0] -= self.velocity
-        self.rect.x += self.movement[0]
-        '''
         if abs(self.rect.x - player.rect.x) <= self.aggro_range:
             if player.rect.x < self.rect.x:
                 self.change_action('run')
