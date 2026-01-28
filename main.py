@@ -45,7 +45,7 @@ for i in range(5):
 coins.append(simple_entity('assets/collectables/coin.png', [160, 308]))
 shop = Shop()
 
-#patroller = Patroller(88, 304, 16, 16)
+patroller = Patroller(88, 304, 16, 16)
 chaser = Chaser(88, 304, 16, 16)
 enemies = [chaser]
 #MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
