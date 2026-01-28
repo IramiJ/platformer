@@ -15,6 +15,7 @@ from world.scrolling import player_scrolling
 from core.kb_event_handling import kb_events
 from entities.player.tail import Tail
 from entities.enemies.patroller import Patroller
+from entities.enemies.chaser import Chaser
 
 clock = pygame.time.Clock()
 #WINDOW-------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -44,9 +45,9 @@ for i in range(5):
 coins.append(simple_entity('assets/collectables/coin.png', [160, 308]))
 shop = Shop()
 
-patroller = Patroller(88, 304, 16, 16)
-
-enemies = [patroller]
+#patroller = Patroller(88, 304, 16, 16)
+chaser = Chaser(88, 304, 16, 16)
+enemies = [chaser]
 #MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
 while True:              
     display.fill((0,0,0))
@@ -68,7 +69,10 @@ while True:
     player.draw(display)
     player_movements(player, tile_rects, display, cd, tail)
     for enemy in enemies:
-        enemy.move()
+        if isinstance(enemy, Chaser):
+            enemy.move(player)
+        else:
+            enemy.move()
         enemy.update_frames()
         enemy.render(display, player.scroll)
         enemy.attack(player)
