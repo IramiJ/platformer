@@ -16,6 +16,7 @@ from core.kb_event_handling import kb_events
 from entities.player.tail import Tail
 from entities.enemies.patroller import Patroller
 from entities.enemies.chaser import Chaser
+from entities.enemies.shooter import Shooter
 
 clock = pygame.time.Clock()
 #WINDOW-------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -47,7 +48,9 @@ shop = Shop()
 
 patroller = Patroller(88, 304, 16, 16)
 chaser = Chaser(88, 304, 16, 16)
-enemies = [chaser]
+shooter = Shooter(88, 304, 16, 16)
+enemies = [shooter]
+bullets = []
 #MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
 while True:              
     display.fill((0,0,0))
@@ -71,14 +74,18 @@ while True:
     for enemy in enemies:
         if isinstance(enemy, Chaser):
             enemy.move(player)
-        else:
+        elif not isinstance(enemy, Shooter):
             enemy.move()
         enemy.update_frames()
         enemy.render(display, player.scroll)
-        enemy.attack(player)
+        if isinstance(enemy, Shooter):
+            enemy.attack(player, bullets)
+        else:
+            enemy.attack(player)
         player.attack(enemy)
     enemies = [e for e in enemies if e.alive]
-
+    for bullet in bullets:
+        bullet.move(player, display, bullets)
     
     draw_constants(display)
     large_font.render(display,str(coin_amount), (16,0))
