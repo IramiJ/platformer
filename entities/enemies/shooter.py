@@ -9,10 +9,10 @@ class Shooter(Enemy):
     def __init__(self,x,y,width,height):
         super().__init__(x,y,width,height)
         self.spawn_point = [self.x, self.y]
-        self.aggro_range = 300
+        self.aggro_range = 120
         self.action = 'idle'
         self.animation_database['idle'] = load_animation('assets/enemies/shooter/idle', [8 for x in range(8)], self)
-        self.animation_database['shoot'] = load_animation('assets/enemies/chaser/run', [60, 60], self)
+        self.animation_database['shoot'] = load_animation('assets/enemies/shooter/shoot', [20, 20], self)
         self.hp_bar = Hp_bar('assets/hp_bar/enemy_hp_bar_bg.png','assets/hp_bar/enemy_hp_bar_frame.png',self.x,self.y-20)
         self.attack_cd = 0
         self.collision_cd = 0
@@ -28,9 +28,13 @@ class Shooter(Enemy):
     def attack(self, player, bullet_list):
         if self.attack_cd > 0:           
             self.attack_cd -= 1
-        elif math.sqrt((self.spawn_point[0] - player.rect.x)**2 + (self.spawn_point[1] - player.rect.y)**2) <= self.aggro_range and self.attack_cd == 0:
-            self.attack_cd = 3 * Settings.fps
-            bullet_list.append(Bullet(self.spawn_point.copy(), player))
+        elif math.sqrt((self.spawn_point[0] - player.rect.x)**2 + (self.spawn_point[1] - player.rect.y)**2) <= self.aggro_range:
+            self.change_action('shoot')
+            if self.attack_cd == 0:
+                self.attack_cd = 3 * Settings.fps
+                bullet_list.append(Bullet(self.spawn_point.copy(), player))
+        else:
+            self.change_action('idle')
         
         if self.collision_cd > 0:
             self.collision_cd -= 1
