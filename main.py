@@ -16,15 +16,18 @@ from core.kb_event_handling import kb_events
 from entities.player.tail import Tail
 from entities.enemies.enemies import Enemies
 from entities.coins import Coins
+from world.level_loader import Level_loader
 
 clock = pygame.time.Clock()
 window_size = [640, 480]
 screen = pygame.display.set_mode(Settings.window_size)
 display = pygame.Surface((320,240))
 pygame.display.set_caption(Settings.caption)
-player = Player(0,304,16,16)
-dict = load_tiles('assets/tiles')
-map = read_csv('maps/map0.csv')
+
+tiles = load_tiles('assets/tiles')
+level = Level_loader()
+level.load_level('world/levels/level1.json')
+player = Player(level.data['spawn'][0],level.data['spawn'][1],16,16)
 hp_bar = Hp_bar("assets/hp_bar/hp_bar_bg.png","assets/hp_bar/hp_bar_frame.png", 280, 0)
 small_font = Font('assets/fonts/small_font.png')
 large_font = Font('assets/fonts/large_font.png')
@@ -41,12 +44,11 @@ scroll = Scroll()
 while True:              
     display.fill((0,0,0))
     
-    scroll.player_scrolling(player, map)
-#    scroll.shake_offset = [random.randint(-4, 4), random.randint(-4, 4)] Shake test
+    scroll.player_scrolling(player, level.map)
     coins.handle_coins(display, player, scroll)
     
     tile_rects = []
-    display_map(display, scroll, tile_rects, map, dict)
+    display_map(display, scroll, tile_rects, level.map, tiles)
     
     player.update_frames()
     player.draw(display, scroll)
