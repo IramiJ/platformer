@@ -21,13 +21,13 @@ class Bullet(simple_entity):
             self.loc[0] += math.cos(self.angle) * self.velocity
             self.loc[1] += math.sin(self.angle) * self.velocity
             if self.dmg_cd == 0:
-                self.dmg_player(player)
+                self.dmg_player(player, scroll)
             self.remove(bullet_list)
         def remove(self, bullet_list):
              if math.sqrt((self.loc[0] - self.start[0])**2 + (self.loc[1] - self.start[1])**2) >= self.range:
                   bullet_list.remove(self)
 
-        def dmg_player(self, player):
+        def dmg_player(self, player, scroll):
             if self.collision_test(player.rect):
-                player.hp -= 1
+                player.take_dmg(scroll)
                 self.dmg_cd = 1

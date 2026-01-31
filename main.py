@@ -1,6 +1,6 @@
 
 
-import pygame, sys
+import pygame, random
 pygame.init()
 from ui.Font_renderer import Font
 from ui.shopping import Shop
@@ -42,6 +42,7 @@ while True:
     display.fill((0,0,0))
     
     scroll.player_scrolling(player, map)
+#    scroll.shake_offset = [random.randint(-4, 4), random.randint(-4, 4)] Shake test
     coins.handle_coins(display, player, scroll)
     
     tile_rects = []

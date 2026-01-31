@@ -38,12 +38,12 @@ class Patroller(Enemy):
             else:
                 self.movement[0] -= self.velocity
         self.rect.x += self.movement[0]
-    def attack(self, player):
+    def attack(self, player, scroll):
         if self.attack_cd > 0:
             
             self.attack_cd -= 1
         else:
             if self.rect.colliderect(player.rect) and not player.dashing:
-                player.hp -= 1
+                player.take_dmg(scroll)
                 self.attack_cd = 30
     

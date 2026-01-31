@@ -13,9 +13,9 @@ class Enemies:
             enemy.update_frames()
             enemy.render(display, scroll.render_scroll)
             if isinstance(enemy, Shooter):
-                enemy.attack(player, bullet_list)
+                enemy.attack(player, bullet_list, scroll)
             else:
-                enemy.attack(player)
+                enemy.attack(player, scroll)
             player.attack(enemy)
         self.enemies = [e for e in self.enemies if e.alive]
         

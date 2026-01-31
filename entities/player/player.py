@@ -58,3 +58,7 @@ class Player(entity):
                     self.dmg_cd = self.dash_cooldown
         else:
             self.dmg_cd -= 1
+    def take_dmg(self, scroll):
+        self.hp -= 1
+        scroll.shake_timer = 10
+        scroll.shake_strength = 3

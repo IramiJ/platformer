@@ -25,7 +25,7 @@ class Shooter(Enemy):
         self.hp_bar.x = self.rect.x-scroll[0]
         self.hp_bar.y = self.rect.y-scroll[1]-20
         self.hp_bar.draw(display, 3, self.hp)
-    def attack(self, player, bullet_list):
+    def attack(self, player, bullet_list, scroll):
         if self.attack_cd > 0:           
             self.attack_cd -= 1
         elif math.sqrt((self.spawn_point[0] - player.rect.x)**2 + (self.spawn_point[1] - player.rect.y)**2) <= self.aggro_range:
@@ -40,7 +40,7 @@ class Shooter(Enemy):
             self.collision_cd -= 1
 
         elif self.rect.colliderect(player.rect) and not player.dashing:
-            player.hp -= 1
+            player.take_dmg(scroll)
             self.collision_cd  = 30
 
         
