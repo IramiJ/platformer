@@ -16,8 +16,8 @@ class Bullet(simple_entity):
             self.angle =  math.atan2(y, x) + math.pi
         def transform_img(self):
             self.img = pygame.transform.rotate(self.base_img, math.degrees(self.angle))
-        def move(self, player, display, bullet_list):
-            self.render(display, player.scroll)
+        def move(self, player, display, bullet_list, scroll):
+            self.render(display, scroll.render_scroll)
             self.loc[0] += math.cos(self.angle) * self.velocity
             self.loc[1] += math.sin(self.angle) * self.velocity
             if self.dmg_cd == 0:

@@ -11,7 +11,7 @@ from entities.hp_bar import Hp_bar
 from core.settings import Settings
 from entities.animations import draw_constants, load_animation
 from entities.player.player_movements import player_movements
-from world.scrolling import player_scrolling
+from world.scrolling import Scroll
 from core.kb_event_handling import kb_events
 from entities.player.tail import Tail
 from entities.enemies.enemies import Enemies
@@ -35,24 +35,26 @@ shop = Shop()
 enemies = Enemies()
 bullets = []
 
+scroll = Scroll()
+
 #MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
 while True:              
     display.fill((0,0,0))
     
-    player_scrolling(player, map)
-    coins.handle_coins(display, player)
+    scroll.player_scrolling(player, map)
+    coins.handle_coins(display, player, scroll)
     
     tile_rects = []
-    display_map(display, player, tile_rects, map, dict)
+    display_map(display, scroll, tile_rects, map, dict)
     
     player.update_frames()
-    player.draw(display)
-    player_movements(player, tile_rects, display, player.cd_obj, player.tail)
+    player.draw(display, scroll)
+    player_movements(player, tile_rects, display, player.cd_obj, player.tail, scroll)
 
-    enemies.handle_enemies(player, display, bullets)
+    enemies.handle_enemies(player, display, bullets, scroll)
 
     for bullet in bullets:
-        bullet.move(player, display, bullets)
+        bullet.move(player, display, bullets, scroll)
     
     draw_constants(display)
     large_font.render(display,str(coins.amount), (16,0))

@@ -6,9 +6,9 @@ class Coins:
         self.objects.append(simple_entity('assets/collectables/coin.png', [160, 308]))
         self.amount = 1000
 
-    def handle_coins(self, display, player):
+    def handle_coins(self, display, player, scroll):
         for coin in self.objects:
-            coin.render(display, player.scroll)
+            coin.render(display, scroll.render_scroll)
             if coin.collision_test(player.rect):
                 self.objects.remove(coin)
                 if player.double_coin_buff:

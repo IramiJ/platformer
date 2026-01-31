@@ -5,7 +5,7 @@ from entities.player.tail import Tail
 from core.settings import Settings
 import pygame, math
 
-def player_movements(player, tile_rects, display, cd, tail):
+def player_movements(player, tile_rects, display, cd, tail, scroll):
     player.movement = [0, 0]
     if player.dashing:
         player.y_momentum = 0
@@ -35,7 +35,7 @@ def player_movements(player, tile_rects, display, cd, tail):
         player.y_momentum = 7
     if player.dash_cooldown > 0:
         player.dash_cooldown -= 1
-        dash_cd(player, display, cd)
+        dash_cd(player, display, cd, scroll)
         
     
     if player.movement[0] > 0:
@@ -60,7 +60,7 @@ def player_movements(player, tile_rects, display, cd, tail):
     tail.update_points()
     for i in range(len(tail.points)):
         if tail.points[i].show:
-            tail.points[i].draw(display, player.scroll)
+            tail.points[i].draw(display, scroll.render_scroll)
             tail.points[i].dur -= i
     
     
@@ -72,10 +72,10 @@ def dash(player):
         player.dashing = True
         player.dash_timer = player.dash_duration
         player.dash_cooldown = 120
-def dash_cd(player, display, cd):
+def dash_cd(player, display, cd, scroll):
     cd.img_id = cd.animation_database[cd.action][cd.frame]
     cd.img = cd.animation_frames[cd.img_id]
-    display.blit(pygame.transform.flip(cd.img,cd.flip,False), [player.rect.x-player.scroll[0], player.rect.y-30-player.scroll[1]])
+    display.blit(pygame.transform.flip(cd.img,cd.flip,False), [player.rect.x-scroll.render_scroll[0], player.rect.y-30-scroll.render_scroll[1]])
     cd.frame += 1
     if cd.frame >= len(cd.animation_database[cd.action]):
         cd.frame = 0

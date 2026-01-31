@@ -48,8 +48,8 @@ class Player(entity):
             self.frame = 0
         self.img_id = self.animation_database[self.action][self.frame]
         self.img = self.animation_frames[self.img_id]
-    def draw(self, display):
-        display.blit(pygame.transform.flip(self.img,self.flip,False), [self.rect.x-self.scroll[0], self.rect.y-self.scroll[1]])
+    def draw(self, display, scroll):
+        display.blit(pygame.transform.flip(self.img,self.flip,False), [self.rect.x-scroll.render_scroll[0], self.rect.y-scroll.render_scroll[1]])
     def attack(self, enemy):
         if self.dmg_cd == 0:
             if self.dashing:

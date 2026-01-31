@@ -31,13 +31,13 @@ def load_tiles(path):
         dict[name].set_colorkey((0,0,0))
     return dict
 
-def display_map(display: pygame.Surface, player, tile_rects, map, dict):
+def display_map(display: pygame.Surface, scroll, tile_rects, map, dict):
     y = 0
     for row in map:
         x = 0
         for tile in row:
             if tile != '-1':
-                display.blit(dict[tile], (x*16-player.scroll[0], y*16-player.scroll[1]))
+                display.blit(dict[tile], (x*16-scroll.render_scroll[0], y*16-scroll.render_scroll[1]))
                 if tile != '9' and tile != '10' and tile != '11':
                     tile_rects.append(pygame.Rect(x*16,y*16,16,16))
             x += 1
