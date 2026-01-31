@@ -6,7 +6,7 @@ def load_animation(path,dur,entity):
     for frame in dur:
         animation_frame_id = animation_name + str(n)
         img_loc = path + '/' + animation_frame_id + '.png'
-        animation_image = pygame.image.load(img_loc).convert()
+        animation_image = pygame.image.load(img_loc).convert_alpha()
         animation_image.set_colorkey((0,0,0))
         entity.animation_frames[animation_frame_id] = animation_image.copy()
         for i in range(frame):

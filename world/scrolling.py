@@ -12,8 +12,8 @@ class Scroll:
     def player_scrolling(self, player, map):
         if player.rect.x < 150:
             self.true_scroll[0] -= self.true_scroll[0]
-        elif player.rect.x + 16 > last_x(map) - 150:
-            self.true_scroll[0]  += -self.true_scroll[0] -300 + last_x(map)
+        elif player.rect.x + 16 > last_x(map) - 160:
+            self.true_scroll[0]  += -self.true_scroll[0] -308 + last_x(map)
         else:
             self.true_scroll[0] += player.rect.x - self.true_scroll[0] -150
         self.true_scroll[1] += player.rect.y - self.true_scroll[1] - 100
