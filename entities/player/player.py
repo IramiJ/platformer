@@ -1,4 +1,5 @@
 from entities.entity import entity
+from entities.player.tail import Tail
 from entities.animations import load_animation
 import pygame
 
@@ -26,6 +27,9 @@ class Player(entity):
         self.animation_database['idle'] = load_animation('assets/char/idle', [15, 15], self)
         self.animation_database['run'] = load_animation('assets/char/run', [5,5,5,5], self)
         self.dmg_cd = 0
+        self.cd_obj = entity(self.x, self.y + 15, 16, 16)
+        self.cd_obj.animation_database['idle'] = load_animation('assets/cooldown/idle', [8 for x in range(15)], self.cd_obj)
+        self.tail = Tail('assets/tail/grey.png',[self.rect.x-2, self.rect.y+8])
     def dying(self):
         if self.rect.y > 500:
             self.rect.x = 0

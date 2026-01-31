@@ -27,7 +27,6 @@ class Shop():
         for item in imgs:
             small_font.render(surf,item,(0,imgs[item][1][1]-8))
             large_font.render(surf,prices[item],[36,imgs[item][1][1]+2])
-            #surf.blit(imgs[item][0], imgs[item][1]) item_boxes
             surf.blit(imgs[item][0], (item_boxes[item].x,item_boxes[item].y))
     def buy(self, currency, buff_list):
         global buy_cooldown
@@ -45,3 +44,9 @@ class Shop():
     def change_displaying(self):
         self.displaying = not self.displaying
         return self.displaying
+    def show(self, display, player, coin_amount):
+        if self.displaying:
+            self.render(display)
+            player.moving_right = False
+            player.moving_left = False
+            coin_amount = self.buy(coin_amount,player.buffs)
