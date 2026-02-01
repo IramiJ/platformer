@@ -24,7 +24,7 @@ class Chaser(Enemy):
         self.hp_bar.x = self.rect.x-scroll[0]
         self.hp_bar.y = self.rect.y-scroll[1]-20
         self.hp_bar.draw(display, 3, self.hp)
-    def move(self, player):
+    def move(self, player, tiles):
         self.movement = [0, 0]
         if abs(self.rect.x - player.rect.x) <= self.aggro_range:
             if player.rect.x < self.rect.x:
@@ -53,6 +53,7 @@ class Chaser(Enemy):
         else:
             self.change_action('idle')
         self.rect.x += self.movement[0]
+        self.collision(tiles)
 
     def attack(self, player, scroll):
         if self.attack_cd > 0:

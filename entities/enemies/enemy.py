@@ -1,4 +1,5 @@
 from entities.entity import entity
+from world.collisions import collision_test
 import pygame
 
 class Enemy(entity):
@@ -34,3 +35,10 @@ class Enemy(entity):
         if self.hp <= 0:
             self.hp = 0
             self.alive = False
+    def collision(self, tiles):
+        hit_list = collision_test(self.rect, tiles)
+        for tile in hit_list:
+            if self.movement[0] > 0:
+                self.rect.right = tile.left
+            elif self.movement[0] < 0:
+                self.rect.left = tile.right

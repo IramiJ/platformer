@@ -16,7 +16,10 @@ class Scroll:
             self.true_scroll[0]  += -self.true_scroll[0] -308 + last_x(map)
         else:
             self.true_scroll[0] += player.rect.x - self.true_scroll[0] -150
-        self.true_scroll[1] += player.rect.y - self.true_scroll[1] - 100
+        if player.rect.y > 304:
+            self.true_scroll[1] -= self.true_scroll[1] - 204
+        else:
+            self.true_scroll[1] += player.rect.y - self.true_scroll[1] - 100
         self.render_scroll = [a+b for a, b in zip(self.true_scroll, self.shake_offset)]
         self.shake()
     def shake(self):

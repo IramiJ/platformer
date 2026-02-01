@@ -1,6 +1,9 @@
 {
     "id": 1,
     "map": "maps/map1.csv",
-    "spawn": [0, 304]
-
+    "spawn": [0, 304],
+    "enemies": {
+        "Patroller": [160, 256],
+        "Chaser": [608, 304]
+    }
 }

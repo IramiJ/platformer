@@ -3,11 +3,12 @@ from entities.enemies.chaser import Chaser
 from entities.enemies.shooter import Shooter
 class Enemies:
     def __init__(self):
-        self.enemies = [Shooter(88, 304, 16, 16)]
-    def handle_enemies(self, player, display, bullet_list, scroll):
+        self.enemy_types = {"Patroller": Patroller, "Chaser": Chaser, "Shooter": Shooter}
+        self.enemies = []
+    def handle_enemies(self, player, display, bullet_list, scroll, tiles):
         for enemy in self.enemies:
             if isinstance(enemy, Chaser):
-                enemy.move(player)
+                enemy.move(player, tiles)
             elif not isinstance(enemy, Shooter):
                 enemy.move()
             enemy.update_frames()
@@ -18,6 +19,13 @@ class Enemies:
                 enemy.attack(player, scroll)
             player.attack(enemy)
         self.enemies = [e for e in self.enemies if e.alive]
+    def load_enemies(self, level):
+        enemies = level.data["enemies"]
+        for enemy_name, (x,y) in enemies.items():
+            enemy_class = self.enemy_types.get(enemy_name)
+
+            self.enemies.append(enemy_class(x,y,16,16))
+    
         
 
 

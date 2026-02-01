@@ -36,6 +36,7 @@ coins = Coins()
 shop = Shop()
 
 enemies = Enemies()
+enemies.load_enemies(level)
 bullets = []
 
 scroll = Scroll()
@@ -54,7 +55,7 @@ while True:
     player.draw(display, scroll)
     player_movements(player, tile_rects, display, player.cd_obj, player.tail, scroll)
 
-    enemies.handle_enemies(player, display, bullets, scroll)
+    enemies.handle_enemies(player, display, bullets, scroll, tile_rects)
 
     for bullet in bullets:
         bullet.move(player, display, bullets, scroll)
