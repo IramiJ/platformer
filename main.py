@@ -68,7 +68,6 @@ while True:
     shop.show(display, player, coins.amount)
     player.apply_buffs()
     surf = pygame.transform.scale(display,Settings.window_size)
-    print([player.rect.x, player.rect.y], level.data["end_coordinates"])
     update_level(player, level, enemies)
     screen.blit(surf, (0,0))
     pygame.display.update()
