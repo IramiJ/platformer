@@ -21,10 +21,10 @@ class Enemies:
         self.enemies = [e for e in self.enemies if e.alive]
     def load_enemies(self, level):
         enemies = level.data["enemies"]
-        for enemy_name, (x,y) in enemies.items():
+        for enemy_name, spawns in enemies.items():
             enemy_class = self.enemy_types.get(enemy_name)
-
-            self.enemies.append(enemy_class(x,y,16,16))
+            for (x, y) in spawns:
+                self.enemies.append(enemy_class(x,y,16,16))
     
         
 
