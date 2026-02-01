@@ -30,10 +30,10 @@ class Player(entity):
         self.cd_obj = entity(self.x, self.y + 15, 16, 16)
         self.cd_obj.animation_database['idle'] = load_animation('assets/cooldown/idle', [8 for x in range(15)], self.cd_obj)
         self.tail = Tail('assets/tail/grey.png',[self.rect.x-2, self.rect.y+8])
-    def dying(self):
-        if self.rect.y > 500:
-            self.rect.x = 0
-            self.rect.y = 304
+    def dying(self, max_y, spawn_point):
+        if self.rect.y > max_y:
+            self.rect.x = spawn_point[0]
+            self.rect.y = spawn_point[1]
     def apply_buffs(self):
         for buff in self.buffs:
             if buff == 'speed_boost':

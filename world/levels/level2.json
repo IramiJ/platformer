@@ -1,0 +1,9 @@
+{
+    "id": 2,
+    "map": "maps/map2.csv",
+    "spawn": [128, 288],
+    "max_y": 3000,
+    "enemies": {
+    },
+    "end_coordinates": [1552, 800]
+}

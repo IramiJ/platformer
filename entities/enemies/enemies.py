@@ -20,6 +20,7 @@ class Enemies:
             player.attack(enemy)
         self.enemies = [e for e in self.enemies if e.alive]
     def load_enemies(self, level):
+        self.enemies = []
         enemies = level.data["enemies"]
         for enemy_name, spawns in enemies.items():
             enemy_class = self.enemy_types.get(enemy_name)
