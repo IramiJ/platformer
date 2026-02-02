@@ -31,7 +31,7 @@ class Shop():
             if pygame.mouse.get_pressed()[0]:
                 mouse_rect = pygame.Rect(pygame.mouse.get_pos()[0]/2, pygame.mouse.get_pos()[1]/2,1,1)
                 if mouse_rect.colliderect(self.item_boxes[item]):
-                    if currency >= int(self.prices[item]) and self.buy_cooldown == 0:
+                    if currency >= int(self.prices[item]) and self.buy_cooldown == 0 and item not in buff_list:
                         currency -= int(self.prices[item])
                         self.buy_cooldown = 0
                         buff_list.append(item)
