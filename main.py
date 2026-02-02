@@ -18,6 +18,7 @@ from entities.enemies.enemies import Enemies
 from entities.coins import Coins
 from world.level_loader import Level_loader, update_level, reach_checkpoint
 from core.logic_variables import Logic_variables
+from ui.pause_screen import Pause_screen
 
 clock = pygame.time.Clock()
 window_size = [640, 480]
@@ -35,7 +36,7 @@ large_font = Font('assets/fonts/large_font.png')
 coins = Coins()
 logic_variables = Logic_variables() 
 shop = Shop()
-
+pause_screen = Pause_screen()
 enemies = Enemies()
 enemies.load_enemies(level)
 bullets = []
@@ -68,8 +69,8 @@ while True:
         player.dying(level.data["max_y"])
         player.apply_buffs()
     shop.show(display, player, coins.amount, logic_variables)
-    
-    kb_events(player, shop, logic_variables)
+    pause_screen.render(display, logic_variables)
+    kb_events(player, shop, pause_screen)
     
     
     surf = pygame.transform.scale(display,Settings.window_size)

@@ -1,6 +1,6 @@
 import pygame, sys
 from entities.player.player_movements import dash
-def kb_events(player, shop, logic_variables):
+def kb_events(player, shop, pause_screen):
     for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -17,6 +17,8 @@ def kb_events(player, shop, logic_variables):
                     shop.change_displaying()
                 if event.key == pygame.K_e:
                     dash(player)
+                if event.key == pygame.K_ESCAPE:
+                    pause_screen.change_displaying()
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_RIGHT:
                     player.moving_right = False
