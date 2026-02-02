@@ -1,4 +1,4 @@
-import pygame, os, time
+import pygame, os, json
 from ui.Font_renderer import Font
 pygame.init()
 small_font = Font('assets/fonts/small_font.png')
@@ -6,18 +6,18 @@ large_font = Font('assets/fonts/large_font.png')
 
 class Shop():
     def __init__(self):
-        self.path = 'assets/shop_items'
-        self.files = os.listdir(self.path)
+        with open("ui/shop.json", "r") as file:
+            self.data = json.load(file)
         self.buy_cooldown = 0
         counter = 1
         self.item_boxes = {}
         self.displaying = False
         self.imgs = {}
-        self.prices = {'speed_boost': '5', 'double_coins': '5', 'jump_boost': '5'}
-        for file in self.files:
-            name = file.split('.')[0]
-            self.imgs[name] = pygame.image.load(self.path + '/' + file).convert(), [0, 32 * counter]
-            self.item_boxes[name] = pygame.Rect(self.imgs[name][1][0],self.imgs[name][1][1],self.imgs[name][0].get_width(),self.imgs[name][0].get_height())
+        self.prices = {}
+        for entry in self.data:
+            self.prices[entry] = str(self.data[entry]["price"])
+            self.imgs[entry] = pygame.image.load(self.data[entry]["asset_path"]).convert(), [0, 32 * counter]
+            self.item_boxes[entry] = pygame.Rect(self.imgs[entry][1][0],self.imgs[entry][1][1],self.imgs[entry][0].get_width(),self.imgs[entry][0].get_height())
             counter += 1
     def render(self,surf):
         surf.fill((0,0,0))

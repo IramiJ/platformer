@@ -37,11 +37,11 @@ class Player(entity):
             self.rect.y = self.spawn_point[1]
     def apply_buffs(self):
         for buff in self.buffs:
-            if buff == 'speed_boost':
+            if buff == 'speed boost':
                 self.velocity = 4
-            elif buff == 'jump_boost':
+            elif buff == 'jump boost':
                 self.jump_momentum = -15
-            elif buff == 'double_coins':
+            elif buff == 'double coins':
                 self.double_coin_buff = True
     def update_frames(self):
         self.frame += 1
