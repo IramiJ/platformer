@@ -1,0 +1,8 @@
+{
+    "right": "K_RIGHT",
+    "left": "K_LEFT",
+    "jump": "K_SPACE",
+    "shop": "K_b",
+    "dash": "K_e",
+    "pause": "K_ESCAPE"
+}
