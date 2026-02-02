@@ -17,6 +17,7 @@ from entities.player.tail import Tail
 from entities.enemies.enemies import Enemies
 from entities.coins import Coins
 from world.level_loader import Level_loader, update_level, reach_checkpoint
+from core.logic_variables import Logic_variables
 
 clock = pygame.time.Clock()
 window_size = [640, 480]
@@ -32,7 +33,7 @@ hp_bar = Hp_bar("assets/hp_bar/hp_bar_bg.png","assets/hp_bar/hp_bar_frame.png", 
 small_font = Font('assets/fonts/small_font.png')
 large_font = Font('assets/fonts/large_font.png')
 coins = Coins()
-
+logic_variables = Logic_variables() 
 shop = Shop()
 
 enemies = Enemies()
@@ -44,27 +45,29 @@ scroll = Scroll()
 #MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
 while True:              
     
-    # Draw logic    
-    display.fill((0,0,0))
-    coins.draw_coins(display, scroll)
-    draw_constants(display)
-    tile_rects = []
-    display_map(display, scroll, tile_rects, level.map, tiles)
-    player.update_frames()
-    player.draw(display, scroll)
-    large_font.render(display,str(coins.amount), (16,0))
-    hp_bar.draw(display, 5, player.hp)
+    # Draw logic  
+    if logic_variables.RENDER:  
+        display.fill((0,0,0))
+        coins.draw_coins(display, scroll)
+        draw_constants(display)
+        tile_rects = []
+        display_map(display, scroll, tile_rects, level.map, tiles)
+        player.update_frames()
+        player.draw(display, scroll)
+        large_font.render(display,str(coins.amount), (16,0))
+        hp_bar.draw(display, 5, player.hp)
 
     # Movement logic
-    player_movements(player, tile_rects, display, player.cd_obj, player.tail, scroll)
-    coins.coin_collisions(player)
-    enemies.handle_enemies(player, display, bullets, scroll, tile_rects)
-    scroll.player_scrolling(player, level)
-    for bullet in bullets:
-        bullet.move(player, display, bullets, scroll)
-    player.dying(level.data["max_y"])
-    player.apply_buffs()
-    shop.show(display, player, coins.amount)
+    if logic_variables.MOVEMENTS:
+        player_movements(player, tile_rects, display, player.cd_obj, player.tail, scroll)
+        coins.coin_collisions(player)
+        enemies.handle_enemies(player, display, bullets, scroll, tile_rects)
+        scroll.player_scrolling(player, level)
+        for bullet in bullets:
+            bullet.move(player, display, bullets, scroll)
+        player.dying(level.data["max_y"])
+        player.apply_buffs()
+    shop.show(display, player, coins.amount, logic_variables)
     
     kb_events(player, shop)
     
