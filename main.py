@@ -69,7 +69,7 @@ while True:
         player.apply_buffs()
     shop.show(display, player, coins.amount, logic_variables)
     
-    kb_events(player, shop)
+    kb_events(player, shop, logic_variables)
     
     
     surf = pygame.transform.scale(display,Settings.window_size)

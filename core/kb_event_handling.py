@@ -1,6 +1,6 @@
 import pygame, sys
 from entities.player.player_movements import dash
-def kb_events(player, shop):
+def kb_events(player, shop, logic_variables):
     for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
