@@ -38,7 +38,7 @@ def display_map(display: pygame.Surface, scroll, tile_rects, map, dict):
         for tile in row:
             if tile != '-1':
                 display.blit(dict[tile], (x*16-scroll.render_scroll[0], y*16-scroll.render_scroll[1]))
-                if tile != '9' and tile != '10' and tile != '11':
+                if all(tile != str(x) for x in range(9, 14)):
                     tile_rects.append(pygame.Rect(x*16,y*16,16,16))
             x += 1
         y += 1

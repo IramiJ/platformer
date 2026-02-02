@@ -1,4 +1,4 @@
-import json
+import json, pygame
 from world.tilemap import read_csv
 
 class Level_loader():
@@ -17,6 +17,14 @@ def update_level(player, level, enemies):
         print("hallo")
         level.next_level()
         enemies.load_enemies(level)
+        player.spawn_point[0]= level.data["spawn"][0]
+        player.spawn_point[1] = level.data["spawn"][1]
         player.rect.x = level.data["spawn"][0]
         player.rect.y = level.data["spawn"][1]
         player.movement = [0, 0]
+
+def reach_checkpoint(player, level):
+    for checkpoint in level.data["checkpoints"]:
+        if player.rect.collidepoint((checkpoint[0]*16, checkpoint[1]*16)):
+            player.spawn_point = [checkpoint[0]*16, checkpoint[1]*16]
+            return

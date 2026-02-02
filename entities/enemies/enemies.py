@@ -25,7 +25,7 @@ class Enemies:
         for enemy_name, spawns in enemies.items():
             enemy_class = self.enemy_types.get(enemy_name)
             for (x, y) in spawns:
-                self.enemies.append(enemy_class(x,y,16,16))
+                self.enemies.append(enemy_class(x*16,y*16,16,16))
     
         
 

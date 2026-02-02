@@ -4,9 +4,13 @@
     "spawn": [0, 304],
     "max_y": 500,
     "enemies": {
-        "Patroller": [[160, 256]],
-        "Chaser": [[608, 304]],
-        "Shooter": [[1072, 192], [1264, 128]]
+        "Patroller": [[10, 16]],
+        "Chaser": [[38, 19]],
+        "Shooter": [[67, 12], [79, 8]]
     },
-    "end_coordinates": [1536, 32]
+    "checkpoints": [[55, 19]],
+    "end_coordinates": [1536, 32],
+    "texts": {
+
+    }
 }

@@ -16,7 +16,7 @@ from core.kb_event_handling import kb_events
 from entities.player.tail import Tail
 from entities.enemies.enemies import Enemies
 from entities.coins import Coins
-from world.level_loader import Level_loader, update_level
+from world.level_loader import Level_loader, update_level, reach_checkpoint
 
 clock = pygame.time.Clock()
 window_size = [640, 480]
@@ -63,12 +63,13 @@ while True:
     draw_constants(display)
     large_font.render(display,str(coins.amount), (16,0))
     hp_bar.draw(display, 5, player.hp)
-    player.dying(level.data["max_y"], level.data["spawn"])
+    player.dying(level.data["max_y"])
     kb_events(player, shop)
     shop.show(display, player, coins.amount)
     player.apply_buffs()
     surf = pygame.transform.scale(display,Settings.window_size)
     update_level(player, level, enemies)
+    reach_checkpoint(player, level)
     screen.blit(surf, (0,0))
     pygame.display.update()
     clock.tick(Settings.fps)
