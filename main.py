@@ -1,6 +1,8 @@
 
 
 import pygame, random
+
+from ui.death_screen import Death_screen
 pygame.init()
 from ui.Font_renderer import Font
 from ui.shopping import Shop
@@ -37,6 +39,7 @@ coins = Coins()
 logic_variables = Logic_variables() 
 shop = Shop()
 pause_screen = Pause_screen()
+death_screen = Death_screen()
 enemies = Enemies()
 enemies.load_enemies(level)
 bullets = []
@@ -68,8 +71,15 @@ while True:
             bullet.move(player, display, bullets, scroll)
         player.dying(level.data["max_y"])
         player.apply_buffs()
-    shop.show(display, player, coins.amount, logic_variables)
-    pause_screen.render(display, logic_variables)
+    if shop.displaying:
+        shop.show(display, player, coins.amount, logic_variables)
+    elif pause_screen.displaying:
+        pause_screen.render(display, logic_variables)
+    elif player.hp <= 0:
+        death_screen.render(display, logic_variables)
+    else:
+        logic_variables.MOVEMENTS = True
+        logic_variables.RENDER = True
     kb_events(player, shop, pause_screen)
     
     

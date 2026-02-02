@@ -48,5 +48,3 @@ class Shop():
             player.moving_right = False
             player.moving_left = False
             coin_amount = self.buy(coin_amount,player.buffs)
-        else:
-            logic_variables.MOVEMENTS = True

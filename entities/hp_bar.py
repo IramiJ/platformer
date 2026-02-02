@@ -5,6 +5,7 @@ class Hp_bar():
         self.bg = pygame.image.load(bg).convert()
         self.bg.set_colorkey((0,0,0))
         self.frame = pygame.image.load(frame).convert()
+        self.frame.set_colorkey((0,0,0))
         self.x = x
         self.y = y
         self.width = self.frame.get_width()
