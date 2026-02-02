@@ -21,6 +21,7 @@ from entities.coins import Coins
 from world.level_loader import Level_loader, update_level, reach_checkpoint
 from core.logic_variables import Logic_variables
 from ui.pause_screen import Pause_screen
+from ui.win_screen import Win_screen
 
 clock = pygame.time.Clock()
 window_size = [640, 480]
@@ -40,6 +41,7 @@ logic_variables = Logic_variables()
 shop = Shop()
 pause_screen = Pause_screen()
 death_screen = Death_screen()
+win_screen = Win_screen()
 enemies = Enemies()
 enemies.load_enemies(level)
 bullets = []
@@ -53,7 +55,7 @@ while True:
 
     # Logic evaluations
     dead = (player.hp <= 0) 
-    overlay_active = shop.displaying or pause_screen.displaying or dead
+    overlay_active = shop.displaying or pause_screen.displaying or win_screen.displaying or dead
     # Logic handling
     logic_variables.MOVEMENTS = not overlay_active
     logic_variables.RENDER = True
@@ -74,6 +76,8 @@ while True:
         shop.show(display, player, coins.amount)
     elif pause_screen.displaying:
         pause_screen.render(display)
+    elif win_screen.displaying:
+        win_screen.render(display)
     elif dead:
         death_screen.render(display)
         
@@ -92,7 +96,7 @@ while True:
     
     
     surf = pygame.transform.scale(display,Settings.window_size)
-    update_level(player, level, enemies)
+    update_level(player, level, enemies, win_screen)
     reach_checkpoint(player, level)
     screen.blit(surf, (0,0))
     pygame.display.update()

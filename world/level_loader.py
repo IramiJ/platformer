@@ -12,9 +12,12 @@ class Level_loader():
         id = self.data["id"] + 1
         self.load_level(f"world/levels/level{id}.json")
 
-def update_level(player, level, enemies):
+def update_level(player, level, enemies, win_screen):
     if player.rect.x >= level.data["end_coordinates"][0] and player.rect.y == level.data["end_coordinates"][1]:
-        level.next_level()
+        try:
+            level.next_level()
+        except:
+            win_screen.displaying = True
         enemies.load_enemies(level)
         player.spawn_point[0]= level.data["spawn"][0]
         player.spawn_point[1] = level.data["spawn"][1]
