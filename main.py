@@ -48,7 +48,15 @@ scroll = Scroll()
 
 #MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
 while True:              
-    
+    # Keyboard handling
+    kb_events(player, shop, pause_screen)
+
+    # Logic evaluations
+    dead = (player.hp <= 0) 
+    overlay_active = shop.displaying or pause_screen.displaying or dead
+    # Logic handling
+    logic_variables.MOVEMENTS = not overlay_active
+    logic_variables.RENDER = True
     # Draw logic  
     if logic_variables.RENDER:  
         display.fill((0,0,0))
@@ -60,7 +68,15 @@ while True:
         player.draw(display, scroll)
         large_font.render(display,str(coins.amount), (16,0))
         hp_bar.draw(display, 5, player.hp)
-
+    
+    # Overlay displays
+    if shop.displaying:
+        shop.show(display, player, coins.amount)
+    elif pause_screen.displaying:
+        pause_screen.render(display)
+    elif dead:
+        death_screen.render(display)
+        
     # Movement logic
     if logic_variables.MOVEMENTS:
         player_movements(player, tile_rects, display, player.cd_obj, player.tail, scroll)
@@ -71,16 +87,8 @@ while True:
             bullet.move(player, display, bullets, scroll)
         player.dying(level.data["max_y"])
         player.apply_buffs()
-    if shop.displaying:
-        shop.show(display, player, coins.amount, logic_variables)
-    elif pause_screen.displaying:
-        pause_screen.render(display, logic_variables)
-    elif player.hp <= 0:
-        death_screen.render(display, logic_variables)
-    else:
-        logic_variables.MOVEMENTS = True
-        logic_variables.RENDER = True
-    kb_events(player, shop, pause_screen)
+    
+    
     
     
     surf = pygame.transform.scale(display,Settings.window_size)

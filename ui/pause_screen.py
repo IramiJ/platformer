@@ -6,8 +6,7 @@ class Pause_screen:
     def __init__(self):
         self.displaying = False
     
-    def render(self, surf, logic_variables):
-        logic_variables.MOVEMENTS = False
+    def render(self, surf):
         surf.fill((0,0,0))
         large_font.render(surf, "PAUSE", (144, 0))
     def change_displaying(self):

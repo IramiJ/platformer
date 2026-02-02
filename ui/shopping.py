@@ -41,9 +41,8 @@ class Shop():
     def change_displaying(self):
         self.displaying = not self.displaying
         return self.displaying
-    def show(self, display, player, coin_amount, logic_variables):
+    def show(self, display, player, coin_amount):
         if self.displaying:
-            logic_variables.MOVEMENTS = False
             self.render(display)
             player.moving_right = False
             player.moving_left = False

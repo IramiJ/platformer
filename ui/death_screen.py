@@ -6,9 +6,7 @@ class Death_screen:
     def __init__(self):
         self.displaying = False
     
-    def render(self, surf, logic_variables):
-        logic_variables.MOVEMENTS = False
-        logic_variables.RENDER = False
+    def render(self, surf):
         surf.fill((0,0,0))
         large_font.render(surf, "YOU DIED", (130, 0))
     def change_displaying(self):
