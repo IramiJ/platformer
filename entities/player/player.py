@@ -32,7 +32,8 @@ class Player(entity):
         self.cd_obj.animation_database['idle'] = load_animation('assets/cooldown/idle', [8 for x in range(15)], self.cd_obj)
         self.tail = Tail('assets/tail/grey.png',[self.rect.x-2, self.rect.y+8])
     def dying(self, max_y):
-        if self.rect.y > max_y:
+        if self.rect.y > max_y or self.hp <= 0:
+            self.hp = 5
             self.rect.x = self.spawn_point[0]
             self.rect.y = self.spawn_point[1]
     def apply_buffs(self):
