@@ -43,30 +43,32 @@ scroll = Scroll()
 
 #MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
 while True:              
+    
+    # Draw logic    
     display.fill((0,0,0))
-    
-    scroll.player_scrolling(player, level)
-    coins.handle_coins(display, player, scroll)
-    
+    coins.draw_coins(display, scroll)
+    draw_constants(display)
     tile_rects = []
     display_map(display, scroll, tile_rects, level.map, tiles)
-    
     player.update_frames()
     player.draw(display, scroll)
-    player_movements(player, tile_rects, display, player.cd_obj, player.tail, scroll)
-
-    enemies.handle_enemies(player, display, bullets, scroll, tile_rects)
-
-    for bullet in bullets:
-        bullet.move(player, display, bullets, scroll)
-    
-    draw_constants(display)
     large_font.render(display,str(coins.amount), (16,0))
     hp_bar.draw(display, 5, player.hp)
+
+    # Movement logic
+    player_movements(player, tile_rects, display, player.cd_obj, player.tail, scroll)
+    coins.coin_collisions(player)
+    enemies.handle_enemies(player, display, bullets, scroll, tile_rects)
+    scroll.player_scrolling(player, level)
+    for bullet in bullets:
+        bullet.move(player, display, bullets, scroll)
     player.dying(level.data["max_y"])
-    kb_events(player, shop)
-    shop.show(display, player, coins.amount)
     player.apply_buffs()
+    shop.show(display, player, coins.amount)
+    
+    kb_events(player, shop)
+    
+    
     surf = pygame.transform.scale(display,Settings.window_size)
     update_level(player, level, enemies)
     reach_checkpoint(player, level)

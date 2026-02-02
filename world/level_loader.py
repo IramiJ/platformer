@@ -14,7 +14,6 @@ class Level_loader():
 
 def update_level(player, level, enemies):
     if player.rect.x >= level.data["end_coordinates"][0] and player.rect.y == level.data["end_coordinates"][1]:
-        print("hallo")
         level.next_level()
         enemies.load_enemies(level)
         player.spawn_point[0]= level.data["spawn"][0]
