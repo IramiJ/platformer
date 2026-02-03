@@ -1,6 +1,7 @@
 from entities.entity import entity
 from entities.player.tail import Tail
 from entities.animations import load_animation
+import json
 import pygame
 
 class Player(entity):
@@ -10,7 +11,7 @@ class Player(entity):
         self.moving_left = False
         self.moving_right = False
         self.y_momentum = 0
-        self.velocity = 3.5
+        self.velocity = 3
         self.jump_momentum = -10
         self.buffs = {}
         self.air_timer = 0
@@ -35,8 +36,16 @@ class Player(entity):
         if self.rect.y > max_y:
             self.rect.x = self.spawn_point[0]
             self.rect.y = self.spawn_point[1]
-    def apply_buffs(self):
-        c = self.buffs.copy()
+    def apply_buffs(self, buff_list):
+        c = self.buffs.copy()   
+        for buff in buff_list:
+            if buff not in self.buffs:
+                if buff == "speed boost":
+                    self.velocity = 3
+                elif buff == "jump boost":
+                    self.jump_momentum = -10
+                elif buff == "double coins":
+                    self.double_coin_buff = False
         for buff in c:
             if self.buffs[buff] > 0:
                 if buff == 'speed boost':
