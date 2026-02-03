@@ -6,7 +6,7 @@ class entity():
         self.y = y
         self.width = width
         self.height = height
-        self.rect = pygame.Rect(self.x,self.y,self.width,self.height)
+        self.rect = pygame.FRect(self.x,self.y,self.width,self.height)
         self.action = 'idle'
         self.frame = 0
         self.img_id = None

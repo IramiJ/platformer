@@ -12,7 +12,7 @@ class Patroller(Enemy):
         self.animation_database['run'] = load_animation('assets/enemies/patroller/run', [15,15,15,15], self)
         self.hp_bar = Hp_bar('assets/hp_bar/enemy_hp_bar_bg.png','assets/hp_bar/enemy_hp_bar_frame.png',self.x,self.y-20)
         self.direction = 'r'
-        self.velocity = 1
+        self.velocity = 0.5
         self.attack_cd = 0
         
 

@@ -10,7 +10,7 @@ class Player(entity):
         self.moving_left = False
         self.moving_right = False
         self.y_momentum = 0
-        self.velocity = 3
+        self.velocity = 3.5
         self.jump_momentum = -10
         self.buffs = {}
         self.air_timer = 0
