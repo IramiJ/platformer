@@ -54,7 +54,7 @@ class Player(entity):
                 elif buff == 'jump boost':
                     self.jump_momentum = -15
                     self.buffs[buff] -= 1
-                elif buff == 'double coins':
+                elif buff == 'double coin':
                     self.double_coin_buff = True
                     self.buffs[buff] -= 1
             else:

@@ -22,6 +22,7 @@ from world.level_loader import Level_loader, update_level, reach_checkpoint
 from core.logic_variables import Logic_variables
 from ui.pause_screen import Pause_screen
 from ui.win_screen import Win_screen
+from entities.player.render_buffs import render_buffs
 
 clock = pygame.time.Clock()
 window_size = [640, 480]
@@ -47,7 +48,6 @@ enemies.load_enemies(level)
 bullets = []
 
 scroll = Scroll()
-
 #MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
 while True:              
     # Keyboard handling
@@ -70,7 +70,8 @@ while True:
         large_font.render(display,str(coins.amount), (16,0))
         draw_constants(display)
         hp_bar.draw(display, 5, player.hp)
-    
+        render_buffs(shop.data, display, player)
+
     # Overlay displays
     if shop.displaying:
         shop.show(display, player, coins)
@@ -91,7 +92,6 @@ while True:
             bullet.move(player, display, bullets, scroll)
         player.dying(level.data["max_y"])
         player.apply_buffs(["speed boost", "jump boost", "double coin"])
-    
     
     surf = pygame.transform.scale(display,Settings.window_size)
     update_level(player, level, enemies, win_screen)
