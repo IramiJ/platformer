@@ -1,7 +1,7 @@
 {
     "double coin": {
-        "price": 10,
-        "duration": 30,
+        "price": "10",
+        "duration": "30",
         "description": "upon collecting coins, earn double the amount",
         "asset_path": "assets/shop_items/double_coins.png"
     },
@@ -15,7 +15,7 @@
 
     "jump boost": {
         "price": "5",
-        "duration": "20",
+        "duration": "3",
         "description": "increases jump height",
         "asset_path": "assets/shop_items/jump_boost.png"
     }

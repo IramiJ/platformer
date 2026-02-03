@@ -15,4 +15,5 @@ def load_animation(path,dur,entity):
     return animation_frame_data
 def draw_constants(display):
     coin_count = pygame.image.load('assets/constants/coins.png').convert()
+    coin_count.set_colorkey((0,0,0))
     display.blit(coin_count, (0,0))

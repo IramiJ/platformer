@@ -62,18 +62,18 @@ while True:
     # Draw logic  
     if logic_variables.RENDER:  
         display.fill((0,0,0))
-        coins.draw_coins(display, scroll)
-        draw_constants(display)
+        coins.draw_coins(display, scroll)       
         tile_rects = []
         display_map(display, scroll, tile_rects, level.map, tiles)
         player.update_frames()
         player.draw(display, scroll)
         large_font.render(display,str(coins.amount), (16,0))
+        draw_constants(display)
         hp_bar.draw(display, 5, player.hp)
     
     # Overlay displays
     if shop.displaying:
-        shop.show(display, player, coins.amount)
+        shop.show(display, player, coins)
     elif pause_screen.displaying:
         pause_screen.render(display)
     elif win_screen.displaying:
@@ -91,8 +91,6 @@ while True:
             bullet.move(player, display, bullets, scroll)
         player.dying(level.data["max_y"])
         player.apply_buffs()
-    
-    
     
     
     surf = pygame.transform.scale(display,Settings.window_size)

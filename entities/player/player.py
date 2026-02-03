@@ -12,7 +12,7 @@ class Player(entity):
         self.y_momentum = 0
         self.velocity = 3
         self.jump_momentum = -10
-        self.buffs = []
+        self.buffs = {}
         self.air_timer = 0
         self.double_coin_buff = False
         self.animation_database = {}
@@ -36,13 +36,21 @@ class Player(entity):
             self.rect.x = self.spawn_point[0]
             self.rect.y = self.spawn_point[1]
     def apply_buffs(self):
-        for buff in self.buffs:
-            if buff == 'speed boost':
-                self.velocity = 4
-            elif buff == 'jump boost':
-                self.jump_momentum = -15
-            elif buff == 'double coins':
-                self.double_coin_buff = True
+        c = self.buffs.copy()
+        for buff in c:
+            if self.buffs[buff] > 0:
+                if buff == 'speed boost':
+                    self.velocity = 4
+                    self.buffs[buff] -= 1
+                elif buff == 'jump boost':
+                    self.jump_momentum = -15
+                    self.buffs[buff] -= 1
+                elif buff == 'double coins':
+                    self.double_coin_buff = True
+                    self.buffs[buff] -= 1
+            else:
+                self.buffs.pop(buff)
+            
     def update_frames(self):
         self.frame += 1
         if self.frame >= len(self.animation_database[self.action]):
