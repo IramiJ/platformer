@@ -11,11 +11,14 @@ class Sword(simple_entity):
         self.particle_cd = 1
     def add_particles(self):
         if self.particle_cd == 0:
-            for i in range(0, self.img.get_width()):                
-                if self.flip:
-                    self.particles.append(Particle("assets/particles/sword_particle.png", [self.loc[0]+i, self.loc[1]], 120))
+            for i in range(0, self.img.get_width()//2):
+                p = Particle("assets/particles/sword_particle.png", [self.loc[0]+2*i, self.loc[1]], 120)
+                p.y_velocity += i/100                
+                if self.flip:                   
+                    self.particles.append(p)                    
                 else:
-                    self.particles.append(Particle("assets/particles/sword_particle.png", [self.loc[0]+self.img.get_width()-i, self.loc[1]], 120))
+                    p.loc[0] = self.loc[0]+self.img.get_width()-2*i
+                    self.particles.append(p)
             self.particle_cd = 60
         else:
             self.particle_cd -= 1

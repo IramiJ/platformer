@@ -1,6 +1,7 @@
 from entities.entity import entity
 from entities.player.tail import Tail
 from entities.player.sword import Sword
+from entities.player.pistol import Pistol
 from entities.animations import load_animation
 import json
 import pygame
@@ -34,6 +35,8 @@ class Player(entity):
         self.cd_obj.animation_database['idle'] = load_animation('assets/cooldown/idle', [8 for x in range(15)], self.cd_obj)
         self.tail = Tail('assets/tail/grey.png',[self.rect.x-2, self.rect.y+8])
         self.sword = Sword([self.rect.x, self.rect.y])
+        self.pistol = Pistol([self.rect.x, self.rect.y])
+        self.mode = "R"
     def dying(self, max_y):
         if self.rect.y > max_y:
             self.rect.x = self.spawn_point[0]
@@ -69,15 +72,39 @@ class Player(entity):
         self.img_id = self.animation_database[self.action][self.frame]
         self.img = self.animation_frames[self.img_id]
     def draw(self, display, scroll):
+        if self.mode == "M":
+            self.draw_sword(display, scroll)
+        elif self.mode == "R":
+            self.draw_pistol(display, scroll)
+        self.sword.particles = [p for p in self.sword.particles if p.duration > 0]
+        display.blit(pygame.transform.flip(self.img,self.flip,False), [self.rect.x-scroll.render_scroll[0], self.rect.y-scroll.render_scroll[1]])
+
+    def draw_sword(self, display, scroll):
         self.sign = -1 if self.flip else 1
         self.sword.flip = self.flip
-        self.sword.loc = [self.rect.x + self.sign*10, self.rect.y+10]
+        if self.sign == 1:
+            self.sword.loc = [self.rect.x + self.sign*10, self.rect.y+10]
+        else:
+            self.sword.loc = [self.rect.x + self.sign*10 - 5, self.rect.y+10]
         display.blit(pygame.transform.flip(self.sword.img,self.flip,False), [self.sword.loc[0]-scroll.render_scroll[0], self.sword.loc[1]-scroll.render_scroll[1]])
         self.sword.add_particles()
         for particle in self.sword.particles:
             particle.render(display, scroll)
-        self.sword.particles = [p for p in self.sword.particles if p.duration > 0]
-        display.blit(pygame.transform.flip(self.img,self.flip,False), [self.rect.x-scroll.render_scroll[0], self.rect.y-scroll.render_scroll[1]])
+
+    def draw_pistol(self, display, scroll):
+        self.sign = -1 if self.flip else 1
+        self.pistol.flip = self.flip
+        if self.sign == 1:
+            self.pistol.loc = [self.rect.x + self.sign*10, self.rect.y+6]
+        else:
+            self.pistol.loc = [self.rect.x + self.sign*10+3, self.rect.y+6]
+        display.blit(pygame.transform.flip(self.pistol.img,self.flip,False), [self.pistol.loc[0]-scroll.render_scroll[0], self.pistol.loc[1]-scroll.render_scroll[1]])
+
+    def switch_mode(self):
+        if self.mode == "M":
+            self.mode   = "R"
+        elif self.mode == "R":
+            self.mode = "M"
     def attack(self, enemy):
         if self.dmg_cd == 0:
             if self.dashing:

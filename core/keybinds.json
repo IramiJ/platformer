@@ -4,5 +4,6 @@
     "jump": "K_SPACE",
     "shop": "K_b",
     "dash": "K_e",
-    "pause": "K_ESCAPE"
+    "pause": "K_ESCAPE",
+    "switch_mode": "K_r"
 }

@@ -36,6 +36,8 @@ def kb_events(player, shop, pause_screen):
                 dash(player)
             elif event.key == keybinds["pause"]:
                 pause_screen.change_displaying()
+            elif event.key == keybinds["switch_mode"]:
+                player.switch_mode()
 
         elif event.type == pygame.KEYUP:
             if event.key == keybinds["right"]:
