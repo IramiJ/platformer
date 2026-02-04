@@ -69,9 +69,14 @@ class Player(entity):
         self.img_id = self.animation_database[self.action][self.frame]
         self.img = self.animation_frames[self.img_id]
     def draw(self, display, scroll):
-        self.sign = 1 if self.flip else -1
-        self.sword.loc = [self.rect.x - self.sign*10-scroll.render_scroll[0], self.rect.y+10-scroll.render_scroll[1]]
-        display.blit(pygame.transform.flip(self.sword.img,self.flip,False), self.sword.loc)
+        self.sign = -1 if self.flip else 1
+        self.sword.flip = self.flip
+        self.sword.loc = [self.rect.x + self.sign*10, self.rect.y+10]
+        display.blit(pygame.transform.flip(self.sword.img,self.flip,False), [self.sword.loc[0]-scroll.render_scroll[0], self.sword.loc[1]-scroll.render_scroll[1]])
+        self.sword.add_particles()
+        for particle in self.sword.particles:
+            particle.render(display, scroll)
+        self.sword.particles = [p for p in self.sword.particles if p.duration > 0]
         display.blit(pygame.transform.flip(self.img,self.flip,False), [self.rect.x-scroll.render_scroll[0], self.rect.y-scroll.render_scroll[1]])
     def attack(self, enemy):
         if self.dmg_cd == 0:
