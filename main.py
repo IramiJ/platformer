@@ -27,7 +27,7 @@ from entities.player.render_buffs import render_buffs
 clock = pygame.time.Clock()
 window_size = [640, 480]
 screen = pygame.display.set_mode(Settings.window_size)
-display = pygame.Surface((320,240))
+display = pygame.Surface((window_size[0]//2,window_size[1]//2))
 pygame.display.set_caption(Settings.caption)
 
 tiles = load_tiles('assets/tiles')

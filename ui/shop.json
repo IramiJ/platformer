@@ -15,7 +15,7 @@
 
     "jump boost": {
         "price": "5",
-        "duration": "3",
+        "duration": "10",
         "description": "increases jump height",
         "asset_path": "assets/shop_items/jump_boost.png"
     }

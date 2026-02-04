@@ -1,5 +1,6 @@
 from entities.entity import entity
 from entities.player.tail import Tail
+from entities.player.sword import Sword
 from entities.animations import load_animation
 import json
 import pygame
@@ -26,12 +27,13 @@ class Player(entity):
         self.dash_speed = 6
         self.dash_cooldown = 0
         self.hp = 5
-        self.animation_database['idle'] = load_animation('assets/char/idle', [15, 15], self)
-        self.animation_database['run'] = load_animation('assets/char/run', [5,5,5,5], self)
+        self.animation_database['idle'] = load_animation('assets/char/idle', [30, 30, 30, 30], self)
+        self.animation_database['run'] = load_animation('assets/char/run', [8,8,8], self)
         self.dmg_cd = 0
         self.cd_obj = entity(self.x, self.y + 15, 16, 16)
         self.cd_obj.animation_database['idle'] = load_animation('assets/cooldown/idle', [8 for x in range(15)], self.cd_obj)
         self.tail = Tail('assets/tail/grey.png',[self.rect.x-2, self.rect.y+8])
+        self.sword = Sword([self.rect.x, self.rect.y])
     def dying(self, max_y):
         if self.rect.y > max_y:
             self.rect.x = self.spawn_point[0]
@@ -67,6 +69,9 @@ class Player(entity):
         self.img_id = self.animation_database[self.action][self.frame]
         self.img = self.animation_frames[self.img_id]
     def draw(self, display, scroll):
+        self.sign = 1 if self.flip else -1
+        self.sword.loc = [self.rect.x - self.sign*10-scroll.render_scroll[0], self.rect.y+10-scroll.render_scroll[1]]
+        display.blit(pygame.transform.flip(self.sword.img,self.flip,False), self.sword.loc)
         display.blit(pygame.transform.flip(self.img,self.flip,False), [self.rect.x-scroll.render_scroll[0], self.rect.y-scroll.render_scroll[1]])
     def attack(self, enemy):
         if self.dmg_cd == 0:
