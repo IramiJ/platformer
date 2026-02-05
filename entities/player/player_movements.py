@@ -71,7 +71,7 @@ def dash(player):
     if not player.dashing and player.dash_cooldown == 0:           
         player.dashing = True
         player.dash_timer = player.dash_duration
-        player.dash_cooldown = 120
+        player.dash_cooldown = player.max_dash_cd
 def dash_cd(player, display, cd, scroll):
     cd.img_id = cd.animation_database[cd.action][cd.frame]
     cd.img = cd.animation_frames[cd.img_id]

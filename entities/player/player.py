@@ -26,6 +26,7 @@ class Player(entity):
         self.dash_timer = 0
         self.dash_duration = 10
         self.dash_speed = 6
+        self.max_dash_cd = 120
         self.dash_cooldown = 0
         self.hp = 5
         self.animation_database['idle'] = load_animation('assets/char/idle', [30, 30, 30, 30], self)
@@ -34,7 +35,7 @@ class Player(entity):
         self.cd_obj = entity(self.x, self.y + 15, 16, 16)
         self.cd_obj.animation_database['idle'] = load_animation('assets/cooldown/idle', [8 for x in range(15)], self.cd_obj)
         self.tail = Tail('assets/tail/grey.png',[self.rect.x-2, self.rect.y+8])
-        self.sword = Sword([self.rect.x, self.rect.y])
+        self.sword = Sword(self.rect.x, self.rect.y)
         self.pistol = Pistol([self.rect.x, self.rect.y])
         self.mode = "R"
     def dying(self, max_y):
@@ -90,6 +91,7 @@ class Player(entity):
         self.sword.add_particles()
         for particle in self.sword.particles:
             particle.render(display, scroll)
+        self.sword.draw_slice(display, scroll)
 
     def draw_pistol(self, display, scroll):
         self.sign = -1 if self.flip else 1
@@ -105,6 +107,16 @@ class Player(entity):
             self.mode   = "R"
         elif self.mode == "R":
             self.mode = "M"
+
+    def update_mode_variables(self):
+        if self.mode == "M":
+            self.velocity = 3
+            self.dash_duration = 20
+        elif self.mode == "R":
+            self.velocity = 4
+            self.dash_duration = 10
+
+
     def attack(self, enemy):
         if self.dmg_cd == 0:
             if self.dashing:
