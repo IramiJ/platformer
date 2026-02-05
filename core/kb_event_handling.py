@@ -1,5 +1,4 @@
 import pygame, sys, json
-from entities.player.player_movements import dash
 
 def load_keybinds(path="core/keybinds.json"):
     with open(path, "r") as f:
@@ -33,7 +32,7 @@ def kb_events(player, shop, pause_screen):
             elif event.key == keybinds["shop"]:
                 shop.change_displaying()
             elif event.key == keybinds["dash"]:
-                dash(player)
+                player.dash()
             elif event.key == keybinds["pause"]:
                 pause_screen.change_displaying()
             elif event.key == keybinds["switch_mode"]:

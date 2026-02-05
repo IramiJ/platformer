@@ -6,8 +6,6 @@ from entities.particles import Particle
 class Sword(entity):
     def __init__(self, x, y):
         super().__init__(x,y,21,3)
-        self.img = pygame.image.load("assets/constants/sword.png").convert()
-        self.img.set_colorkey((0,0,0))
         self.particles = []
         self.flip = False
         self.particle_cd = 1
@@ -22,7 +20,7 @@ class Sword(entity):
                 if self.flip:                   
                     self.particles.append(p)                    
                 else:
-                    p.loc[0] = self.loc[0]+self.img.get_width()-i
+                    p.loc[0] = self.loc[0]+20-i
                     self.particles.append(p)
             self.particle_cd = 60
         else:
@@ -44,7 +42,10 @@ class Sword(entity):
                 self.slice_animation.append(animation_image)
             n +=1 
     def draw_slice(self, display: pygame.Surface, scroll):
-        display.blit(self.slice_animation[self.slice_frame], [self.loc[0]+self.img.get_width()-scroll.render_scroll[0], self.loc[1]-scroll.render_scroll[1]-4])
+        if not self.flip:
+            display.blit(pygame.transform.flip(self.slice_animation[self.slice_frame],self.flip,False), [self.loc[0]+14-scroll.render_scroll[0], self.loc[1]-scroll.render_scroll[1]-16])
+        else:
+            display.blit(pygame.transform.flip(self.slice_animation[self.slice_frame],self.flip,False), [self.loc[0]-scroll.render_scroll[0], self.loc[1]-scroll.render_scroll[1]-16])
         if self.slice_frame < len(self.slice_animation)-1:
             self.slice_frame += 1
         else:

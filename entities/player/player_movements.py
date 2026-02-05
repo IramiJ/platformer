@@ -39,13 +39,22 @@ def player_movements(player, tile_rects, display, cd, tail, scroll):
         
     
     if player.movement[0] > 0:
-        player.change_action('run')
+        if player.mode == "meele":
+            player.change_action('run_meele')
+        else:
+            player.change_action('run_ranged')
         player.flip = False
     if player.movement[0] < 0:
-        player.change_action('run')
+        if player.mode == "meele":
+            player.change_action('run_meele')
+        else:
+            player.change_action('run_ranged')
         player.flip = True
     if player.movement[0] == 0:
-        player.change_action('idle')
+        if player.mode == "meele":
+            player.change_action('idle_meele')
+        else:
+            player.change_action('idle_ranged')
     player.rect, collisions = move(player.rect, player.movement, tile_rects)
 
     if collisions['bottom']:
@@ -67,11 +76,7 @@ def player_movements(player, tile_rects, display, cd, tail, scroll):
     
     
 
-def dash(player):
-    if not player.dashing and player.dash_cooldown == 0:           
-        player.dashing = True
-        player.dash_timer = player.dash_duration
-        player.dash_cooldown = player.max_dash_cd
+
 def dash_cd(player, display, cd, scroll):
     cd.img_id = cd.animation_database[cd.action][cd.frame]
     cd.img = cd.animation_frames[cd.img_id]
