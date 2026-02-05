@@ -18,3 +18,10 @@ class Particle:
     def increase_velocity(self):
         self.y_velocity += 0.01
         self.x_velocity = random.randint(-10, 10) / 30
+
+class simple_particle:
+    def __init__(self, loc, velocities, radius):
+        self.loc = loc
+        self.velocities = velocities
+        self.radius = radius
+        

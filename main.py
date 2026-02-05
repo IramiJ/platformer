@@ -3,6 +3,7 @@
 import pygame, random
 
 from ui.death_screen import Death_screen
+from world.torch import Torch
 pygame.init()
 from ui.Font_renderer import Font
 from ui.shopping import Shop
@@ -46,7 +47,7 @@ win_screen = Win_screen()
 enemies = Enemies()
 enemies.load_enemies(level)
 bullets = []
-
+t = Torch([32, 304])
 scroll = Scroll()
 #MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
 while True:              
@@ -71,7 +72,7 @@ while True:
         draw_constants(display)
         hp_bar.draw(display, 5, player.hp)
         render_buffs(shop.data, display, player)
-
+        t.draw(display, scroll)
     # Overlay displays
     if shop.displaying:
         shop.show(display, player, coins)
@@ -93,7 +94,7 @@ while True:
         player.dying(level.data["max_y"])
         player.apply_buffs(["speed boost", "jump boost", "double coin"])
         player.update_mode_variables()
-
+    print(p.loc for p in t.particles)
     surf = pygame.transform.scale(display,Settings.window_size)
     update_level(player, level, enemies, win_screen)
     reach_checkpoint(player, level)
