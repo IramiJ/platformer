@@ -5,7 +5,7 @@ from entities.particles import Particle
 
 class Sword(entity):
     def __init__(self, x, y):
-        super().__init__(x,y,21,3)
+        super().__init__(x,y,21,7)
         self.img = pygame.image.load("assets/constants/curve_sword.png").convert()
         self.img.set_colorkey((0,0,0))
         self.particles = []
@@ -52,5 +52,20 @@ class Sword(entity):
             self.slice_frame += 1
         else:
             self.slice_frame = 0
+
+    def draw(self, player, display, scroll):
+        self.flip = player.flip
+        self.sign = -1 if self.flip else 1       
+        if self.sign == 1:
+            self.loc = [player.rect.right-6, player.rect.y+6]
+        else:
+            
+            self.loc = [player.rect.left-21+6, player.rect.y+6]
+        if player.dashing:
+            self.draw_slice(display, scroll)
+        self.add_particles()
+        display.blit(pygame.transform.flip(self.img, self.flip, False), [self.loc[0] - scroll.render_scroll[0], self.loc[1] - scroll.render_scroll[1]])
+        for particle in self.particles:
+            particle.render(display, scroll)
         
 

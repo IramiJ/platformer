@@ -74,33 +74,16 @@ class Player(entity):
         self.img_id = self.animation_database[self.action][self.frame]
         self.img = self.animation_frames[self.img_id]
     def draw(self, display, scroll):
+#        pygame.draw.rect(display, (255,0,0), pygame.Rect(self.rect.left - scroll.render_scroll[0], self.rect.top - scroll.render_scroll[1], 16, 16))
         if self.mode == "meele":
-            self.draw_sword(display, scroll)
+            self.sword.draw(self, display, scroll)
         elif self.mode == "ranged":
-            self.draw_pistol(display, scroll)
+            self.pistol.draw(self, display, scroll)
         self.sword.particles = [p for p in self.sword.particles if p.duration > 0]
         display.blit(pygame.transform.flip(self.img,self.flip,False), [self.rect.x-scroll.render_scroll[0], self.rect.y-scroll.render_scroll[1]])
 
-    def draw_sword(self, display, scroll):
-        self.sign = -1 if self.flip else 1
-        self.sword.flip = self.flip
-        if self.sign == 1:
-            self.sword.loc = [self.rect.x + self.sign*10, self.rect.y+6]
-        else:
-            self.sword.loc = [self.rect.x + self.sign*10 - 6, self.rect.y+6]
-        if self.dashing:
-            self.sword.draw_slice(display, scroll)
-        self.sword.add_particles()
-        display.blit(pygame.transform.flip(self.sword.img, self.flip, False), [self.sword.loc[0] - scroll.render_scroll[0], self.sword.loc[1] - scroll.render_scroll[1]])
-        for particle in self.sword.particles:
-            particle.render(display, scroll)
-    def draw_pistol(self, display, scroll):
-        self.sign = -1 if self.flip else 1
-        if self.sign == 1:
-            self.pistol.loc = [self.rect.x + self.sign*10-2, self.rect.y+6]
-        else:
-            self.pistol.loc = [self.rect.x + self.sign*10+4, self.rect.y+6]
-        display.blit(pygame.transform.flip(self.pistol.img, self.flip, False), [self.pistol.loc[0] - scroll.render_scroll[0], self.pistol.loc[1] - scroll.render_scroll[1]])
+    
+    
 
     def dash(self):
         if not self.dashing and self.dash_cooldown == 0:           
