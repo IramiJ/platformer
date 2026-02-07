@@ -37,6 +37,8 @@ def kb_events(player, shop, pause_screen):
                 pause_screen.change_displaying()
             elif event.key == keybinds["switch_mode"]:
                 player.switch_mode()
+            elif event.key == keybinds["shoot"]:
+                player.pistol.add_bullet()
 
         elif event.type == pygame.KEYUP:
             if event.key == keybinds["right"]:

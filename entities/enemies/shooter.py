@@ -1,5 +1,5 @@
 from entities.enemies.enemy import Enemy
-from entities.enemies.bullet import Bullet
+from entities.enemies.shooter_bullet import Shooter_Bullet
 from entities.animations import load_animation
 from entities.hp_bar import Hp_bar
 from core.settings import Settings
@@ -32,7 +32,7 @@ class Shooter(Enemy):
             self.change_action('shoot')
             if self.attack_cd == 0:
                 self.attack_cd = 3 * Settings.fps
-                bullet_list.append(Bullet(self.spawn_point.copy(), player))
+                bullet_list.append(Shooter_Bullet(self.spawn_point.copy(), player))
         else:
             self.change_action('idle')
         

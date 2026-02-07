@@ -94,6 +94,7 @@ while True:
         player.dying(level.data["max_y"])
         player.apply_buffs(["speed boost", "jump boost", "double coin"])
         player.update_mode_variables()
+        player.pistol.shoot(enemies.enemies)
     surf = pygame.transform.scale(display,Settings.window_size)
     update_level(player, level, enemies, win_screen)
     reach_checkpoint(player, level)

@@ -1,7 +1,7 @@
 import pygame, math
 from entities.entity import simple_entity
 
-class Bullet(simple_entity):
+class Shooter_Bullet(simple_entity):
         def __init__(self, loc, player):
             super().__init__('assets/enemies/shooter/bullet.png',  loc)
             self.start = self.loc.copy()
@@ -16,18 +16,18 @@ class Bullet(simple_entity):
             self.angle =  math.atan2(y, x) + math.pi
         def transform_img(self):
             self.img = pygame.transform.rotate(self.base_img, math.degrees(self.angle))
-        def move(self, player, display, bullet_list, scroll):
+        def move(self, entity, display, bullet_list, scroll):
             self.render(display, scroll.render_scroll)
             self.loc[0] += math.cos(self.angle) * self.velocity
             self.loc[1] += math.sin(self.angle) * self.velocity
             if self.dmg_cd == 0:
-                self.dmg_player(player, scroll)
+                self.dmg_entity(entity, scroll)
             self.remove(bullet_list)
         def remove(self, bullet_list):
              if math.sqrt((self.loc[0] - self.start[0])**2 + (self.loc[1] - self.start[1])**2) >= self.range:
                   bullet_list.remove(self)
 
-        def dmg_player(self, player, scroll):
-            if self.collision_test(player.rect):
-                player.take_dmg(scroll)
+        def dmg_entity(self, entity, scroll):
+            if self.collision_test(entity.rect):
+                entity.take_dmg(scroll)
                 self.dmg_cd = 1
