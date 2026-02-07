@@ -10,6 +10,10 @@ class Pistol:
         self.bullets = []
         self.flip = False
         self.shoot_cd = 60
+        self.ammo = 5
+        self.ammo_img = pygame.image.load("assets/constants/cd_pistol.png").convert()
+        self.ammo_img.set_colorkey((0,0,0))
+
     def draw(self, player, display, scroll):
         if self.shoot_cd > 0:
             self.shoot_cd -= 1
@@ -34,13 +38,14 @@ class Pistol:
             flip = bool(self.flip)
             self.bullets.append(Bullet(b_loc, flip))
             self.shoot_cd = 60
+            self.ammo -= 1
 
 class Bullet(simple_entity):
         def __init__(self, loc, flip):
-            super().__init__('assets/enemies/shooter/bullet.png',  loc)
+            super().__init__('assets/constants/pistol_bullet.png',  loc)
             self.start = self.loc.copy()
             self.base_img = self.img.copy()
-            self.velocity = 2
+            self.velocity = 5
             self.range = 200
             self.dmg_cd = 0
             self.flip = flip
@@ -62,3 +67,4 @@ class Bullet(simple_entity):
                     if self.collision_test(enemy.rect):
                         enemy.take_dmg()
                         self.dmg_cd = 1
+

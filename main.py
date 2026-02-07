@@ -32,6 +32,7 @@ display = pygame.Surface((window_size[0]//2,window_size[1]//2))
 pygame.display.set_caption(Settings.caption)
 
 tiles = load_tiles('assets/tiles')
+print(tiles)
 level = Level_loader()
 level.load_level('world/levels/level1.json')
 player = Player(level.data['spawn'][0],level.data['spawn'][1],16,16)

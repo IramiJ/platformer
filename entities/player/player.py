@@ -29,6 +29,7 @@ class Player(entity):
         self.max_dash_cd = 120
         self.dash_cooldown = 0
         self.hp = 5
+        self.dmg = 1
         self.animation_database['idle'] = load_animation('assets/char/idle', [15,15,20,30,10,10], self)
         self.animation_database['run'] = load_animation('assets/char/run', [5 for x in range(12)], self)
         self.dmg_cd = 0
@@ -98,12 +99,14 @@ class Player(entity):
             self.mode = "meele"
 
     def update_mode_variables(self):
-        if self.mode == "M":
+        if self.mode == "meele":
             self.velocity = 3
             self.dash_duration = 20
-        elif self.mode == "R":
+            self.dmg = 2
+        elif self.mode == "ranged":
             self.velocity = 4
             self.dash_duration = 10
+            self.dmg = 1
 
 
     def attack(self, enemy):
