@@ -1,6 +1,7 @@
 from entities.entity import entity
 from entities.player.tail import Tail
 from entities.player.sword import Sword
+from entities.player.pistol import Pistol
 from entities.animations import load_animation
 import json
 import pygame
@@ -28,16 +29,15 @@ class Player(entity):
         self.max_dash_cd = 120
         self.dash_cooldown = 0
         self.hp = 5
-        self.animation_database['idle_meele'] = load_animation('assets/char/idle_meele', [30, 30, 30, 30, 30], self)
-        self.animation_database['run_meele'] = load_animation('assets/char/run_meele', [20,20,20,20,20,20], self)
-        self.animation_database['idle_ranged'] = load_animation('assets/char/idle_ranged', [30, 30, 30, 30, 30], self)
-        self.animation_database['run_ranged'] = load_animation('assets/char/run_ranged', [20,20,20,20,20,20], self)
+        self.animation_database['idle'] = load_animation('assets/char/idle', [15,15,20,30,10,10], self)
+        self.animation_database['run'] = load_animation('assets/char/run', [5 for x in range(12)], self)
         self.dmg_cd = 0
         self.cd_obj = entity(self.x, self.y + 15, 16, 16)
         self.cd_obj.animation_database['idle'] = load_animation('assets/cooldown/idle', [8 for x in range(15)], self.cd_obj)
         self.tail = Tail('assets/tail/grey.png',[self.rect.x-2, self.rect.y+8])
         self.sword = Sword(self.rect.x, self.rect.y)
-        self.action = "idle_meele"
+        self.pistol = Pistol(self.rect.y, self.rect.y)
+        self.action = "idle"
         self.mode = "meele"
     def dying(self, max_y):
         if self.rect.y > max_y:
@@ -76,6 +76,8 @@ class Player(entity):
     def draw(self, display, scroll):
         if self.mode == "meele":
             self.draw_sword(display, scroll)
+        elif self.mode == "ranged":
+            self.draw_pistol(display, scroll)
         self.sword.particles = [p for p in self.sword.particles if p.duration > 0]
         display.blit(pygame.transform.flip(self.img,self.flip,False), [self.rect.x-scroll.render_scroll[0], self.rect.y-scroll.render_scroll[1]])
 
@@ -83,14 +85,23 @@ class Player(entity):
         self.sign = -1 if self.flip else 1
         self.sword.flip = self.flip
         if self.sign == 1:
-            self.sword.loc = [self.rect.x + self.sign*10, self.rect.y+10]
+            self.sword.loc = [self.rect.x + self.sign*10, self.rect.y+6]
         else:
-            self.sword.loc = [self.rect.x + self.sign*10 - 5, self.rect.y+10]
+            self.sword.loc = [self.rect.x + self.sign*10 - 6, self.rect.y+6]
         if self.dashing:
             self.sword.draw_slice(display, scroll)
         self.sword.add_particles()
+        display.blit(pygame.transform.flip(self.sword.img, self.flip, False), [self.sword.loc[0] - scroll.render_scroll[0], self.sword.loc[1] - scroll.render_scroll[1]])
         for particle in self.sword.particles:
             particle.render(display, scroll)
+    def draw_pistol(self, display, scroll):
+        self.sign = -1 if self.flip else 1
+        if self.sign == 1:
+            self.pistol.loc = [self.rect.x + self.sign*10-2, self.rect.y+6]
+        else:
+            self.pistol.loc = [self.rect.x + self.sign*10+4, self.rect.y+6]
+        display.blit(pygame.transform.flip(self.pistol.img, self.flip, False), [self.pistol.loc[0] - scroll.render_scroll[0], self.pistol.loc[1] - scroll.render_scroll[1]])
+
     def dash(self):
         if not self.dashing and self.dash_cooldown == 0:           
             self.dashing = True

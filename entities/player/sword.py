@@ -6,6 +6,8 @@ from entities.particles import Particle
 class Sword(entity):
     def __init__(self, x, y):
         super().__init__(x,y,21,3)
+        self.img = pygame.image.load("assets/constants/curve_sword.png").convert()
+        self.img.set_colorkey((0,0,0))
         self.particles = []
         self.flip = False
         self.particle_cd = 1

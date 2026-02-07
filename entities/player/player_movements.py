@@ -39,22 +39,13 @@ def player_movements(player, tile_rects, display, cd, tail, scroll):
         
     
     if player.movement[0] > 0:
-        if player.mode == "meele":
-            player.change_action('run_meele')
-        else:
-            player.change_action('run_ranged')
+        player.change_action('run')
         player.flip = False
     if player.movement[0] < 0:
-        if player.mode == "meele":
-            player.change_action('run_meele')
-        else:
-            player.change_action('run_ranged')
+        player.change_action('run')
         player.flip = True
     if player.movement[0] == 0:
-        if player.mode == "meele":
-            player.change_action('idle_meele')
-        else:
-            player.change_action('idle_ranged')
+        player.change_action('idle')
     player.rect, collisions = move(player.rect, player.movement, tile_rects)
 
     if collisions['bottom']:
