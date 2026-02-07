@@ -10,7 +10,7 @@ def render_buffs(buff_list, display: pygame.Surface, player):
             img = pygame.image.load(buff_list[buff]["asset_path"]).convert()
             img.set_colorkey((0,0,0))
             location = [320-img.get_width()-20, 20+y_offset]
-            small_font.render(display, str(player.buffs[buff]//60), [320-10, 25+y_offset])
+            small_font.render(display, str(player.buffs[buff]//60), [320-10, 40+y_offset])
             display.blit(img, location)
             y_offset += img.get_height()
         
