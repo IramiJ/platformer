@@ -6,5 +6,6 @@
     "dash": "K_e",
     "pause": "K_ESCAPE",
     "switch_mode": "K_r",
-    "shoot": "K_q"
+    "shoot": "K_q",
+    "reload": "K_d"
 }

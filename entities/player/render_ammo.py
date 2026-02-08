@@ -12,7 +12,7 @@ class Ammo():
         self.pistol_img.set_colorkey((0,0,0))
     def render_ammo(self, display, player):
         self.render_pistol(display)
-        if player.pistol.ammo > 0:
+        if not player.pistol.reloading:
             self.render_ammo_amount(display, player)
         else:
             self.dash_cd(display)

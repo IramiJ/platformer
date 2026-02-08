@@ -41,7 +41,7 @@ class Pistol:
         display.blit(pygame.transform.flip(self.img, player.flip, False), [self.loc[0] - scroll.render_scroll[0], self.loc[1] - scroll.render_scroll[1]])
         for bullet in self.bullets:
             bullet.render(display, scroll.render_scroll)
-        print(self.ammo)
+        print(self.reloading)
     def shoot(self, enemy_list):
         for bullet in self.bullets:
             bullet.move(enemy_list, self.bullets)
@@ -58,8 +58,9 @@ class Pistol:
         
 
     def reload(self):
-        self.reload_cd = 120
-        self.reloading = True
+        if not self.reloading:
+            self.reload_cd = 120
+            self.reloading = True
 
 
 class Bullet(simple_entity):
