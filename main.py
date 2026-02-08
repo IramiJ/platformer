@@ -24,7 +24,7 @@ from core.logic_variables import Logic_variables
 from ui.pause_screen import Pause_screen
 from ui.win_screen import Win_screen
 from entities.player.render_buffs import render_buffs
-from entities.player.render_ammo import render_ammo
+from entities.player.render_ammo import Ammo
 
 clock = pygame.time.Clock()
 window_size = [640, 480]
@@ -33,7 +33,6 @@ display = pygame.Surface((window_size[0]//2,window_size[1]//2))
 pygame.display.set_caption(Settings.caption)
 
 tiles = load_tiles('assets/tiles')
-print(tiles)
 level = Level_loader()
 level.load_level('world/levels/level1.json')
 player = Player(level.data['spawn'][0],level.data['spawn'][1],16,16)
@@ -47,6 +46,7 @@ pause_screen = Pause_screen()
 death_screen = Death_screen()
 win_screen = Win_screen()
 enemies = Enemies()
+ammo = Ammo()
 enemies.load_enemies(level)
 bullets = []
 t = Torch([32, 304])
@@ -74,7 +74,7 @@ while True:
         draw_constants(display)
         hp_bar.draw(display, 5, player.hp)
         render_buffs(shop.data, display, player)
-        render_ammo(display, player)
+        ammo.render_ammo(display, player)
         t.draw(display, scroll)
     # Overlay displays
     if shop.displaying:

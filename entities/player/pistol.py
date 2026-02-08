@@ -1,5 +1,6 @@
 import pygame, math
-from entities.entity import simple_entity
+from entities.entity import simple_entity, entity
+from entities.animations import load_animation
 
 
 class Pistol:
@@ -9,14 +10,28 @@ class Pistol:
         self.img.set_colorkey((0,0,0))
         self.bullets = []
         self.flip = False
+        self.reloading = False
+        self.add_ammo = False
         self.shoot_cd = 60
         self.ammo = 5
         self.ammo_img = pygame.image.load("assets/constants/cd_pistol.png").convert()
         self.ammo_img.set_colorkey((0,0,0))
+        self.reload_cd = 0
 
     def draw(self, player, display, scroll):
         if self.shoot_cd > 0:
             self.shoot_cd -= 1
+        if self.reload_cd > 0:
+            self.reload_cd -= 1
+            if self.reload_cd == 0:
+                self.reloading = False
+                self.add_ammo = True
+        if self.add_ammo:
+            self.ammo = 5
+            self.add_ammo = False
+        if self.ammo <= 0 and not self.reloading:
+            self.reload()
+        
         self.flip = player.flip
         sign = -1 if player.flip else 1
         if sign == 1:
@@ -26,19 +41,26 @@ class Pistol:
         display.blit(pygame.transform.flip(self.img, player.flip, False), [self.loc[0] - scroll.render_scroll[0], self.loc[1] - scroll.render_scroll[1]])
         for bullet in self.bullets:
             bullet.render(display, scroll.render_scroll)
-        
+        print(self.ammo)
     def shoot(self, enemy_list):
         for bullet in self.bullets:
             bullet.move(enemy_list, self.bullets)
             
 
     def add_bullet(self):
-        if self.shoot_cd <= 0:
-            b_loc = self.loc.copy()
-            flip = bool(self.flip)
-            self.bullets.append(Bullet(b_loc, flip))
-            self.shoot_cd = 60
-            self.ammo -= 1
+        if self.reload_cd == 0:
+            if self.shoot_cd <= 0:
+                b_loc = self.loc.copy()
+                flip = bool(self.flip)
+                self.bullets.append(Bullet(b_loc, flip))
+                self.shoot_cd = 60
+                self.ammo -= 1
+        
+
+    def reload(self):
+        self.reload_cd = 120
+        self.reloading = True
+
 
 class Bullet(simple_entity):
         def __init__(self, loc, flip):
