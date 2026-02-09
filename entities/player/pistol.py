@@ -19,18 +19,7 @@ class Pistol:
         self.reload_cd = 0
 
     def draw(self, player, display, scroll):
-        if self.shoot_cd > 0:
-            self.shoot_cd -= 1
-        if self.reload_cd > 0:
-            self.reload_cd -= 1
-            if self.reload_cd == 0:
-                self.reloading = False
-                self.add_ammo = True
-        if self.add_ammo:
-            self.ammo = 5
-            self.add_ammo = False
-        if self.ammo <= 0 and not self.reloading:
-            self.reload()
+        self.update_cds()
         
         self.flip = player.flip
         sign = -1 if player.flip else 1
@@ -45,7 +34,20 @@ class Pistol:
     def shoot(self, enemy_list):
         for bullet in self.bullets:
             bullet.move(enemy_list, self.bullets)
-            
+    
+    def update_cds(self):
+        if self.shoot_cd > 0:
+            self.shoot_cd -= 1
+        if self.reload_cd > 0:
+            self.reload_cd -= 1
+            if self.reload_cd == 0:
+                self.reloading = False
+                self.add_ammo = True
+        if self.add_ammo:
+            self.ammo = 5
+            self.add_ammo = False
+        if self.ammo <= 0 and not self.reloading:
+            self.reload()
 
     def add_bullet(self):
         if self.reload_cd == 0:

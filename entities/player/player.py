@@ -95,7 +95,7 @@ class Player(entity):
     def switch_mode(self):
         if self.mode == "meele":
             self.mode   = "ranged"
-        elif self.mode == "ranged":
+        elif self.mode == "ranged" and not self.pistol.reloading:
             self.mode = "meele"
 
     def update_mode_variables(self):

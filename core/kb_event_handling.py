@@ -40,7 +40,8 @@ def kb_events(player, shop, pause_screen):
             elif event.key == keybinds["shoot"]:
                 player.pistol.add_bullet()
             elif event.key == keybinds["reload"]:
-                player.pistol.reload()
+                if player.mode == "ranged":
+                    player.pistol.reload()
 
         elif event.type == pygame.KEYUP:
             if event.key == keybinds["right"]:
