@@ -113,9 +113,12 @@ class Player(entity):
         if self.dmg_cd == 0:
             if self.dashing and self.mode == "meele":
                 if self.rect.colliderect(enemy.rect):
-                    enemy.take_dmg()
+                    enemy.take_dmg(self.dmg)
                     self.dmg_cd = self.dash_cooldown
-                    self.hp += 1
+                    if self.hp < 5:
+                        self.hp += 1
+                    else:
+                        self.hp = 5
         else:
             self.dmg_cd -= 1
     def take_dmg(self, scroll):

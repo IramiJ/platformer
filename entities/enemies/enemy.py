@@ -26,11 +26,11 @@ class Enemy(entity):
         else:
             self.dmg_timer = 0
         display.blit(pygame.transform.flip(to_blit,self.flip,False), [self.rect.x-scroll[0], self.rect.y-scroll[1]])
-    def take_dmg(self):
+    def take_dmg(self, dmg):
         if not self.alive:
             return
         self.dmg_timer = 5
-        self.hp -= 1
+        self.hp -= dmg
         self.taking_dmg = True
         if self.hp <= 0:
             self.hp = 0
