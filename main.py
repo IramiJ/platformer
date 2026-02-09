@@ -76,7 +76,6 @@ while True:
         ammo.render_ammo(display, player)
         for torch in torches:
             torch.draw(display, scroll)
-    print(torches[0].loc)
     # Overlay displays
     if shop.displaying:
         shop.show(display, player, coins)
