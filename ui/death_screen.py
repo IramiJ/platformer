@@ -11,3 +11,4 @@ class Death_screen:
         large_font.render(surf, "YOU DIED", (130, 0))
     def change_displaying(self):
         self.displaying = not self.displaying
+        

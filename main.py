@@ -18,7 +18,7 @@ from world.scrolling import Scroll
 from core.kb_event_handling import kb_events
 from entities.enemies.enemies import Enemies
 from entities.coins import Coins
-from world.level_loader import Level_loader, update_level, reach_checkpoint
+from world.level_loader import Level_loader, update_level, reach_checkpoint, reload_level
 from core.logic_variables import Logic_variables
 from ui.pause_screen import Pause_screen
 from ui.win_screen import Win_screen
@@ -48,7 +48,8 @@ enemies = Enemies()
 ammo = Ammo()
 enemies.load_enemies(level)
 bullets = []
-torches = [Chandelier([32, 304])]
+torches = []
+load_torches(level.map, torches)
 scroll = Scroll()
 #MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
 while True:              
@@ -85,6 +86,9 @@ while True:
         win_screen.render(display)
     elif dead:
         death_screen.render(display)
+        if player.respawn:
+            player.revive(level)
+            reload_level(enemies, level, torches, player)
         
     # Movement logic
     if logic_variables.MOVEMENTS:

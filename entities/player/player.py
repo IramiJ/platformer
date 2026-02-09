@@ -40,10 +40,10 @@ class Player(entity):
         self.pistol = Pistol(self.rect.y, self.rect.y)
         self.action = "idle"
         self.mode = "meele"
+        self.respawn = False
     def dying(self, max_y):
         if self.rect.y > max_y:
-            self.rect.x = self.spawn_point[0]
-            self.rect.y = self.spawn_point[1]
+            self.set_respawn()
     def apply_buffs(self, buff_list):
         c = self.buffs.copy()   
         for buff in buff_list:
@@ -125,4 +125,16 @@ class Player(entity):
         self.hp -= 1
         scroll.shake_timer = 10
         scroll.shake_strength = 3
+    
+    def set_respawn(self):
+        self.rect.x = self.spawn_point[0]
+        self.rect.y = self.spawn_point[1]
+    
+    def revive(self, level):
+        if self.respawn:
+            self.hp = 5
+            level.id = 1
+            self.set_respawn()
+            self.respawn = False
+        
     

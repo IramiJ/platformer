@@ -22,26 +22,29 @@ def kb_events(player, shop, pause_screen):
             sys.exit()
 
         if event.type == pygame.KEYDOWN:
-            if event.key == keybinds["right"]:
-                player.moving_right = True
-            elif event.key == keybinds["left"]:
-                player.moving_left = True
-            elif event.key == keybinds["jump"]:
-                if player.air_timer < 6:
-                    player.y_momentum = player.jump_momentum
-            elif event.key == keybinds["shop"]:
-                shop.change_displaying()
-            elif event.key == keybinds["dash"]:
-                player.dash()
-            elif event.key == keybinds["pause"]:
-                pause_screen.change_displaying()
-            elif event.key == keybinds["switch_mode"]:
-                player.switch_mode()
-            elif event.key == keybinds["shoot"]:
-                player.pistol.add_bullet()
-            elif event.key == keybinds["reload"]:
-                if player.mode == "ranged":
-                    player.pistol.reload()
+            if player.hp <= 0:
+                player.respawn = True
+            else:
+                if event.key == keybinds["right"]:
+                    player.moving_right = True
+                elif event.key == keybinds["left"]:
+                    player.moving_left = True
+                elif event.key == keybinds["jump"]:
+                    if player.air_timer < 6:
+                        player.y_momentum = player.jump_momentum
+                elif event.key == keybinds["shop"]:
+                    shop.change_displaying()
+                elif event.key == keybinds["dash"]:
+                    player.dash()
+                elif event.key == keybinds["pause"]:
+                    pause_screen.change_displaying()
+                elif event.key == keybinds["switch_mode"]:
+                    player.switch_mode()
+                elif event.key == keybinds["shoot"]:
+                    player.pistol.add_bullet()
+                elif event.key == keybinds["reload"]:
+                    if player.mode == "ranged":
+                        player.pistol.reload()
 
         elif event.type == pygame.KEYUP:
             if event.key == keybinds["right"]:

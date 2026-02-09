@@ -35,6 +35,7 @@ def load_tiles(path):
 def load_torches(map, torch_list):
     torch_types = {"10": Torch, "12": Chandelier}
     y = 0
+    torch_list.clear()
     for row in map:
         x = 0
         for tile in row:
