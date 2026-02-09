@@ -1,5 +1,7 @@
-import json, pygame
+import json
 from world.tilemap import read_csv
+
+from .tilemap import load_torches
 
 class Level_loader():
     def __init__(self):
@@ -12,13 +14,14 @@ class Level_loader():
         id = self.data["id"] + 1
         self.load_level(f"world/levels/level{id}.json")
 
-def update_level(player, level, enemies, win_screen):
+def update_level(player, level, enemies, torches, win_screen):
     if player.rect.x >= level.data["end_coordinates"][0] and player.rect.y == level.data["end_coordinates"][1]:
         try:
             level.next_level()
         except:
             win_screen.displaying = True
         enemies.load_enemies(level)
+        load_torches(level.map, torches)
         player.spawn_point[0]= level.data["spawn"][0]
         player.spawn_point[1] = level.data["spawn"][1]
         player.rect.x = level.data["spawn"][0]

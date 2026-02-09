@@ -48,7 +48,7 @@ enemies = Enemies()
 ammo = Ammo()
 enemies.load_enemies(level)
 bullets = []
-torches = []
+torches = [Chandelier([32, 304])]
 scroll = Scroll()
 #MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
 while True:              
@@ -76,6 +76,7 @@ while True:
         ammo.render_ammo(display, player)
         for torch in torches:
             torch.draw(display, scroll)
+    print(torches[0].loc)
     # Overlay displays
     if shop.displaying:
         shop.show(display, player, coins)
@@ -99,7 +100,7 @@ while True:
         player.update_mode_variables()
         player.pistol.shoot(enemies.enemies)
     surf = pygame.transform.scale(display,Settings.window_size)
-    update_level(player, level, enemies, win_screen)
+    update_level(player, level, enemies, torches, win_screen)
     reach_checkpoint(player, level)
     screen.blit(surf, (0,0))
     pygame.display.update()

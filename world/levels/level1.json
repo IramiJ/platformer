@@ -1,4 +1,5 @@
 {
+    "type": "level",
     "id": 1,
     "map": "maps/map1.csv",
     "spawn": [0, 304],

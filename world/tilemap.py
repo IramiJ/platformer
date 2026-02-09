@@ -1,5 +1,6 @@
 import os, csv, pygame
-
+from .torch import Torch
+from .chandelier import Chandelier
 
 def load_map(path):
     f = open(path + '.txt', 'r')
@@ -31,12 +32,25 @@ def load_tiles(path):
         dict[name].set_colorkey((0,0,0))
     return dict
 
+def load_torches(map, torch_list):
+    torch_types = {"10": Torch, "12": Chandelier}
+    y = 0
+    for row in map:
+        x = 0
+        for tile in row:
+            if tile == "10" or tile == "12":
+                position = [x*16, y*16]
+                torch_list.append(torch_types[tile](position))
+            x += 1
+        y += 1
+    
+
 def display_map(display: pygame.Surface, scroll, tile_rects, map, dict):
     y = 0
     for row in map:
         x = 0
         for tile in row:
-            if tile != '-1':
+            if tile != '-1' and tile != "10" and tile != "12":
                 display.blit(dict[tile], (x*16-scroll.render_scroll[0], y*16-scroll.render_scroll[1]))
                 if all(tile != str(x) for x in range(10,12)):
                     tile_rects.append(pygame.Rect(x*16,y*16,16,16))
