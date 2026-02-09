@@ -11,7 +11,7 @@ class Shooter(Enemy):
         self.spawn_point = [self.x, self.y]
         self.aggro_range = 120
         self.action = 'idle'
-        self.animation_database['idle'] = load_animation('assets/enemies/shooter/idle', [8 for x in range(8)], self)
+        self.animation_database['idle'] = load_animation('assets/enemies/shooter/idle', [20,20,20,20,20,20], self)
         self.animation_database['shoot'] = load_animation('assets/enemies/shooter/shoot', [20, 20], self)
         self.hp_bar = Hp_bar('assets/hp_bar/enemy_hp_bar_bg.png','assets/hp_bar/enemy_hp_bar_frame.png',self.x,self.y-20)
         self.attack_cd = 0

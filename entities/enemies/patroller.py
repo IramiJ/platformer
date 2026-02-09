@@ -9,7 +9,7 @@ class Patroller(Enemy):
         self.spawn_point = (self.x, self.y)
         self.distance = 20
         self.action = 'run'
-        self.animation_database['run'] = load_animation('assets/enemies/patroller/run', [15,15,15,15], self)
+        self.animation_database['run'] = load_animation('assets/enemies/patroller/run', [5,5,5,5,5,5], self)
         self.hp_bar = Hp_bar('assets/hp_bar/enemy_hp_bar_bg.png','assets/hp_bar/enemy_hp_bar_frame.png',self.x,self.y-20)
         self.direction = 'r'
         self.velocity = 1.2

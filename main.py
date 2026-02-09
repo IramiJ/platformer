@@ -16,7 +16,6 @@ from entities.animations import draw_constants, load_animation
 from entities.player.player_movements import player_movements
 from world.scrolling import Scroll
 from core.kb_event_handling import kb_events
-from entities.player.tail import Tail
 from entities.enemies.enemies import Enemies
 from entities.coins import Coins
 from world.level_loader import Level_loader, update_level, reach_checkpoint
@@ -49,7 +48,7 @@ enemies = Enemies()
 ammo = Ammo()
 enemies.load_enemies(level)
 bullets = []
-t = Torch([32, 304])
+torches = []
 scroll = Scroll()
 #MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
 while True:              
@@ -75,7 +74,8 @@ while True:
         hp_bar.draw(display, 5, player.hp)
         render_buffs(shop.data, display, player)
         ammo.render_ammo(display, player)
-        t.draw(display, scroll)
+        for torch in torches:
+            torch.draw(display, scroll)
     # Overlay displays
     if shop.displaying:
         shop.show(display, player, coins)
