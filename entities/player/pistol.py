@@ -12,7 +12,8 @@ class Pistol:
         self.flip = False
         self.reloading = False
         self.add_ammo = False
-        self.shoot_cd = 60
+        self.max_shoot_cd = 30
+        self.shoot_cd = 1
         self.ammo = 5
         self.ammo_img = pygame.image.load("assets/constants/cd_pistol.png").convert()
         self.ammo_img.set_colorkey((0,0,0))
@@ -54,7 +55,7 @@ class Pistol:
                 b_loc = self.loc.copy()
                 flip = bool(self.flip)
                 self.bullets.append(Bullet(b_loc, flip))
-                self.shoot_cd = 60
+                self.shoot_cd = self.max_shoot_cd
                 self.ammo -= 1
         
 
