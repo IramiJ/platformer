@@ -16,6 +16,8 @@ class Shooter(Enemy):
         self.hp_bar = Hp_bar('assets/hp_bar/enemy_hp_bar_bg.png','assets/hp_bar/enemy_hp_bar_frame.png',self.x,self.y-20)
         self.attack_cd = 0
         self.collision_cd = 0
+        self.stunned = False
+        self.stun_cd = 0
         
 
     def render(self, display, scroll):
@@ -26,15 +28,20 @@ class Shooter(Enemy):
         self.hp_bar.y = self.rect.y-scroll[1]-20
         self.hp_bar.draw(display, 3, self.hp)
     def attack(self, player, bullet_list, scroll):
-        if self.attack_cd > 0:           
-            self.attack_cd -= 1
-        elif math.sqrt((self.spawn_point[0] - player.rect.x)**2 + (self.spawn_point[1] - player.rect.y)**2) <= self.aggro_range:
-            self.change_action('shoot')
-            if self.attack_cd == 0:
-                self.attack_cd = 3 * Settings.fps
-                bullet_list.append(Shooter_Bullet(self.spawn_point.copy(), player))
+        if self.stunned: 
+            self.stun_cd -= 1
+            if self.stun_cd == 0:
+                self.stunned = False
         else:
-            self.change_action('idle')
+            if self.attack_cd > 0:           
+                self.attack_cd -= 1
+            elif math.sqrt((self.spawn_point[0] - player.rect.x)**2 + (self.spawn_point[1] - player.rect.y)**2) <= self.aggro_range:
+                self.change_action('shoot')
+                if self.attack_cd == 0:
+                    self.attack_cd = 3 * Settings.fps
+                    bullet_list.append(Shooter_Bullet(self.spawn_point.copy(), player))
+            else:
+                self.change_action('idle')
         
         if self.collision_cd > 0:
             self.collision_cd -= 1
@@ -42,7 +49,10 @@ class Shooter(Enemy):
         elif self.rect.colliderect(player.rect) and not player.dashing:
             player.take_dmg(scroll)
             self.collision_cd  = 30
-
+    
+    def stun(self):
+        self.stun_cd = 12
+        self.stunned = True
         
 
     

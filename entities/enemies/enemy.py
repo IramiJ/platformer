@@ -9,6 +9,7 @@ class Enemy(entity):
         self.velocity = 1
         self.alive = True
         self.dmg_timer = 0
+        
     def update_frames(self):
         self.frame += 1
         if self.frame >= len(self.animation_database[self.action]):

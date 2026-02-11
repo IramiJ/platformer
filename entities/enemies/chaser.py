@@ -15,6 +15,8 @@ class Chaser(Enemy):
         self.direction = 'r'
         self.velocity = 1.5
         self.attack_cd = 0
+        self.stunned = False
+        self.stun_cd = 0
         
 
     def render(self, display, scroll):
@@ -25,34 +27,39 @@ class Chaser(Enemy):
         self.hp_bar.y = self.rect.y-scroll[1]-20
         self.hp_bar.draw(display, 3, self.hp)
     def move(self, player, tiles):
-        self.movement = [0, 0]
-        if abs(self.rect.x - player.rect.x) <= self.aggro_range:
-            if player.rect.x < self.rect.x:
-                self.change_action('run')
-                self.direction = 'l'
-                self.flip = True
-                self.movement[0] -= self.velocity
-            elif player.rect.x > self.rect.x:
-                self.change_action('run')
-                self.direction = 'r'
-                self.flip = False
-                self.movement[0] += self.velocity
-            elif player.rect.x == self.rect.x:
-                self.movement[0] = 0
-        elif self.rect.x != self.spawn_point[0]:
-                if self.rect.x < self.spawn_point[0]:
-                    self.change_action('run')
-                    self.direction = 'r'
-                    self.flip = False
-                    self.movement[0] += self.velocity
-                else:
+        if self.stunned:
+            self.stun_cd -= 1
+            if self.stun_cd == 0:
+                self.stunned = False
+        else:
+            self.movement = [0, 0]
+            if abs(self.rect.x - player.rect.x) <= self.aggro_range:
+                if player.rect.x < self.rect.x:
                     self.change_action('run')
                     self.direction = 'l'
                     self.flip = True
                     self.movement[0] -= self.velocity
-        else:
-            self.change_action('idle')
-        self.rect.x += self.movement[0]
+                elif player.rect.x > self.rect.x:
+                    self.change_action('run')
+                    self.direction = 'r'
+                    self.flip = False
+                    self.movement[0] += self.velocity
+                elif player.rect.x == self.rect.x:
+                    self.movement[0] = 0
+            elif self.rect.x != self.spawn_point[0]:
+                    if self.rect.x < self.spawn_point[0]:
+                        self.change_action('run')
+                        self.direction = 'r'
+                        self.flip = False
+                        self.movement[0] += self.velocity
+                    else:
+                        self.change_action('run')
+                        self.direction = 'l'
+                        self.flip = True
+                        self.movement[0] -= self.velocity
+            else:
+                self.change_action('idle')
+            self.rect.x += self.movement[0]
         self.collision(tiles)
 
     def attack(self, player, scroll):
@@ -63,3 +70,6 @@ class Chaser(Enemy):
             if self.rect.colliderect(player.rect) and not player.dashing:
                 player.take_dmg(scroll)
                 self.attack_cd = 30
+    def stun(self):
+        self.stunned = True
+        self.stun_cd = 12

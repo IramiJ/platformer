@@ -14,6 +14,8 @@ class Patroller(Enemy):
         self.direction = 'r'
         self.velocity = 1.2
         self.attack_cd = 0
+        self.stunned = False
+        self.stun_cd = 0
         
 
     def render(self, display, scroll):
@@ -24,20 +26,25 @@ class Patroller(Enemy):
         self.hp_bar.y = self.rect.y-scroll[1]-20
         self.hp_bar.draw(display, 3, self.hp)
     def move(self):
-        self.movement = [0, 0]
-        if self.direction == 'r':
-            if self.rect.x >= self.spawn_point[0] + self.distance:
-                self.direction = 'l'
-                self.flip = True
-            else:
-                self.movement[0] += self.velocity
-        if self.direction == 'l':
-            if self.rect.x <= self.spawn_point[0] - self.distance:
-                self.direction = 'r'
-                self.flip = False
-            else:
-                self.movement[0] -= self.velocity
-        self.rect.x += self.movement[0]
+        if self.stunned:
+            self.stun_cd -= 1
+            if self.stun_cd == 0:
+                self.stunned = False
+        else:
+            self.movement = [0, 0]
+            if self.direction == 'r':
+                if self.rect.x >= self.spawn_point[0] + self.distance:
+                    self.direction = 'l'
+                    self.flip = True
+                else:
+                    self.movement[0] += self.velocity
+            if self.direction == 'l':
+                if self.rect.x <= self.spawn_point[0] - self.distance:
+                    self.direction = 'r'
+                    self.flip = False
+                else:
+                    self.movement[0] -= self.velocity
+            self.rect.x += self.movement[0]
     def attack(self, player, scroll):
         if self.attack_cd > 0:
             
@@ -46,4 +53,7 @@ class Patroller(Enemy):
             if self.rect.colliderect(player.rect) and not player.dashing:
                 player.take_dmg(scroll)
                 self.attack_cd = 30
+    def stun(self):
+        self.stun_cd = 12
+        self.stunned = True
     

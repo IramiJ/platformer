@@ -54,7 +54,7 @@ class Pistol:
             if self.shoot_cd <= 0:
                 b_loc = self.loc.copy()
                 flip = bool(self.flip)
-                self.bullets.append(Bullet(b_loc, flip))
+                self.bullets.append(Pistol_Bullet(b_loc, flip))
                 self.shoot_cd = self.max_shoot_cd
                 self.ammo -= 1
         
@@ -65,7 +65,7 @@ class Pistol:
             self.reloading = True
 
 
-class Bullet(simple_entity):
+class Pistol_Bullet(simple_entity):
         def __init__(self, loc, flip):
             super().__init__('assets/constants/pistol_bullet.png',  loc)
             self.start = self.loc.copy()
@@ -91,5 +91,6 @@ class Bullet(simple_entity):
                 for enemy in enemies:
                     if self.collision_test(enemy.rect):
                         enemy.take_dmg(1)
+                        enemy.stun()
                         self.dmg_cd = 1
 
