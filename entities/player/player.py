@@ -26,7 +26,7 @@ class Player(entity):
         self.dash_timer = 0
         self.dash_duration = 10
         self.dash_speed = 6
-        self.max_dash_cd = 120
+        self.max_dash_cd = 60
         self.dash_cooldown = 0
         self.hp = 5
         self.dmg = 1
@@ -34,7 +34,7 @@ class Player(entity):
         self.animation_database['run'] = load_animation('assets/char/run', [5 for x in range(12)], self)
         self.dmg_cd = 0
         self.cd_obj = entity(self.x, self.y + 15, 16, 16)
-        self.cd_obj.animation_database['idle'] = load_animation('assets/cooldown/idle', [8 for x in range(15)], self.cd_obj)
+        self.cd_obj.animation_database['idle'] = load_animation('assets/cooldown/idle', [4 for x in range(15)], self.cd_obj)
         self.tail = Tail('assets/tail/grey.png',[self.rect.x-2, self.rect.y+8])
         self.sword = Sword(self.rect.x, self.rect.y)
         self.pistol = Pistol(self.rect.y, self.rect.y)
