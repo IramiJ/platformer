@@ -70,7 +70,6 @@ class Chaser(Enemy):
                 self.change_action('idle')
             self.true_velocity = self.velocity + self.move_burst_increase
             self.rect.x += self.movement[0]
-        print(self.rect.x)
 
     def attack(self, player, scroll):
         if self.attack_cd > 0:
