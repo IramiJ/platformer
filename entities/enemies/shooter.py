@@ -18,6 +18,7 @@ class Shooter(Enemy):
         self.collision_cd = 0
         self.stunned = False
         self.stun_cd = 0
+        self.shoot_count = 0
         
 
     def render(self, display, scroll):
@@ -38,8 +39,13 @@ class Shooter(Enemy):
             elif math.sqrt((self.spawn_point[0] - player.rect.x)**2 + (self.spawn_point[1] - player.rect.y)**2) <= self.aggro_range:
                 self.change_action('shoot')
                 if self.attack_cd == 0:
-                    self.attack_cd = 3 * Settings.fps
+                    if self.shoot_count == 2:                    
+                        self.attack_cd = 2 * Settings.fps
+                        self.shoot_count = 0
+                    else:
+                        self.attack_cd = 0.5 * Settings.fps
                     bullet_list.append(Shooter_Bullet(self.spawn_point.copy(), player))
+                    self.shoot_count += 1
             else:
                 self.change_action('idle')
         
@@ -49,7 +55,7 @@ class Shooter(Enemy):
         elif self.rect.colliderect(player.rect) and not player.dashing:
             player.take_dmg(scroll)
             self.collision_cd  = 30
-    
+            
     def stun(self):
         self.stun_cd = 12
         self.stunned = True
