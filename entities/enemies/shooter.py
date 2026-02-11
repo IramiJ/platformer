@@ -9,7 +9,7 @@ class Shooter(Enemy):
     def __init__(self,x,y,width,height):
         super().__init__(x,y,width,height)
         self.spawn_point = [self.x, self.y]
-        self.aggro_range = 120
+        self.aggro_range = 300
         self.action = 'idle'
         self.animation_database['idle'] = load_animation('assets/enemies/shooter/idle', [20,20,20,20,20,20], self)
         self.animation_database['shoot'] = load_animation('assets/enemies/shooter/shoot', [20, 20], self)
