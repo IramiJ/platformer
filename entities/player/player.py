@@ -3,8 +3,8 @@ from entities.player.tail import Tail
 from entities.player.sword import Sword
 from entities.player.pistol import Pistol
 from entities.animations import load_animation
-import json
-import pygame
+from entities.spark import Spark
+import pygame, random
 
 class Player(entity):
     def __init__(self,x,y,width,height):
@@ -110,12 +110,14 @@ class Player(entity):
             self.dmg = 1
 
 
-    def attack(self, enemy, logic_variables):
+    def attack(self, enemy, logic_variables, sparks):
         if self.dmg_cd == 0:
             if self.dashing and self.mode == "meele":
                 if self.rect.colliderect(enemy.rect):
                     enemy.take_dmg(self.dmg)
                     self.hitstop(logic_variables)
+                    sparks.append(Spark([enemy.rect.x, enemy.rect.y], random.randint(0, 360), random.randint(3, 6), (255,255,255), 2))
+
                     self.dmg_cd = self.dash_cooldown
                     if self.hp < 5:
                         self.hp += 1

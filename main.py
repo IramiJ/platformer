@@ -49,6 +49,7 @@ ammo = Ammo()
 enemies.load_enemies(level)
 bullets = []
 torches = []
+sparks = []
 load_torches(level.map, torches)
 scroll = Scroll()
 #MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -77,6 +78,8 @@ while True:
         ammo.render_ammo(display, player)
         for torch in torches:
             torch.draw(display, scroll)
+        for i, spark in sorted(enumerate(sparks), reverse=True):
+            spark.draw(display, scroll)
     # Overlay displays
     if shop.displaying:
         shop.show(display, player, coins)
@@ -91,10 +94,10 @@ while True:
             reload_level(enemies, level, torches, player)
         
     # Movement logic
-    if logic_variables.MOVEMENTS and logic_variables.hitstop_timer == 0:
+    if logic_variables.MOVEMENTS and logic_variables.hitstop_timer <= 0:
         player_movements(player, tile_rects, display, player.cd_obj, player.tail, scroll)
         coins.coin_collisions(player)
-        enemies.handle_enemies(player, display, bullets, scroll, tile_rects, logic_variables)
+        enemies.handle_enemies(player, display, bullets, scroll, tile_rects, logic_variables, sparks)
         scroll.player_scrolling(player, level)
         for bullet in bullets:
             bullet.move(player, display, bullets, scroll)
@@ -102,6 +105,10 @@ while True:
         player.apply_buffs(["speed boost", "jump boost", "double coin"])
         player.update_mode_variables()
         player.pistol.shoot(enemies.enemies)
+        for i, spark in sorted(enumerate(sparks), reverse=True):
+            spark.move(1)
+            if not spark.alive:
+                sparks.pop(i)
     else:
         logic_variables.hitstop_timer -= 1
     surf = pygame.transform.scale(display,Settings.window_size)
