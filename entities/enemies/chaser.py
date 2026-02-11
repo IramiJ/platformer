@@ -69,7 +69,10 @@ class Chaser(Enemy):
             else:
                 self.change_action('idle')
             self.true_velocity = self.velocity + self.move_burst_increase
+            
             self.rect.x += self.movement[0]
+            self.collision(tiles)
+            
 
     def attack(self, player, scroll):
         if self.attack_cd > 0:

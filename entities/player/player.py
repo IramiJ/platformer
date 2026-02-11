@@ -41,6 +41,7 @@ class Player(entity):
         self.action = "idle"
         self.mode = "meele"
         self.respawn = False
+        self.histstop_timer = 0
     def dying(self, max_y):
         if self.rect.y > max_y:
             self.set_respawn()
@@ -109,11 +110,12 @@ class Player(entity):
             self.dmg = 1
 
 
-    def attack(self, enemy):
+    def attack(self, enemy, logic_variables):
         if self.dmg_cd == 0:
             if self.dashing and self.mode == "meele":
                 if self.rect.colliderect(enemy.rect):
                     enemy.take_dmg(self.dmg)
+                    self.hitstop(logic_variables)
                     self.dmg_cd = self.dash_cooldown
                     if self.hp < 5:
                         self.hp += 1
@@ -136,5 +138,8 @@ class Player(entity):
             level.id = 1
             self.set_respawn()
             self.respawn = False
+    
+    def hitstop(self, logic_variables):
+        logic_variables.hitstop_timer = 3
         
     

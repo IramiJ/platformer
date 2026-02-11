@@ -91,10 +91,10 @@ while True:
             reload_level(enemies, level, torches, player)
         
     # Movement logic
-    if logic_variables.MOVEMENTS:
+    if logic_variables.MOVEMENTS and logic_variables.hitstop_timer == 0:
         player_movements(player, tile_rects, display, player.cd_obj, player.tail, scroll)
         coins.coin_collisions(player)
-        enemies.handle_enemies(player, display, bullets, scroll, tile_rects)
+        enemies.handle_enemies(player, display, bullets, scroll, tile_rects, logic_variables)
         scroll.player_scrolling(player, level)
         for bullet in bullets:
             bullet.move(player, display, bullets, scroll)
@@ -102,6 +102,8 @@ while True:
         player.apply_buffs(["speed boost", "jump boost", "double coin"])
         player.update_mode_variables()
         player.pistol.shoot(enemies.enemies)
+    else:
+        logic_variables.hitstop_timer -= 1
     surf = pygame.transform.scale(display,Settings.window_size)
     update_level(player, level, enemies, torches, win_screen)
     reach_checkpoint(player, level)

@@ -5,7 +5,7 @@ class Enemies:
     def __init__(self):
         self.enemy_types = {"Patroller": Patroller, "Chaser": Chaser, "Shooter": Shooter}
         self.enemies = []
-    def handle_enemies(self, player, display, bullet_list, scroll, tiles):
+    def handle_enemies(self, player, display, bullet_list, scroll, tiles, logic_variables):
         for enemy in self.enemies:
             if isinstance(enemy, Chaser):
                 enemy.move(player, tiles)
@@ -17,7 +17,7 @@ class Enemies:
                 enemy.attack(player, bullet_list, scroll)
             else:
                 enemy.attack(player, scroll)
-            player.attack(enemy)
+            player.attack(enemy, logic_variables)
         self.enemies = [e for e in self.enemies if e.alive]
     def load_enemies(self, level):
         self.enemies = []
