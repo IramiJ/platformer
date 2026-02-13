@@ -9,7 +9,7 @@ class Torch:
         self.particle_spawn = self.loc.copy()
         self.particle_spawn[0]+= 4
     def add_particles(self):
-        if random.randint(0, 20) == 20:
+        if random.randint(0, 50) == 50:
             self.particles.append(simple_particle(self.particle_spawn.copy(), [random.randint(-10, 10)/100, 0], random.randint(14, 24)/10))
     def draw_particles(self, display, scroll):        
         for particle in self.particles:

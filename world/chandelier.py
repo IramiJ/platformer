@@ -15,7 +15,7 @@ class Chandelier:
         self.particle_spawns [2][1] += 4
     def add_particles(self):
         for spawn in self.particle_spawns:
-            if random.randint(1, 20) == 20:
+            if random.randint(1, 50) == 50:
                 self.particles.append(simple_particle(spawn.copy(), [random.randint(-10, 10)/100, 0], random.randint(14, 24)/10))
     def draw_particles(self, display, scroll):        
         for particle in self.particles:
