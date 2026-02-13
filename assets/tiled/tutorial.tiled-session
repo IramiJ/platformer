@@ -1,0 +1,45 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "tutorial.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "file.lastUsedOpenFilter": "Alle Dateien (*)",
+    "fileStates": {
+        "purple_tiles.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 5.5
+        },
+        "tutorial.tmx": {
+            "scale": 3,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 2988.5,
+                "y": 461.33333333333337
+            }
+        }
+    },
+    "last.exportedFilePath": "C:/Users/User/OneDrive/Desktop/programming/projects/platformer/maps",
+    "last.imagePath": "C:/Users/User/OneDrive/Desktop/programming/projects/platformer/assets/tiles",
+    "map.height": 200,
+    "map.lastUsedExportFilter": "CSV-Dateien (*.csv)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 300,
+    "openFiles": [
+        "tutorial.tmx",
+        "purple_tiles.tsx"
+    ],
+    "project": "tutorial.tiled-project",
+    "recentFiles": [
+        "purple_tiles.tsx",
+        "tutorial.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.type": 1
+}

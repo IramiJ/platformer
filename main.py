@@ -24,6 +24,7 @@ from ui.pause_screen import Pause_screen
 from ui.win_screen import Win_screen
 from entities.player.render_buffs import render_buffs
 from entities.player.render_ammo import Ammo
+from world.texts import Texts
 
 clock = pygame.time.Clock()
 window_size = [640, 480]
@@ -50,6 +51,8 @@ enemies.load_enemies(level)
 bullets = []
 torches = []
 sparks = []
+texts = Texts()
+texts.load_texts(level.data["texts"])
 load_torches(level.map, torches)
 scroll = Scroll()
 #MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -72,6 +75,7 @@ while True:
         player.update_frames()
         player.draw(display, scroll)
         large_font.render(display,str(player.coin_amount), (16,0))
+        texts.render_texts(display, scroll)
         draw_constants(display)
         hp_bar.draw(display, 5, player.hp)
         render_buffs(shop.data, display, player)

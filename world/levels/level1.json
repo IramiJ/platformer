@@ -2,17 +2,26 @@
     "type": "level",
     "id": 1,
     "map": "maps/map1.csv",
-    "spawn": [0, 304],
-    "max_y": 500,
+    "spawn": [208, 624],
+    "max_y": 1200,
     "enemies": {
-        "Patroller": [],
-        "Heavy_Patroller": [[10,16]],
-        "Chaser": [[38, 19]],
-        "Shooter": [[67, 12], [79, 8]]
+        "Patroller": [[54, 36]],
+        "Heavy_Patroller": [],
+        "Chaser": [[119, 40]],
+        "Shooter": [[152, 30]]
     },
-    "checkpoints": [[55, 19]],
-    "end_coordinates": [1536, 32],
+    "checkpoints": [[92, 40]],
+    "end_coordinates": [3008, 640],
     "texts": {
+        "press SPACE to jump": [20, 36],
+        "press E to dash": [33, 26],
+        "press R to switch weapons": [33, 27],
+        "press Q to shoot": [33, 28],
+        "patroller: walks left and right": [47, 32],
+        "this is a checkpoint": [88, 37],
+        "this is a chaser: he chases you. be careful!": [110, 35],
+        "this is shooter, he always shoots 3 bullets at once": [145, 26],
+        "gate to the next level": [184, 37]
 
     }
 }
