@@ -28,7 +28,7 @@ class Patroller(Enemy):
         self.draw(display, scroll)
         self.hp_bar.x = self.rect.x-scroll[0]
         self.hp_bar.y = self.rect.y-scroll[1]-20
-        self.hp_bar.draw(display, 3, self.hp)
+        self.hp_bar.draw(display, self.max_hp, self.hp)
     def move(self):
         if self.stunned:
             self.stun_cd -= 1

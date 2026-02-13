@@ -1,9 +1,10 @@
 from entities.enemies.patroller import Patroller
 from entities.enemies.chaser import Chaser
 from entities.enemies.shooter import Shooter
+from .heavy_patroller import Heavy_Patroller
 class Enemies:
     def __init__(self):
-        self.enemy_types = {"Patroller": Patroller, "Chaser": Chaser, "Shooter": Shooter}
+        self.enemy_types = {"Patroller": Patroller, "Chaser": Chaser, "Shooter": Shooter, "Heavy_Patroller": Heavy_Patroller}
         self.enemies = []
     def handle_enemies(self, player, display, bullet_list, scroll, tiles, logic_variables, sparks):
         for enemy in self.enemies:

@@ -5,6 +5,7 @@ import pygame
 class Enemy(entity):
     def __init__(self,x,y,width,height):
         super().__init__(x,y,width,height)
+        self.max_hp = 3
         self.hp = 3
         self.velocity = 1
         self.alive = True
