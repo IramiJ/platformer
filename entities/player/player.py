@@ -121,6 +121,7 @@ class Player(entity):
 
                     self.dmg_cd = self.dash_cooldown
                     if enemy.stunned:
+                        sparks.append(Spark([enemy.rect.x, enemy.rect.y], random.randint(0, 360), random.randint(3, 6), (255,255,255), 2))
                         self.heal(2)
                     else:
                         self.heal(1)
