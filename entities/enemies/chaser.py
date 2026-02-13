@@ -84,7 +84,7 @@ class Chaser(Enemy):
                 self.attack_cd = 30
     def stun(self):
         self.stunned = True
-        self.stun_cd = 12
+        self.stun_cd = 20
     def move_burst(self):
         if self.move_burst_increase <= 0:
             self.move_burst_increase = 2

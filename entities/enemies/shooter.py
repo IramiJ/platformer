@@ -57,7 +57,7 @@ class Shooter(Enemy):
             self.collision_cd  = 30
             
     def stun(self):
-        self.stun_cd = 12
+        self.stun_cd = 20
         self.stunned = True
         
 

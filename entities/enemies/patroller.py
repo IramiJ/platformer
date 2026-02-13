@@ -61,7 +61,7 @@ class Patroller(Enemy):
                 player.take_dmg(scroll)
                 self.attack_cd = 30
     def stun(self):
-        self.stun_cd = 12
+        self.stun_cd = 20
         self.stunned = True
     def activate_burst(self):
         self.bursting = True

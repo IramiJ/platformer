@@ -28,6 +28,7 @@ class Player(entity):
         self.dash_speed = 6
         self.max_dash_cd = 60
         self.dash_cooldown = 0
+        self.max_hp = 5
         self.hp = 5
         self.dmg = 1
         self.animation_database['idle'] = load_animation('assets/char/idle', [15,15,20,30,10,10], self)
@@ -119,10 +120,10 @@ class Player(entity):
                     sparks.append(Spark([enemy.rect.x, enemy.rect.y], random.randint(0, 360), random.randint(3, 6), (255,255,255), 2))
 
                     self.dmg_cd = self.dash_cooldown
-                    if self.hp < 5:
-                        self.hp += 1
+                    if enemy.stunned:
+                        self.heal(2)
                     else:
-                        self.hp = 5
+                        self.heal(1)
         else:
             self.dmg_cd -= 1
     def take_dmg(self, scroll):
@@ -143,5 +144,11 @@ class Player(entity):
     
     def hitstop(self, logic_variables):
         logic_variables.hitstop_timer = 3
+    
+    def heal(self, amount):
+        if self.hp + amount < self.max_hp:
+            self.hp += amount
+        else:
+            self.hp = self.max_hp
         
     
