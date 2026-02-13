@@ -29,8 +29,7 @@ class Pistol:
         else:
             self.loc = [player.rect.left-self.img.get_width()+6, player.rect.y+6]
         display.blit(pygame.transform.flip(self.img, player.flip, False), [self.loc[0] - scroll.render_scroll[0], self.loc[1] - scroll.render_scroll[1]])
-        for bullet in self.bullets:
-            bullet.render(display, scroll.render_scroll)
+        
     def shoot(self, enemy_list):
         for bullet in self.bullets:
             bullet.move(enemy_list, self.bullets)

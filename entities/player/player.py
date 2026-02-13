@@ -82,6 +82,8 @@ class Player(entity):
             self.sword.draw(self, display, scroll)
         elif self.mode == "ranged":
             self.pistol.draw(self, display, scroll)
+        for bullet in self.pistol.bullets:
+            bullet.render(display, scroll.render_scroll)
         self.sword.particles = [p for p in self.sword.particles if p.duration > 0]
         display.blit(pygame.transform.flip(self.img,self.flip,False), [self.rect.x-scroll.render_scroll[0], self.rect.y-scroll.render_scroll[1]])
 
