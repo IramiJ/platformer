@@ -27,21 +27,21 @@ class Shop():
             large_font.render(surf,self.prices[item],[36,self.imgs[item][1][1]+2])
             small_font.render(surf, "duration: " + str(self.data[item]["duration"]), [60,self.imgs[item][1][1]+2]), 
             surf.blit(self.imgs[item][0], (self.item_boxes[item].x,self.item_boxes[item].y))
-    def buy(self, coins, buff_list):
+    def buy(self, player, buff_list):
         for item in self.imgs:
             if pygame.mouse.get_pressed()[0]:
                 mouse_rect = pygame.Rect(pygame.mouse.get_pos()[0]/2, pygame.mouse.get_pos()[1]/2,1,1)
                 if mouse_rect.colliderect(self.item_boxes[item]):
-                    if coins.amount >= int(self.prices[item]) and self.buy_cooldown == 0 and item not in buff_list:
-                        coins.amount -= int(self.prices[item])
+                    if player.coin_amount >= int(self.prices[item]) and self.buy_cooldown == 0 and item not in buff_list:
+                        player.coin_amount -= int(self.prices[item])
                         self.buy_cooldown = 0
                         buff_list[item] = int(self.data[item]["duration"]) * 60
     def change_displaying(self):
         self.displaying = not self.displaying
         return self.displaying
-    def show(self, display, player, coins):
+    def show(self, display, player):
         if self.displaying:
             self.render(display)
             player.moving_right = False
             player.moving_left = False
-            self.buy(coins,player.buffs)
+            self.buy(player,player.buffs)

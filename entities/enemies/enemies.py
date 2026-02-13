@@ -19,7 +19,10 @@ class Enemies:
             else:
                 enemy.attack(player, scroll)
             player.attack(enemy, logic_variables, sparks)
+        length = int(len(self.enemies))
         self.enemies = [e for e in self.enemies if e.alive]
+        if len(self.enemies) < length:
+            player.coin_amount += 5
     def load_enemies(self, level):
         self.enemies = []
         enemies = level.data["enemies"]

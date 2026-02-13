@@ -71,7 +71,7 @@ while True:
         display_map(display, scroll, tile_rects, level.map, tiles)
         player.update_frames()
         player.draw(display, scroll)
-        large_font.render(display,str(coins.amount), (16,0))
+        large_font.render(display,str(player.coin_amount), (16,0))
         draw_constants(display)
         hp_bar.draw(display, 5, player.hp)
         render_buffs(shop.data, display, player)
@@ -82,7 +82,7 @@ while True:
             spark.draw(display, scroll)
     # Overlay displays
     if shop.displaying:
-        shop.show(display, player, coins)
+        shop.show(display, player)
     elif pause_screen.displaying:
         pause_screen.render(display)
     elif win_screen.displaying:

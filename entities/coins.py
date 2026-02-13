@@ -4,7 +4,6 @@ class Coins:
     def __init__(self):
         self.objects = []
         self.objects.append(simple_entity('assets/collectables/coin.png', [160, 308]))
-        self.amount = 1000
 
     def draw_coins(self, display, scroll):
         for coin in self.objects:
