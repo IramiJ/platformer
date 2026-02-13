@@ -112,7 +112,6 @@ while True:
                 sparks.pop(i)
     else:
         logic_variables.hitstop_timer -= 1
-    print(player.velocity, player.mode)
     surf = pygame.transform.scale(display,Settings.window_size)
     update_level(player, level, enemies, torches, win_screen)
     reach_checkpoint(player, level)
