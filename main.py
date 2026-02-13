@@ -102,8 +102,9 @@ while True:
         for bullet in bullets:
             bullet.move(player, display, bullets, scroll)
         player.dying(level.data["max_y"])
-        player.apply_buffs(["speed boost", "jump boost", "double coin"])
+        player.remove_buffs(["speed boost", "jump boost", "double coin"])
         player.update_mode_variables()
+        player.apply_buffs()
         player.pistol.shoot(enemies.enemies)
         for i, spark in sorted(enumerate(sparks), reverse=True):
             spark.move(1)
@@ -111,6 +112,7 @@ while True:
                 sparks.pop(i)
     else:
         logic_variables.hitstop_timer -= 1
+    print(player.velocity, player.mode)
     surf = pygame.transform.scale(display,Settings.window_size)
     update_level(player, level, enemies, torches, win_screen)
     reach_checkpoint(player, level)

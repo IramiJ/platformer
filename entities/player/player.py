@@ -47,7 +47,8 @@ class Player(entity):
     def dying(self, max_y):
         if self.rect.y > max_y:
             self.set_respawn()
-    def apply_buffs(self, buff_list):
+    
+    def remove_buffs(self, buff_list):
         c = self.buffs.copy()   
         for buff in buff_list:
             if buff not in self.buffs:
@@ -57,10 +58,12 @@ class Player(entity):
                     self.jump_momentum = -10
                 elif buff == "double coins":
                     self.double_coin_buff = False
+    def apply_buffs(self):
+        c = self.buffs.copy()
         for buff in c:
             if self.buffs[buff] > 0:
                 if buff == 'speed boost':
-                    self.velocity = 4
+                    self.velocity += 2
                     self.buffs[buff] -= 1
                 elif buff == 'jump boost':
                     self.jump_momentum = -15
