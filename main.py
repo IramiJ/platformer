@@ -95,7 +95,7 @@ while True:
         death_screen.render(display)
         if player.respawn:
             player.revive(level)
-            reload_level(enemies, level, torches, player)
+            reload_level(enemies, level, torches, player, texts)
         
     # Movement logic
     if logic_variables.MOVEMENTS and logic_variables.hitstop_timer <= 0:
@@ -117,7 +117,7 @@ while True:
     else:
         logic_variables.hitstop_timer -= 1
     surf = pygame.transform.scale(display,Settings.window_size)
-    update_level(player, level, enemies, torches, win_screen)
+    update_level(player, level, enemies, torches, texts, win_screen)
     reach_checkpoint(player, level)
     screen.blit(surf, (0,0))
     pygame.display.update()
