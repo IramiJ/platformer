@@ -1,6 +1,6 @@
 
 
-import pygame, random
+import pygame, time
 
 from ui.death_screen import Death_screen
 from world.torch import Torch
@@ -55,10 +55,15 @@ texts = Texts()
 texts.load_texts(level.data["texts"])
 load_torches(level.map, torches)
 scroll = Scroll()
+
+last_time = time.time()
+
 #MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
 while True:              
     # Keyboard handling
     kb_events(player, shop, pause_screen)
+    dt = time.time() - last_time
+    last_time = time.time()
 
     # Logic evaluations
     dead = (player.hp <= 0) 
@@ -84,6 +89,7 @@ while True:
             torch.draw(display, scroll)
         for i, spark in sorted(enumerate(sparks), reverse=True):
             spark.draw(display, scroll)
+        large_font.render(display, f"fps: {round(1/dt)}", [120, 0])
     # Overlay displays
     if shop.displaying:
         shop.show(display, player)
