@@ -1,9 +1,9 @@
 from ui.Font_renderer import Font
 import pygame
-small_font = Font('assets/fonts/small_font.png')
-large_font = Font('assets/fonts/large_font.png')
+
 
 def render_buffs(buff_list, display: pygame.Surface, player):
+    small_font = Font('assets/fonts/small_font.png')
     y_offset = 0
     for buff in buff_list:
         if buff in player.buffs:

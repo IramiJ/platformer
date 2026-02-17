@@ -1,11 +1,12 @@
 import pygame, os, json
 from ui.Font_renderer import Font
 pygame.init()
-small_font = Font('assets/fonts/small_font.png')
-large_font = Font('assets/fonts/large_font.png')
+
 
 class Shop():
     def __init__(self):
+        self.small_font = Font('assets/fonts/small_font.png')
+        self.large_font = Font('assets/fonts/large_font.png')
         with open("ui/shop.json", "r") as file:
             self.data = json.load(file)
         self.buy_cooldown = 0
@@ -21,11 +22,11 @@ class Shop():
             counter += 1
     def render(self,surf):
         surf.fill((0,0,0))
-        large_font.render(surf,'SHOP',(150,0))  
+        self.large_font.render(surf,'SHOP',(150,0))  
         for item in self.imgs:
-            small_font.render(surf,item,(0,self.imgs[item][1][1]-8))
-            large_font.render(surf,self.prices[item],[36,self.imgs[item][1][1]+2])
-            small_font.render(surf, "duration: " + str(self.data[item]["duration"]), [60,self.imgs[item][1][1]+2]), 
+            self.small_font.render(surf,item,(0,self.imgs[item][1][1]-8))
+            self.large_font.render(surf,self.prices[item],[36,self.imgs[item][1][1]+2])
+            self.small_font.render(surf, "duration: " + str(self.data[item]["duration"]), [60,self.imgs[item][1][1]+2]), 
             surf.blit(self.imgs[item][0], (self.item_boxes[item].x,self.item_boxes[item].y))
     def buy(self, player, buff_list):
         for item in self.imgs:
