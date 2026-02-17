@@ -41,7 +41,8 @@ def kb_events(player, shop, pause_screen):
                 elif event.key == keybinds["switch_mode"]:
                     player.switch_mode()
                 elif event.key == keybinds["shoot"]:
-                    player.pistol.add_bullet()
+                    if player.mode == "ranged":
+                        player.pistol.add_bullet()
                 elif event.key == keybinds["reload"]:
                     if player.mode == "ranged":
                         player.pistol.reload()
