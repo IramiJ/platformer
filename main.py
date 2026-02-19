@@ -55,15 +55,18 @@ texts = Texts()
 texts.load_texts(level.data["texts"])
 load_torches(level.map, torches)
 scroll = Scroll()
-
+frames = 0
+current_fps = 0
 last_time = time.time()
-
 #MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
 while True:              
     # Keyboard handling
+    frames += 1
     kb_events(player, shop, pause_screen)
-    dt = time.time() - last_time
-    last_time = time.time()
+    if time.time() - last_time >= 1:
+        current_fps = frames
+        frames = 0
+        last_time = time.time()
 
     # Logic evaluations
     dead = (player.hp <= 0) 
@@ -89,7 +92,11 @@ while True:
             torch.draw(display, scroll)
         for i, spark in sorted(enumerate(sparks), reverse=True):
             spark.draw(display, scroll)
-        large_font.render(display, f"fps: {round(1/dt)}", [120, 0])
+
+
+        large_font.render(display, f"fps: {current_fps}", [120, 0])
+
+
     # Overlay displays
     if shop.displaying:
         shop.show(display, player)
