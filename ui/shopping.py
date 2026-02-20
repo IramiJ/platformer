@@ -1,5 +1,6 @@
 import pygame, os, json
 from ui.Font_renderer import Font
+from entities.animations import draw_constants
 pygame.init()
 
 
@@ -23,6 +24,7 @@ class Shop():
     def render(self,surf, player_coin_amount):
         surf.fill((0,0,0))
         self.large_font.render(surf,'SHOP',(150,0))  
+        draw_constants(surf)
         for item in self.imgs:
             self.small_font.render(surf,item,(0,self.imgs[item][1][1]-8))
             self.large_font.render(surf,self.prices[item],[36,self.imgs[item][1][1]+2])

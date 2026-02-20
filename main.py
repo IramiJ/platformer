@@ -83,7 +83,6 @@ while True:
         player.update_frames()
         player.draw(display, scroll)
         texts.render_texts(display, scroll)
-        draw_constants(display)
         hp_bar.draw(display, 5, player.hp)
         render_buffs(shop.data, display, player)
         ammo.render_ammo(display, player)
