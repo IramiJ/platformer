@@ -82,7 +82,6 @@ while True:
         display_map(display, scroll, tile_rects, level.map, tiles)
         player.update_frames()
         player.draw(display, scroll)
-        large_font.render(display,str(player.coin_amount), (16,0))
         texts.render_texts(display, scroll)
         draw_constants(display)
         hp_bar.draw(display, 5, player.hp)

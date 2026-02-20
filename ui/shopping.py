@@ -20,7 +20,7 @@ class Shop():
             self.imgs[entry] = pygame.image.load(self.data[entry]["asset_path"]).convert(), [0, 32 * counter]
             self.item_boxes[entry] = pygame.Rect(self.imgs[entry][1][0],self.imgs[entry][1][1],self.imgs[entry][0].get_width(),self.imgs[entry][0].get_height())
             counter += 1
-    def render(self,surf):
+    def render(self,surf, player_coin_amount):
         surf.fill((0,0,0))
         self.large_font.render(surf,'SHOP',(150,0))  
         for item in self.imgs:
@@ -28,6 +28,7 @@ class Shop():
             self.large_font.render(surf,self.prices[item],[36,self.imgs[item][1][1]+2])
             self.small_font.render(surf, "duration: " + str(self.data[item]["duration"]), [60,self.imgs[item][1][1]+2]), 
             surf.blit(self.imgs[item][0], (self.item_boxes[item].x,self.item_boxes[item].y))
+        self.large_font.render(surf,str(player_coin_amount), (16,0))
     def buy(self, player, buff_list):
         for item in self.imgs:
             if pygame.mouse.get_pressed()[0]:
@@ -42,7 +43,7 @@ class Shop():
         return self.displaying
     def show(self, display, player):
         if self.displaying:
-            self.render(display)
+            self.render(display, player.coin_amount)
             player.moving_right = False
             player.moving_left = False
             self.buy(player,player.buffs)
