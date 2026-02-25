@@ -3,12 +3,17 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "tutorial.tmx",
+    "activeFile": "n.tsx",
     "expandedProjectPaths": [
         "."
     ],
     "file.lastUsedOpenFilter": "Alle Dateien (*)",
     "fileStates": {
+        "n.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
         "purple_tiles.tsx": {
             "dynamicWrapping": false,
             "scaleInDock": 1,
@@ -18,27 +23,37 @@
             "scale": 3,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 2988.5,
-                "y": 461.33333333333337
+                "x": 3292.833333333333,
+                "y": 597.6666666666666
+            }
+        },
+        "unbenannt.tmx": {
+            "scale": 2,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 776.5,
+                "y": 700.5
             }
         }
     },
     "last.exportedFilePath": "C:/Users/User/OneDrive/Desktop/programming/projects/platformer/maps",
-    "last.imagePath": "C:/Users/User/OneDrive/Desktop/programming/projects/platformer/assets/tiles",
+    "last.imagePath": "C:/Users/User/Downloads/ezgif-split (1)",
     "map.height": 200,
     "map.lastUsedExportFilter": "CSV-Dateien (*.csv)",
     "map.lastUsedFormat": "tmx",
-    "map.tileHeight": 16,
-    "map.tileWidth": 16,
+    "map.tileHeight": 24,
+    "map.tileWidth": 24,
     "map.width": 300,
     "openFiles": [
-        "tutorial.tmx",
-        "purple_tiles.tsx"
+        "unbenannt.tmx",
+        "n.tsx"
     ],
     "project": "tutorial.tiled-project",
     "recentFiles": [
-        "purple_tiles.tsx",
-        "tutorial.tmx"
+        "unbenannt.tmx",
+        "n.tsx",
+        "tutorial.tmx",
+        "purple_tiles.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.type": 1
