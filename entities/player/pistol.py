@@ -30,9 +30,9 @@ class Pistol:
             self.loc = [player.rect.left-self.img.get_width()+6, player.rect.y+6]
         display.blit(pygame.transform.flip(self.img, player.flip, False), [self.loc[0] - scroll.render_scroll[0], self.loc[1] - scroll.render_scroll[1]])
         
-    def shoot(self, enemy_list):
+    def shoot(self, enemy_list, dt):
         for bullet in self.bullets:
-            bullet.move(enemy_list, self.bullets)
+            bullet.move(enemy_list, self.bullets, dt)
     
     def update_cds(self):
         if self.shoot_cd > 0:
@@ -73,12 +73,12 @@ class Pistol_Bullet(simple_entity):
             self.range = 200
             self.dmg_cd = 0
             self.flip = flip
-        def move(self, enemy_list, bullet_list):
+        def move(self, enemy_list, bullet_list, dt):
             self.dmg_entity(enemy_list)
             if not self.flip:
-                self.loc[0] += self.velocity
+                self.loc[0] += self.velocity * dt
             else:
-                self.loc[0] -= self.velocity           
+                self.loc[0] -= self.velocity * dt          
             self.remove(bullet_list)
             
         def remove(self, bullet_list):

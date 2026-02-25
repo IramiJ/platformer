@@ -114,8 +114,8 @@ while True:
         enemies.handle_enemies(player, display, bullets, scroll, tile_rects, logic_variables, sparks, dt)
         scroll.player_scrolling(player, level)
         for bullet in bullets:
-            bullet.move(player, display, bullets, scroll)
-        player.pistol.shoot(enemies.enemies)
+            bullet.move(player, display, bullets, scroll, dt)
+        player.pistol.shoot(enemies.enemies, dt)
         # Player event logic 
         player.dying(level.data["max_y"])
         player.remove_buffs(["speed boost", "jump boost", "double coin"])
