@@ -29,7 +29,7 @@ class Patroller(Enemy):
         self.hp_bar.x = self.rect.x-scroll[0]
         self.hp_bar.y = self.rect.y-scroll[1]-20
         self.hp_bar.draw(display, self.max_hp, self.hp)
-    def move(self):
+    def move(self, dt):
         if self.stunned:
             self.stun_cd -= 1
             if self.stun_cd == 0:
@@ -51,7 +51,7 @@ class Patroller(Enemy):
                     self.activate_burst()
                 else:
                     self.movement[0] -= self.true_velocity
-            self.rect.x += self.movement[0]
+            self.rect.x += self.movement[0] * dt
     def attack(self, player, scroll):
         if self.attack_cd > 0:
             

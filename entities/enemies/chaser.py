@@ -31,7 +31,7 @@ class Chaser(Enemy):
         self.hp_bar.x = self.rect.x-scroll[0]
         self.hp_bar.y = self.rect.y-scroll[1]-20
         self.hp_bar.draw(display, self.max_hp, self.hp)
-    def move(self, player, tiles):
+    def move(self, player, tiles, dt):
         if self.stunned:
             self.stun_cd -= 1
             if self.stun_cd == 0:
@@ -72,7 +72,7 @@ class Chaser(Enemy):
                 self.change_action('idle')
             self.true_velocity = self.velocity + self.move_burst_increase
             
-            self.rect.x += self.movement[0]
+            self.rect.x += self.movement[0] * dt
             self.collision(tiles)
             
 

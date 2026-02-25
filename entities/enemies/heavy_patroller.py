@@ -6,7 +6,7 @@ class Heavy_Patroller(Patroller):
         self.max_hp = 6
         self.hp = 6
         self.true_velocity = 1
-    def move(self):
+    def move(self, dt):
         self.movement = [0, 0]
         if self.direction == 'r':
             if self.rect.x >= self.spawn_point[0] + self.distance:
@@ -20,4 +20,4 @@ class Heavy_Patroller(Patroller):
                 self.flip = False
             else:
                 self.movement[0] -= self.true_velocity
-        self.rect.x += self.movement[0]
+        self.rect.x += self.movement[0] * dt

@@ -6,12 +6,12 @@ class Enemies:
     def __init__(self):
         self.enemy_types = {"Patroller": Patroller, "Chaser": Chaser, "Shooter": Shooter, "Heavy_Patroller": Heavy_Patroller}
         self.enemies = []
-    def handle_enemies(self, player, display, bullet_list, scroll, tiles, logic_variables, sparks):
+    def handle_enemies(self, player, display, bullet_list, scroll, tiles, logic_variables, sparks, dt):
         for enemy in self.enemies:
             if isinstance(enemy, Chaser):
-                enemy.move(player, tiles)
+                enemy.move(player, tiles, dt)
             elif not isinstance(enemy, Shooter):
-                enemy.move()
+                enemy.move(dt)
             enemy.update_frames()
             enemy.render(display, scroll.render_scroll)
             if isinstance(enemy, Shooter):
