@@ -83,7 +83,7 @@ class Player(entity):
 
 
     def draw(self, display, scroll, dt):
-        pygame.draw.rect(display, (255,0,0), pygame.Rect(self.rect.left - scroll.render_scroll[0], self.rect.top - scroll.render_scroll[1], 16, 16))
+#        pygame.draw.rect(display, (255,0,0), pygame.Rect(self.rect.left - scroll.render_scroll[0], self.rect.top - scroll.render_scroll[1], 16, 16))
         if self.mode == "meele":
             self.sword.draw(self, display, scroll, dt)
         elif self.mode == "ranged":
