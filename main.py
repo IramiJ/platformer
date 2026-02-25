@@ -59,8 +59,9 @@ frames = 0
 current_fps = 0
 last_time = time.time()
 #MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
-while True:              
-    # Keyboard handling
+while True:
+    clock.tick(Settings.fps)              
+    # FPS handling
     frames += 1
     kb_events(player, shop, pause_screen)
     if time.time() - last_time >= 1:
@@ -90,8 +91,6 @@ while True:
             torch.draw(display, scroll)
         for i, spark in sorted(enumerate(sparks), reverse=True):
             spark.draw(display, scroll)
-
-
         large_font.render(display, f"fps: {current_fps}", [120, 0])
 
 
@@ -111,16 +110,17 @@ while True:
     # Movement logic
     if logic_variables.MOVEMENTS and logic_variables.hitstop_timer <= 0:
         player_movements(player, tile_rects, display, player.cd_obj, player.tail, scroll)
-        coins.coin_collisions(player)
         enemies.handle_enemies(player, display, bullets, scroll, tile_rects, logic_variables, sparks)
         scroll.player_scrolling(player, level)
         for bullet in bullets:
             bullet.move(player, display, bullets, scroll)
+        player.pistol.shoot(enemies.enemies)
+        # Player event logic 
         player.dying(level.data["max_y"])
         player.remove_buffs(["speed boost", "jump boost", "double coin"])
         player.update_mode_variables()
         player.apply_buffs()
-        player.pistol.shoot(enemies.enemies)
+        # Spark sword logic
         for i, spark in sorted(enumerate(sparks), reverse=True):
             spark.move(1)
             if not spark.alive:
@@ -132,4 +132,4 @@ while True:
     reach_checkpoint(player, level)
     screen.blit(surf, (0,0))
     pygame.display.update()
-    clock.tick(Settings.fps)
+    
