@@ -12,7 +12,7 @@ class Enemies:
                 enemy.move(player, tiles, dt)
             elif not isinstance(enemy, Shooter):
                 enemy.move(dt)
-            enemy.update_frames()
+            enemy.update_frames(dt)
             enemy.render(display, scroll.render_scroll)
             if isinstance(enemy, Shooter):
                 enemy.attack(player, bullet_list, scroll)

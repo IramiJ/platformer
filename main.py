@@ -82,8 +82,8 @@ while True:
         coins.draw_coins(display, scroll)       
         tile_rects = []
         display_map(display, scroll, tile_rects, level.map, tiles)
-        player.update_frames()
-        player.draw(display, scroll)
+        player.update_frames(dt)
+        player.draw(display, scroll, dt)
         texts.render_texts(display, scroll)
         hp_bar.draw(display, player.max_hp, player.hp)
         render_buffs(shop.data, display, player)
@@ -128,6 +128,7 @@ while True:
                 sparks.pop(i)
     else:
         logic_variables.hitstop_timer -= 1
+    
     surf = pygame.transform.scale(display,Settings.window_size)
     update_level(player, level, enemies, torches, texts, win_screen)
     reach_checkpoint(player, level)

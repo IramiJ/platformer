@@ -4,7 +4,7 @@ from entities.player.sword import Sword
 from entities.player.pistol import Pistol
 from entities.animations import load_animation
 from entities.spark import Spark
-import pygame, random
+import math, pygame, random
 
 class Player(entity):
     def __init__(self,x,y,width,height):
@@ -74,16 +74,16 @@ class Player(entity):
             else:
                 self.buffs.pop(buff)
             
-    def update_frames(self):
-        self.frame += 1
+    def update_frames(self, dt):
+        self.frame += dt
         if self.frame >= len(self.animation_database[self.action]):
             self.frame = 0
-        self.img_id = self.animation_database[self.action][self.frame]
+        self.img_id = self.animation_database[self.action][math.floor(self.frame)]
         self.img = self.animation_frames[self.img_id]
-    def draw(self, display, scroll):
+    def draw(self, display, scroll, dt):
 #        pygame.draw.rect(display, (255,0,0), pygame.Rect(self.rect.left - scroll.render_scroll[0], self.rect.top - scroll.render_scroll[1], 16, 16))
         if self.mode == "meele":
-            self.sword.draw(self, display, scroll)
+            self.sword.draw(self, display, scroll, dt)
         elif self.mode == "ranged":
             self.pistol.draw(self, display, scroll)
         for bullet in self.pistol.bullets:
@@ -95,7 +95,7 @@ class Player(entity):
     
 
     def dash(self):
-        if not self.dashing and self.dash_cooldown == 0:           
+        if not self.dashing and self.dash_cooldown <= 0:           
             self.dashing = True
             self.dash_timer = self.dash_duration
             self.dash_cooldown = self.max_dash_cd   

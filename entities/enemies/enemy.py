@@ -1,6 +1,6 @@
 from entities.entity import entity
 from world.collisions import collision_test
-import pygame
+import pygame, math
 
 class Enemy(entity):
     def __init__(self,x,y,width,height):
@@ -11,11 +11,11 @@ class Enemy(entity):
         self.alive = True
         self.dmg_timer = 0
         
-    def update_frames(self):
-        self.frame += 1
+    def update_frames(self, dt):
+        self.frame += dt
         if self.frame >= len(self.animation_database[self.action]):
             self.frame = 0
-        self.img_id = self.animation_database[self.action][self.frame]
+        self.img_id = self.animation_database[self.action][math.floor(self.frame)]
         self.img = self.animation_frames[self.img_id]
     def draw(self, display, scroll):
         to_blit = self.img.copy()

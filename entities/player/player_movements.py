@@ -34,8 +34,8 @@ def player_movements(player, tile_rects, display, cd, tail, scroll, dt):
     if player.y_momentum > 7:
         player.y_momentum = 7
     if player.dash_cooldown > 0:
-        player.dash_cooldown -= 1
-        dash_cd(player, display, cd, scroll)
+        player.dash_cooldown -= dt
+        dash_cd(player, display, cd, scroll, dt)
         
     
     if player.movement[0] > 0:
@@ -68,10 +68,10 @@ def player_movements(player, tile_rects, display, cd, tail, scroll, dt):
     
 
 
-def dash_cd(player, display, cd, scroll):
-    cd.img_id = cd.animation_database[cd.action][cd.frame]
+def dash_cd(player, display, cd, scroll, dt):
+    cd.img_id = cd.animation_database[cd.action][math.floor(cd.frame)]
     cd.img = cd.animation_frames[cd.img_id]
     display.blit(pygame.transform.flip(cd.img,cd.flip,False), [player.rect.x-scroll.render_scroll[0], player.rect.y-30-scroll.render_scroll[1]])
-    cd.frame += 1
+    cd.frame += dt
     if cd.frame >= len(cd.animation_database[cd.action]):
         cd.frame = 0
