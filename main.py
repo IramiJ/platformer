@@ -60,7 +60,8 @@ current_fps = 0
 last_time = time.time()
 #MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
 while True:
-    clock.tick(Settings.fps)              
+    dt = clock.tick(Settings.fps) / 1000  
+    dt *= 60 # Running the game on 60fps, regardless of the framerate
     # FPS handling
     frames += 1
     kb_events(player, shop, pause_screen)
@@ -109,7 +110,7 @@ while True:
         
     # Movement logic
     if logic_variables.MOVEMENTS and logic_variables.hitstop_timer <= 0:
-        player_movements(player, tile_rects, display, player.cd_obj, player.tail, scroll)
+        player_movements(player, tile_rects, display, player.cd_obj, player.tail, scroll, dt)
         enemies.handle_enemies(player, display, bullets, scroll, tile_rects, logic_variables, sparks)
         scroll.player_scrolling(player, level)
         for bullet in bullets:

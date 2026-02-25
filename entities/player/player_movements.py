@@ -5,12 +5,12 @@ from entities.player.tail import Tail
 from core.settings import Settings
 import pygame, math
 
-def player_movements(player, tile_rects, display, cd, tail, scroll):
+def player_movements(player, tile_rects, display, cd, tail, scroll, dt):
     player.movement = [0, 0]
     if player.dashing:
         player.y_momentum = 0
         player.movement[0] = player.dash_speed * (-1 if player.flip else 1)
-        player.dash_timer -= 1
+        player.dash_timer -= 1 * dt
         if player.dash_timer <= 0:
             player.dashing = False
     else:   
@@ -30,7 +30,7 @@ def player_movements(player, tile_rects, display, cd, tail, scroll):
         tail.loc[1] = player.rect.y + 8
     
     
-    player.y_momentum += 0.4
+    player.y_momentum += 0.4 * dt
     if player.y_momentum > 7:
         player.y_momentum = 7
     if player.dash_cooldown > 0:
@@ -46,7 +46,7 @@ def player_movements(player, tile_rects, display, cd, tail, scroll):
         player.flip = True
     if player.movement[0] == 0:
         player.change_action('idle')
-    player.rect, collisions = move(player.rect, player.movement, tile_rects)
+    player.rect, collisions = move(player.rect, player.movement, tile_rects, dt)
 
     if collisions['bottom']:
         player.y_momentum = 0

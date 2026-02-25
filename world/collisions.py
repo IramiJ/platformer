@@ -5,9 +5,9 @@ def collision_test(rect, tiles):
             hit_list.append(tile)
     return hit_list
 
-def move(rect, movement, tiles):
+def move(rect, movement, tiles, dt):
     collision_types = {'top': False, 'bottom': False, 'left': False, 'right': False}
-    rect.x += movement[0]
+    rect.x += movement[0] * dt
     hit_list = collision_test(rect, tiles)
     for tile in hit_list:
         if movement[0] > 0:
@@ -16,7 +16,7 @@ def move(rect, movement, tiles):
         elif movement[0] < 0:
             rect.left = tile.right
             collision_types['left'] = True
-    rect.y += movement[1]
+    rect.y += movement[1] * dt
     hit_list = collision_test(rect, tiles)
     for tile in hit_list:
         if movement[1] > 0:
