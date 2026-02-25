@@ -1,4 +1,4 @@
 class Settings():
-    fps = 30
+    fps = 120
     window_size = [640, 480]
     caption = "cat game"

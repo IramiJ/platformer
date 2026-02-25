@@ -80,8 +80,10 @@ class Player(entity):
             self.frame = 0
         self.img_id = self.animation_database[self.action][math.floor(self.frame)]
         self.img = self.animation_frames[self.img_id]
+
+
     def draw(self, display, scroll, dt):
-#        pygame.draw.rect(display, (255,0,0), pygame.Rect(self.rect.left - scroll.render_scroll[0], self.rect.top - scroll.render_scroll[1], 16, 16))
+        pygame.draw.rect(display, (255,0,0), pygame.Rect(self.rect.left - scroll.render_scroll[0], self.rect.top - scroll.render_scroll[1], 16, 16))
         if self.mode == "meele":
             self.sword.draw(self, display, scroll, dt)
         elif self.mode == "ranged":
@@ -117,8 +119,8 @@ class Player(entity):
             self.dmg = 1
 
 
-    def attack(self, enemy, logic_variables, sparks):
-        if self.dmg_cd == 0:
+    def attack(self, enemy, logic_variables, sparks, dt):
+        if self.dmg_cd <= 0:  
             if self.dashing and self.mode == "meele":
                 if self.rect.colliderect(enemy.rect):
                     enemy.take_dmg(self.dmg)
@@ -131,8 +133,11 @@ class Player(entity):
                         self.heal(2)
                     else:
                         self.heal(1)
-        else:
-            self.dmg_cd -= 1
+
+    def manage_attack_cd(self, dt):
+        if self.dmg_cd > 0:
+            self.dmg_cd -= dt
+
     def take_dmg(self, scroll):
         self.hp -= 1
         scroll.shake_timer = 10

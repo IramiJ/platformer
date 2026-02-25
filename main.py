@@ -121,6 +121,7 @@ while True:
         player.remove_buffs(["speed boost", "jump boost", "double coin"])
         player.update_mode_variables()
         player.apply_buffs()
+        player.manage_attack_cd(dt)
         # Spark sword logic
         for i, spark in sorted(enumerate(sparks), reverse=True):
             spark.move(1)
@@ -128,7 +129,7 @@ while True:
                 sparks.pop(i)
     else:
         logic_variables.hitstop_timer -= 1
-    
+    print(player.dmg_cd)
     surf = pygame.transform.scale(display,Settings.window_size)
     update_level(player, level, enemies, torches, texts, win_screen)
     reach_checkpoint(player, level)

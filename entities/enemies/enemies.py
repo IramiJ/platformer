@@ -2,6 +2,8 @@ from entities.enemies.patroller import Patroller
 from entities.enemies.chaser import Chaser
 from entities.enemies.shooter import Shooter
 from .heavy_patroller import Heavy_Patroller
+import pygame
+
 class Enemies:
     def __init__(self):
         self.enemy_types = {"Patroller": Patroller, "Chaser": Chaser, "Shooter": Shooter, "Heavy_Patroller": Heavy_Patroller}
@@ -14,11 +16,12 @@ class Enemies:
                 enemy.move(dt)
             enemy.update_frames(dt)
             enemy.render(display, scroll.render_scroll)
+#            pygame.draw.rect(display, (255,0,0), pygame.Rect(enemy.rect.left - scroll.render_scroll[0], enemy.rect.top - scroll.render_scroll[1], 16, 16))
             if isinstance(enemy, Shooter):
                 enemy.attack(player, bullet_list, scroll)
             else:
                 enemy.attack(player, scroll)
-            player.attack(enemy, logic_variables, sparks)
+            player.attack(enemy, logic_variables, sparks, dt)
         length = int(len(self.enemies))
         self.enemies = [e for e in self.enemies if e.alive]
         if len(self.enemies) < length:
