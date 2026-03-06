@@ -5,6 +5,7 @@ class Minimap:
         self.size = [40, 30]
         self.pos = [280, 0]
         self.map_array = []
+        self.display_array = []
         self.minimap_surface = pygame.Surface(self.size)
         self.border_color = (200, 200, 200)
         self.border = pygame.Rect(0, 0, self.size[0], self.size[1])
