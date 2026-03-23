@@ -16,9 +16,9 @@ class Ammo():
         if not player.pistol.reloading:
             self.render_ammo_amount(display, player)
         else:
-            self.dash_cd(display)
+            self.update_dash_img(display)
 
-    def dash_cd(self, display):
+    def update_dash_img(self, display):
         self.cd_obj.img_id = self.cd_obj.animation_database[self.cd_obj.action][self.cd_obj.frame]
         self.cd_obj.img = self.cd_obj.animation_frames[self.cd_obj.img_id]
         display.blit(self.cd_obj.img,  (self.cd_obj.x, self.cd_obj.y))
