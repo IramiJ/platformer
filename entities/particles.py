@@ -12,9 +12,13 @@ class Particle:
         self.y_velocity = 0.2
     def render(self, display, scroll):
         self.increase_velocity()
+        self.update_location()
+        display.blit(self.img, [self.loc[0]-scroll.render_scroll[0], self.loc[1]-scroll.render_scroll[1]])
+    
+    def update_location(self):
         self.loc[0] += self.x_velocity
         self.loc[1] += self.y_velocity
-        display.blit(self.img, [self.loc[0]-scroll.render_scroll[0], self.loc[1]-scroll.render_scroll[1]])
+
     def increase_velocity(self):
         self.y_velocity += 0.01
         self.x_velocity = random.randint(-10, 10) / 30
