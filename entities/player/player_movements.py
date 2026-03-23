@@ -8,36 +8,44 @@ import pygame, math
 def player_movements(player, tile_rects, display, cd, tail, scroll, dt):
     player.movement = [0, 0]
     if player.dashing:
-        player.y_momentum = 0
-        player.movement[0] = player.dash_speed * (-1 if player.flip else 1)
-        player.dash_timer -= 1 * dt
-        if player.dash_timer <= 0:
-            player.dashing = False
+        handle_player_dash(player, dt)
     else:   
-        if player.moving_right:
-            player.movement[0] += player.velocity
-            for point in tail.points:
-                point.show = True
-            tail.loc[0] = player.rect.x - 1 + player.movement[0]
-            tail.dir = 'r'
-        if player.moving_left:
-            player.movement[0] -= player.velocity
-            tail.loc[0] = player.rect.x + 17 + player.movement[0]
-            for point in tail.points:
-                point.show = True
-            tail.dir = 'l'
+        move_left(player, tail)
+        move_right(player, tail)
         player.movement[1] += player.y_momentum
         tail.loc[1] = player.rect.y + 8
     
     
-    player.y_momentum += 0.4 * dt
-    if player.y_momentum > 7:
-        player.y_momentum = 7
+    set_player_y_momentum(player, dt)
+
+    set_player_dash(player, dt, display, cd, scroll)
+    
+    determin_player_action(player)
+
+    player.rect, collisions = move(player.rect, player.movement, tile_rects, dt)
+
+    handle_velocity_collisions(collisions, player)
+    
+    tail.update_points()
+    handle_tail_points(tail, display, scroll)
+
+def handle_tail_points(tail, display, scroll):
+    for i in range(len(tail.points)):
+        if tail.points[i].show:
+            tail.points[i].draw(display, scroll.render_scroll)
+            tail.points[i].dur -= i    
+
+def set_player_dash(player, dt, display, cd, scroll):
     if player.dash_cooldown > 0:
         player.dash_cooldown -= dt
         dash_cd(player, display, cd, scroll, dt)
-        
-    
+
+def set_player_y_momentum(player, dt):
+    player.y_momentum += 0.4 * dt
+    if player.y_momentum > 7:
+        player.y_momentum = 7
+
+def determin_player_action(player):
     if player.movement[0] > 0:
         player.change_action('run')
         player.flip = False
@@ -46,8 +54,31 @@ def player_movements(player, tile_rects, display, cd, tail, scroll, dt):
         player.flip = True
     if player.movement[0] == 0:
         player.change_action('idle')
-    player.rect, collisions = move(player.rect, player.movement, tile_rects, dt)
 
+def move_right(player, tail):
+    if player.moving_right:
+        player.movement[0] += player.velocity
+        for point in tail.points:
+            point.show = True
+        tail.loc[0] = player.rect.x - 1 + player.movement[0]
+        tail.dir = 'r'
+
+def move_left(player, tail):
+    if player.moving_left:
+        player.movement[0] -= player.velocity
+        tail.loc[0] = player.rect.x + 17 + player.movement[0]
+        for point in tail.points:
+            point.show = True
+        tail.dir = 'l'
+
+def handle_player_dash(player, dt):
+    player.y_momentum = 0
+    player.movement[0] = player.dash_speed * (-1 if player.flip else 1)
+    player.dash_timer -= 1 * dt
+    if player.dash_timer <= 0:
+        player.dashing = False    
+    
+def handle_velocity_collisions(collisions, player):
     if collisions['bottom']:
         player.y_momentum = 0
         player.air_timer = 0
@@ -55,18 +86,7 @@ def player_movements(player, tile_rects, display, cd, tail, scroll, dt):
         player.air_timer += 1
 
     if collisions['top']:
-        player.y_momentum = 0
-    
-    tail.update_points()
-    for i in range(len(tail.points)):
-        if tail.points[i].show:
-            tail.points[i].draw(display, scroll.render_scroll)
-            tail.points[i].dur -= i
-    
-    
-    
-    
-
+        player.y_momentum = 0    
 
 def dash_cd(player, display, cd, scroll, dt):
     cd.img_id = cd.animation_database[cd.action][math.floor(cd.frame)]
