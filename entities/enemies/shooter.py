@@ -27,18 +27,16 @@ class Shooter(Enemy):
         if not self.alive:
             return 
         self.draw(display, scroll)
+        self.update_hp_bar(scroll)
+        self.hp_bar.draw(display, self.max_hp, self.hp)
+    def update_hp_bar(self, scroll):
         self.hp_bar.x = self.rect.x-scroll[0]
         self.hp_bar.y = self.rect.y-scroll[1]-20
-        self.hp_bar.draw(display, self.max_hp, self.hp)
     def attack(self, player, bullet_list, scroll):
-        if self.stunned: 
-            self.stun_cd -= 1
-            if self.stun_cd == 0:
-                self.stunned = False
-        else:
-            if self.attack_cd > 0:           
-                self.attack_cd -= 1
-            elif math.sqrt((self.spawn_point[0] - player.rect.x)**2 + (self.spawn_point[1] - player.rect.y)**2) <= self.aggro_range:
+        self.handle_stun_state()
+        if not self.stunned:
+            self.reduce_attack_cd()
+            if math.sqrt((self.spawn_point[0] - player.rect.x)**2 + (self.spawn_point[1] - player.rect.y)**2) <= self.aggro_range:
                 self.change_action('shoot')
                 if self.attack_cd == 0:
                     if self.shoot_count == 2:                    
@@ -51,19 +49,28 @@ class Shooter(Enemy):
             else:
                 self.change_action('idle')
         
-        if self.collision_cd > 0:
-            self.collision_cd -= 1
-
-        elif self.rect.colliderect(player.rect) and not player.dashing:
-            player.take_dmg(scroll)
-            self.collision_cd  = 30
+        self.update_player_phsyical_dmg(player, scroll)
             
     def stun(self):
         self.stun_cd = 20
         self.stunned = True
         
-
+    def handle_stun_state(self):
+        if self.stunned: 
+            self.stun_cd -= 1
+            if self.stun_cd == 0:
+                self.stunned = False
     
-        
+    def reduce_attack_cd(self):
+        if self.attack_cd > 0:           
+            self.attack_cd -= 1
+    
+    def update_player_phsyical_dmg(self, player, scroll):
+        if self.collision_cd > 0:
+            self.collision_cd -= 1
+
+        elif self.rect.colliderect(player.rect) and not player.dashing:
+            player.take_dmg(scroll)
+            self.collision_cd  = 30  
 
              
