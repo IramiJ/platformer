@@ -28,9 +28,39 @@ class Chaser(Enemy):
         if not self.alive:
             return 
         self.draw(display, scroll)
+        self.update_hp_bar(scroll)
+        self.hp_bar.draw(display, self.max_hp, self.hp)
+    def update_hp_bar(self, scroll):
         self.hp_bar.x = self.rect.x-scroll[0]
         self.hp_bar.y = self.rect.y-scroll[1]-20
-        self.hp_bar.draw(display, self.max_hp, self.hp)
+
+    def move_to_player(self, player):
+        if player.rect.x < self.rect.x:
+            self.change_action('run')
+            self.direction = 'l'
+            self.flip = True
+            self.movement[0] -= self.true_velocity
+        elif player.rect.x > self.rect.x:
+            self.change_action('run')
+            self.direction = 'r'
+            self.flip = False
+            self.movement[0] += self.true_velocity
+        elif player.rect.x == self.rect.x:
+            self.movement[0] = 0
+    
+    def return_to_spawnpoint(self):
+        self.move_burst_increase = 0
+        if self.rect.x < self.spawn_point[0]:
+            self.change_action('run')
+            self.direction = 'r'
+            self.flip = False
+            self.movement[0] += self.true_velocity
+        else:
+            self.change_action('run')
+            self.direction = 'l'
+            self.flip = True
+            self.movement[0] -= self.true_velocity
+
     def move(self, player, tiles, dt):
         if self.stunned:
             self.stun_cd -= 1
@@ -40,34 +70,11 @@ class Chaser(Enemy):
             self.movement = [0, 0]
             if abs(self.rect.x - player.rect.x) <= self.aggro_range:    
                 self.move_burst()           
-                if player.rect.x < self.rect.x:
-                    self.change_action('run')
-                    self.direction = 'l'
-                    self.flip = True
-                    self.movement[0] -= self.true_velocity
-                elif player.rect.x > self.rect.x:
-                    self.change_action('run')
-                    self.direction = 'r'
-                    self.flip = False
-                    self.movement[0] += self.true_velocity
-                elif player.rect.x == self.rect.x:
-                    self.movement[0] = 0
+                self.move_to_player(player)
             elif abs(self.rect.x - self.spawn_point[0]) < 1:
                     self.rect.x = self.spawn_point[0]
             elif self.rect.x != self.spawn_point[0]:
-                    self.move_burst_increase = 0
-                    
-                    if self.rect.x < self.spawn_point[0]:
-                        self.change_action('run')
-                        self.direction = 'r'
-                        self.flip = False
-                        self.movement[0] += self.true_velocity
-                    else:
-                        self.change_action('run')
-                        self.direction = 'l'
-                        self.flip = True
-                        self.movement[0] -= self.true_velocity
-                    
+                    self.return_to_spawnpoint()
             else:
                 self.change_action('idle')
             self.true_velocity = self.velocity + self.move_burst_increase
@@ -78,7 +85,6 @@ class Chaser(Enemy):
 
     def attack(self, player, scroll):
         if self.attack_cd > 0:
-            
             self.attack_cd -= 1
         else:
             if self.rect.colliderect(player.rect) and not player.dashing:
