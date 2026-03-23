@@ -17,8 +17,7 @@ class Enemy(entity):
             self.frame = 0
         self.img_id = self.animation_database[self.action][math.floor(self.frame)]
         self.img = self.animation_frames[self.img_id]
-    def draw(self, display, scroll):
-        to_blit = self.img.copy()
+    def draw_dmg_timer(self, to_blit):
         if self.dmg_timer > 0:
             if self.dmg_timer == 5:
                 to_blit.fill((255, 255, 255), special_flags=pygame.BLEND_RGB_ADD)
@@ -27,7 +26,13 @@ class Enemy(entity):
             self.dmg_timer -= 1
         else:
             self.dmg_timer = 0
+    def draw(self, display, scroll):
+        to_blit = self.img.copy()
+        self.draw_dmg_timer(to_blit)
         display.blit(pygame.transform.flip(to_blit,self.flip,False), [self.rect.x-scroll[0], self.rect.y-scroll[1]])
+    def die(self):
+        self.hp = 0
+        self.alive = False
     def take_dmg(self, dmg):
         if not self.alive:
             return
@@ -35,8 +40,7 @@ class Enemy(entity):
         self.hp -= dmg
         self.taking_dmg = True
         if self.hp <= 0:
-            self.hp = 0
-            self.alive = False
+            self.die()
     def collision(self, tiles):
         hit_list = collision_test(self.rect, tiles)
         for tile in hit_list:
