@@ -44,6 +44,7 @@ class Player(entity):
         self.mode = "meele"
         self.respawn = False
         self.histstop_timer = 0
+
     def dying(self, max_y):
         if self.rect.y > max_y:
             self.set_respawn()
@@ -58,6 +59,7 @@ class Player(entity):
                     self.jump_momentum = -10
                 elif buff == "double coins":
                     self.double_coin_buff = False
+
     def apply_buffs(self):
         c = self.buffs.copy()
         for buff in c:
@@ -120,19 +122,27 @@ class Player(entity):
 
 
     def attack(self, enemy, logic_variables, sparks, dt):
-        if self.dmg_cd <= 0:  
-            if self.dashing and self.mode == "meele":
-                if self.rect.colliderect(enemy.rect):
-                    enemy.take_dmg(self.dmg)
-                    self.hitstop(logic_variables)
-                    sparks.append(Spark([enemy.rect.x, enemy.rect.y], random.randint(0, 360), random.randint(3, 6), (255,255,255), 2))
+        if self.dmg_cd <= 0 and self.dashing and self.mode == "meele":
+            if self.rect.colliderect(enemy.rect):
+                self.attack_on_hit(enemy, logic_variables, sparks)
 
-                    self.dmg_cd = self.dash_cooldown
-                    if enemy.stunned:
-                        sparks.append(Spark([enemy.rect.x, enemy.rect.y], random.randint(0, 360), random.randint(3, 6), (255,255,255), 2))
-                        self.heal(2)
-                    else:
-                        self.heal(1)
+                self.match_cooldowns()
+                self.heal_on_stun(enemy, sparks)
+
+    def attack_on_hit(self, enemy, logic_variables, sparks):
+        enemy.take_dmg(self.dmg)
+        self.hitstop(logic_variables)
+        sparks.append(Spark([enemy.rect.x, enemy.rect.y], random.randint(0, 360), random.randint(3, 6), (255,255,255), 2))
+
+    def heal_on_stun(self, enemy, sparks):
+        if enemy.stunned:
+            sparks.append(Spark([enemy.rect.x, enemy.rect.y], random.randint(0, 360), random.randint(3, 6), (255,255,255), 2))
+            self.heal(2)
+        else:
+            self.heal(1)
+
+    def match_cooldowns(self):
+        self.dmg_cd = self.dash_cooldown
 
     def manage_attack_cd(self, dt):
         if self.dmg_cd > 0:
