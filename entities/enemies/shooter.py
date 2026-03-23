@@ -36,21 +36,24 @@ class Shooter(Enemy):
         self.handle_stun_state()
         if not self.stunned:
             self.reduce_attack_cd()
-            if math.sqrt((self.spawn_point[0] - player.rect.x)**2 + (self.spawn_point[1] - player.rect.y)**2) <= self.aggro_range:
-                self.change_action('shoot')
-                if self.attack_cd == 0:
-                    if self.shoot_count == 2:                    
-                        self.attack_cd = 2 * Settings.fps
-                        self.shoot_count = 0
-                    else:
-                        self.attack_cd = 0.5 * Settings.fps
-                    bullet_list.append(Shooter_Bullet(self.spawn_point.copy(), player))
-                    self.shoot_count += 1
-            else:
-                self.change_action('idle')
-        
+            self.check_attack_state(player, bullet_list)
         self.update_player_phsyical_dmg(player, scroll)
-            
+    def check_attack_state(self, player, bullet_list):
+        if math.sqrt((self.spawn_point[0] - player.rect.x)**2 + (self.spawn_point[1] - player.rect.y)**2) <= self.aggro_range:
+            self.shoot(bullet_list, player)
+        else:
+            self.change_action('idle')
+    def shoot(self, bullet_list, player):
+        self.change_action('shoot')
+        if self.attack_cd == 0:
+            if self.shoot_count == 2:                    
+                self.attack_cd = 2 * Settings.fps
+                self.shoot_count = 0
+            else:
+                self.attack_cd = 0.5 * Settings.fps
+            bullet_list.append(Shooter_Bullet(self.spawn_point.copy(), player))
+            self.shoot_count += 1
+
     def stun(self):
         self.stun_cd = 20
         self.stunned = True
