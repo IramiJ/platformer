@@ -9,15 +9,20 @@ class Heavy_Patroller(Patroller):
     def move(self, dt):
         self.movement = [0, 0]
         if self.direction == 'r':
-            if self.rect.x >= self.spawn_point[0] + self.distance:
+            self.move_right()
+        if self.direction == 'l':
+            self.move_left()
+        self.rect.x += self.movement[0] * dt # actual movement of the enemy
+    def move_right(self):
+        if self.rect.x >= self.spawn_point[0] + self.distance:
                 self.direction = 'l'
                 self.flip = True
-            else:
-                self.movement[0] += self.true_velocity
-        if self.direction == 'l':
-            if self.rect.x <= self.spawn_point[0] - self.distance:
-                self.direction = 'r'
-                self.flip = False
-            else:
-                self.movement[0] -= self.true_velocity
-        self.rect.x += self.movement[0] * dt
+        else:
+            self.movement[0] += self.true_velocity
+    def move_left(self):
+        if self.rect.x <= self.spawn_point[0] - self.distance:
+            self.direction = 'r'
+            self.flip = False
+        else:
+            self.movement[0] -= self.true_velocity
+        
