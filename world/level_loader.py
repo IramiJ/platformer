@@ -25,17 +25,17 @@ def update_level(player, level, enemies, torches, texts, win_screen):
         enemies.load_enemies(level)
         load_torches(level.map, torches)
         texts.load_texts(level.data["texts"])
-        player.spawn_point[0]= level.data["spawn"][0]
-        player.spawn_point[1] = level.data["spawn"][1]
-        player.rect.x = level.data["spawn"][0]
-        player.rect.y = level.data["spawn"][1]
-        player.movement = [0, 0]
+        initialize_player(player, level)
+
 def reload_level(enemies, level, torches, player, texts):
     level.reload_level()
     enemies.load_enemies(level)
     texts.load_texts(level.data["texts"])
     load_torches(level.map, torches)
-    player.spawn_point[0]= level.data["spawn"][0]
+    initialize_player(player, level)
+
+def initialize_player(player, level):
+    player.spawn_point[0] = level.data["spawn"][0]
     player.spawn_point[1] = level.data["spawn"][1]
     player.rect.x = level.data["spawn"][0]
     player.rect.y = level.data["spawn"][1]
