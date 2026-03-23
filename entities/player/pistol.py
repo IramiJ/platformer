@@ -22,14 +22,20 @@ class Pistol:
     def draw(self, player, display, scroll):
         self.update_cds()
         
+        self.set_flip(player)
+        self.set_location(player)
+        
+        display.blit(pygame.transform.flip(self.img, player.flip, False), [self.loc[0] - scroll.render_scroll[0], self.loc[1] - scroll.render_scroll[1]])
+
+    def set_flip(self, player):
         self.flip = player.flip
-        sign = -1 if player.flip else 1
-        if sign == 1:
+    
+    def set_location(self, player):
+        if not self.flip:
             self.loc = [player.rect.right-6, player.rect.y+6]
         else:
             self.loc = [player.rect.left-self.img.get_width()+6, player.rect.y+6]
-        display.blit(pygame.transform.flip(self.img, player.flip, False), [self.loc[0] - scroll.render_scroll[0], self.loc[1] - scroll.render_scroll[1]])
-        
+
     def shoot(self, enemy_list, dt):
         for bullet in self.bullets:
             bullet.move(enemy_list, self.bullets, dt)
@@ -82,8 +88,8 @@ class Pistol_Bullet(simple_entity):
             self.remove(bullet_list)
             
         def remove(self, bullet_list):
-             if math.sqrt((self.loc[0] - self.start[0])**2 + (self.loc[1] - self.start[1])**2) >= self.range:
-                  bullet_list.remove(self)
+            if math.sqrt((self.loc[0] - self.start[0])**2 + (self.loc[1] - self.start[1])**2) >= self.range:
+                bullet_list.remove(self)
 
         def dmg_entity(self, enemies):
             if self.dmg_cd == 0:
