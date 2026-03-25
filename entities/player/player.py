@@ -45,7 +45,7 @@ class Player(entity):
         self.respawn = False
         self.histstop_timer = 0
 
-    def dying(self, max_y):
+    def die_through_falling(self, max_y):
         if self.rect.y > max_y:
             self.set_respawn()
     
@@ -87,7 +87,7 @@ class Player(entity):
     def draw(self, display, scroll, dt):
 #        pygame.draw.rect(display, (255,0,0), pygame.Rect(self.rect.left - scroll.render_scroll[0], self.rect.top - scroll.render_scroll[1], 16, 16))
         if self.mode == "meele":
-            self.sword.draw(self, display, scroll, dt)
+            self.sword.draw(self.flip, self.dashing, self.rect, display, scroll, dt)
         elif self.mode == "ranged":
             self.pistol.draw(self, display, scroll)
         for bullet in self.pistol.bullets:
@@ -110,7 +110,7 @@ class Player(entity):
         elif self.mode == "ranged" and not self.pistol.reloading:
             self.mode = "meele"
 
-    def update_mode_variables(self):
+    def update_mode_properties(self):
         if self.mode == "meele":
             self.velocity = 3
             self.dash_duration = 20
@@ -126,12 +126,12 @@ class Player(entity):
             if self.rect.colliderect(enemy.rect):
                 self.attack_on_hit(enemy, logic_variables, sparks)
 
-                self.match_cooldowns()
+                self.match_damage_cooldown()
                 self.heal_on_stun(enemy, sparks)
 
     def attack_on_hit(self, enemy, logic_variables, sparks):
         enemy.take_dmg(self.dmg)
-        self.hitstop(logic_variables)
+        self.activate_hitstop(logic_variables)
         sparks.append(Spark([enemy.rect.x, enemy.rect.y], random.randint(0, 360), random.randint(3, 6), (255,255,255), 2))
 
     def heal_on_stun(self, enemy, sparks):
@@ -141,7 +141,7 @@ class Player(entity):
         else:
             self.heal(1)
 
-    def match_cooldowns(self):
+    def match_damage_cooldown(self):
         self.dmg_cd = self.dash_cooldown
 
     def manage_attack_cd(self, dt):
@@ -153,7 +153,7 @@ class Player(entity):
         scroll.shake_timer = 10
         scroll.shake_strength = 3
     
-    def set_respawn(self):
+    def set_respawn_location(self):
         self.rect.x = self.spawn_point[0]
         self.rect.y = self.spawn_point[1]
     
@@ -161,10 +161,10 @@ class Player(entity):
         if self.respawn:
             self.hp = 5
             level.id = 1
-            self.set_respawn()
+            self.set_respawn_location()
             self.respawn = False
     
-    def hitstop(self, logic_variables):
+    def activate_hitstop(self, logic_variables):
         logic_variables.hitstop_timer = 3
     
     def heal(self, amount):

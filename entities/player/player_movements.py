@@ -20,16 +20,16 @@ def player_movements(player, tile_rects, display, cd, tail, scroll, dt):
 
     set_player_dash(player, dt, display, cd, scroll)
     
-    determin_player_action(player)
+    determine_player_action(player)
 
     player.rect, collisions = move(player.rect, player.movement, tile_rects, dt)
 
-    handle_velocity_collisions(collisions, player)
+    handle_y_collisions(collisions, player)
     
     tail.update_points()
-    handle_tail_points(tail, display, scroll)
+    update_tail_points(tail, display, scroll)
 
-def handle_tail_points(tail, display, scroll):
+def update_tail_points(tail, display, scroll):
     for i in range(len(tail.points)):
         if tail.points[i].show:
             tail.points[i].draw(display, scroll.render_scroll)
@@ -38,14 +38,14 @@ def handle_tail_points(tail, display, scroll):
 def set_player_dash(player, dt, display, cd, scroll):
     if player.dash_cooldown > 0:
         player.dash_cooldown -= dt
-        dash_cd(player, display, cd, scroll, dt)
+        draw_dash_cd(player, display, cd, scroll, dt)
 
 def set_player_y_momentum(player, dt):
     player.y_momentum += 0.4 * dt
     if player.y_momentum > 7:
         player.y_momentum = 7
 
-def determin_player_action(player):
+def determine_player_action(player):
     if player.movement[0] > 0:
         player.change_action('run')
         player.flip = False
@@ -78,7 +78,7 @@ def handle_player_dash(player, dt):
     if player.dash_timer <= 0:
         player.dashing = False    
     
-def handle_velocity_collisions(collisions, player):
+def handle_y_collisions(collisions, player):
     if collisions['bottom']:
         player.y_momentum = 0
         player.air_timer = 0
@@ -88,7 +88,7 @@ def handle_velocity_collisions(collisions, player):
     if collisions['top']:
         player.y_momentum = 0    
 
-def dash_cd(player, display, cd, scroll, dt):
+def draw_dash_cd(player, display, cd, scroll, dt):
     cd.img_id = cd.animation_database[cd.action][math.floor(cd.frame)]
     cd.img = cd.animation_frames[cd.img_id]
     display.blit(pygame.transform.flip(cd.img,cd.flip,False), [player.rect.x-scroll.render_scroll[0], player.rect.y-30-scroll.render_scroll[1]])

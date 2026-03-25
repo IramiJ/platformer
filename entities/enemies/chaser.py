@@ -10,7 +10,7 @@ class Chaser(Enemy):
         self.aggro_range = 100
         self.action = 'run'
         self.max_hp = 4
-        self.hp = 4
+        self.current_hp = 4
         self.animation_database['idle'] = load_animation('assets/enemies/chaser/idle', [20,20,20,20,20,20], self)
         self.animation_database['run'] = load_animation('assets/enemies/chaser/run', [5,5,5,5,5,5], self)
         self.hp_bar = Hp_bar('assets/hp_bar/enemy_hp_bar_bg.png','assets/hp_bar/enemy_hp_bar_frame.png',self.x,self.y-20)
@@ -29,7 +29,7 @@ class Chaser(Enemy):
             return 
         self.draw(display, scroll)
         self.update_hp_bar(scroll)
-        self.hp_bar.draw(display, self.max_hp, self.hp)
+        self.hp_bar.draw(display, self.max_hp, self.current_hp)
     def update_hp_bar(self, scroll):
         self.hp_bar.x = self.rect.x-scroll[0]
         self.hp_bar.y = self.rect.y-scroll[1]-20

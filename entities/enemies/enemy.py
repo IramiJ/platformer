@@ -6,7 +6,7 @@ class Enemy(entity):
     def __init__(self,x,y,width,height):
         super().__init__(x,y,width,height)
         self.max_hp = 3
-        self.hp = 3
+        self.current_hp = 3
         self.velocity = 1
         self.alive = True
         self.dmg_timer = 0
@@ -31,15 +31,15 @@ class Enemy(entity):
         self.draw_dmg_timer(to_blit)
         display.blit(pygame.transform.flip(to_blit,self.flip,False), [self.rect.x-scroll[0], self.rect.y-scroll[1]])
     def die(self):
-        self.hp = 0
+        self.current_hp = 0
         self.alive = False
     def take_dmg(self, dmg):
         if not self.alive:
             return
         self.dmg_timer = 5
-        self.hp -= dmg
+        self.current_hp -= dmg
         self.taking_dmg = True
-        if self.hp <= 0:
+        if self.current_hp <= 0:
             self.die()
     def collision(self, tiles):
         hit_list = collision_test(self.rect, tiles)

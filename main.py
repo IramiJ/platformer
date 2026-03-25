@@ -117,9 +117,9 @@ while True:
             bullet.move(player, display, bullets, scroll, dt)
         player.pistol.shoot(enemies.enemies, dt)
         # Player event logic 
-        player.dying(level.data["max_y"])
+        player.die_through_falling(level.data["max_y"])
         player.remove_buffs(["speed boost", "jump boost", "double coin"])
-        player.update_mode_variables()
+        player.update_mode_properties()
         player.apply_buffs()
         player.manage_attack_cd(dt)
         # Spark sword logic

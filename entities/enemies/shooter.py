@@ -12,7 +12,7 @@ class Shooter(Enemy):
         self.aggro_range = 300
         self.action = 'idle'
         self.max_hp = 2
-        self.hp = 2
+        self.current_hp = 2
         self.animation_database['idle'] = load_animation('assets/enemies/shooter/idle', [20,20,20,20,20,20], self)
         self.animation_database['shoot'] = load_animation('assets/enemies/shooter/shoot', [20, 20], self)
         self.hp_bar = Hp_bar('assets/hp_bar/enemy_hp_bar_bg.png','assets/hp_bar/enemy_hp_bar_frame.png',self.x,self.y-20)
@@ -28,7 +28,7 @@ class Shooter(Enemy):
             return 
         self.draw(display, scroll)
         self.update_hp_bar(scroll)
-        self.hp_bar.draw(display, self.max_hp, self.hp)
+        self.hp_bar.draw(display, self.max_hp, self.current_hp)
     def update_hp_bar(self, scroll):
         self.hp_bar.x = self.rect.x-scroll[0]
         self.hp_bar.y = self.rect.y-scroll[1]-20

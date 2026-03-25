@@ -26,7 +26,7 @@ class Patroller(Enemy):
             return 
         self.draw(display, scroll)
         self.update_hp_bar_location(scroll)
-        self.hp_bar.draw(display, self.max_hp, self.hp)
+        self.hp_bar.draw(display, self.max_hp, self.current_hp)
     def update_hp_bar_location(self, scroll):
         self.hp_bar.x = self.rect.x-scroll[0]
         self.hp_bar.y = self.rect.y-scroll[1]-20
