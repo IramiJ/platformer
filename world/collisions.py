@@ -5,7 +5,7 @@ def collision_test(rect, tiles):
             hit_list.append(tile)
     return hit_list
 
-def move(rect, movement, tiles, dt):
+def move_collisions(rect, movement, tiles, dt):
     collision_types = {'top': False, 'bottom': False, 'left': False, 'right': False}
     x_movement(rect, movement, dt, tiles, collision_types)
     y_movement(rect, movement, dt, tiles, collision_types)

@@ -4,7 +4,7 @@ from entities.player.sword import Sword
 from entities.player.pistol import Pistol
 from entities.animations import load_animation
 from entities.spark import Spark
-from world.collisions import move
+from world.collisions import move_collisions
 import math, pygame, random
 
 class Player(entity):
@@ -190,7 +190,7 @@ class Player(entity):
 
         self.determine_action()
 
-        self.rect, collisions = move(self.rect, self.movement, tile_rects, dt)
+        self.rect, collisions = move_collisions(self.rect, self.movement, tile_rects, dt)
 
         self.handle_y_collisions(collisions)
 

@@ -26,6 +26,41 @@ from entities.player.render_buffs import render_buffs
 from entities.player.render_ammo import Ammo
 from world.texts import Texts
 
+class Game():
+    def __init__(self):
+        self.clock = pygame.time.Clock()
+        self.window_size = [640, 480]
+        self.screen = pygame.display.set_mode(Settings.window_size)
+        display = pygame.Surface((window_size[0]//2,window_size[1]//2))
+        pygame.display.set_caption(Settings.caption)
+
+        tiles = load_tiles('assets/tiles')
+        level = Level_loader()
+        level.load_level('world/levels/level1.json')
+        player = Player(level.data['spawn'][0],level.data['spawn'][1],16,16)
+        hp_bar = Hp_bar("assets/hp_bar/hp_bar_bg.png","assets/hp_bar/hp_bar_frame.png", 0, 0)
+        small_font = Font('assets/fonts/small_font.png')
+        large_font = Font('assets/fonts/large_font.png')
+        coins = Coins()
+        logic_variables = Logic_variables() 
+        shop = Shop()
+        pause_screen = Pause_screen()
+        death_screen = Death_screen()
+        win_screen = Win_screen()
+        enemies = Enemies()
+        ammo = Ammo()
+        enemies.load_enemies(level)
+        bullets = []
+        torches = []
+        sparks = []
+        texts = Texts()
+        texts.load_texts(level.data["texts"])
+        load_torches(level.map, torches)
+        scroll = Scroll()
+        frames = 0
+        current_fps = 0
+        last_time = time.time()
+
 clock = pygame.time.Clock()
 window_size = [640, 480]
 screen = pygame.display.set_mode(Settings.window_size)
@@ -64,11 +99,13 @@ while True:
     dt *= 60 # Running the game on 60fps, regardless of the framerate
     # FPS counting
     frames += 1
-    kb_events(player, shop, pause_screen)
+    
     if time.time() - last_time >= 1:
         current_fps = frames
         frames = 0
         last_time = time.time()
+    
+    kb_events(player, shop, pause_screen)
 
     # Logic evaluations
     dead = (player.hp <= 0) 
