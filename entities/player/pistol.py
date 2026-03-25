@@ -25,7 +25,7 @@ class Pistol:
         self.set_flip(player)
         self.set_location(player)
         
-        display.blit(pygame.transform.flip(self.img, player.flip, False), [self.loc[0] - scroll.render_scroll[0], self.loc[1] - scroll.render_scroll[1]])
+        display.blit(pygame.transform.flip(self.img, self.flip, False), [self.loc[0] - scroll.render_scroll[0], self.loc[1] - scroll.render_scroll[1]])
 
     def set_flip(self, player):
         self.flip = player.flip
