@@ -13,7 +13,7 @@ from entities.player.player import Player
 from entities.hp_bar import Hp_bar
 from core.settings import Settings
 from entities.animations import draw_constants, load_animation
-from entities.player.player_movements import player_movements
+# from entities.player.player_movements import player_movements
 from world.scrolling import Scroll
 from core.kb_event_handling import kb_events
 from entities.enemies.enemies import Enemies
@@ -110,7 +110,7 @@ while True:
         
     # Movement logic
     if logic_variables.MOVEMENTS and logic_variables.hitstop_timer <= 0:
-        player_movements(player, tile_rects, display, player.cd_obj, player.tail, scroll, dt)
+        player.handle_movements( tile_rects, display, player.tail, scroll, dt)
         enemies.handle_enemies(player, display, bullets, scroll, tile_rects, logic_variables, sparks, dt)
         scroll.player_scrolling(player, level)
         for bullet in bullets:

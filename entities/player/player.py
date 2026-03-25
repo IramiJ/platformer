@@ -4,6 +4,7 @@ from entities.player.sword import Sword
 from entities.player.pistol import Pistol
 from entities.animations import load_animation
 from entities.spark import Spark
+from world.collisions import move
 import math, pygame, random
 
 class Player(entity):
@@ -172,5 +173,95 @@ class Player(entity):
             self.hp += amount
         else:
             self.hp = self.max_hp
+    
+    def handle_movements(self, tile_rects, display, tail, scroll, dt):
+        self.movement = [0, 0]
+        if self.dashing:
+            self.handle_dash(dt)
+        else:   
+            self.move_left(tail)
+            self.move_right(tail)
+            self.movement[1] += self.y_momentum
+            tail.loc[1] = self.rect.y + 8
+
+        self.set_y_momentum(dt)
+
+        self.set_dash(dt, display, scroll)
+
+        self.determine_action()
+
+        self.rect, collisions = move(self.rect, self.movement, tile_rects, dt)
+
+        self.handle_y_collisions(collisions)
+
+        tail.update_points()
+        self.update_tail_points(tail, display, scroll)
+
+    def update_tail_points(self, tail, display, scroll):
+        for i in range(len(tail.points)):
+            if tail.points[i].show:
+                tail.points[i].draw(display, scroll.render_scroll)
+                tail.points[i].dur -= i    
+
+    def set_dash(self, dt, display, scroll):
+        if self.dash_cooldown > 0:
+            self.dash_cooldown -= dt
+            self.draw_dash_cd(display, scroll, dt)
+
+    def set_y_momentum(self, dt):
+        self.y_momentum += 0.4 * dt
+        if self.y_momentum > 7:
+            self.y_momentum = 7
+
+    def determine_action(self):
+        if self.movement[0] > 0:
+            self.change_action('run')
+            self.flip = False
+        if self.movement[0] < 0:
+            self.change_action('run')
+            self.flip = True
+        if self.movement[0] == 0:
+            self.change_action('idle')
+
+    def move_right(self, tail):
+        if self.moving_right:
+            self.movement[0] += self.velocity
+            for point in tail.points:
+                point.show = True
+            tail.loc[0] = self.rect.x - 1 + self.movement[0]
+            tail.dir = 'r'
+
+    def move_left(self, tail):
+        if self.moving_left:
+            self.movement[0] -= self.velocity
+            tail.loc[0] = self.rect.x + 17 + self.movement[0]
+            for point in tail.points:
+                point.show = True
+            tail.dir = 'l'
+
+    def handle_dash(self, dt):
+        self.y_momentum = 0
+        self.movement[0] =  self.dash_speed * (-1 if self.flip else 1)
+        self.dash_timer -= 1 * dt
+        if self.dash_timer <= 0:
+            self.dashing = False    
+        
+    def handle_y_collisions(self, collisions):
+        if collisions['bottom']:
+            self.y_momentum = 0
+            self.air_timer = 0
+        else:
+            self.air_timer += 1
+
+        if collisions['top']:
+            self.y_momentum = 0    
+
+    def draw_dash_cd(self, display, scroll, dt):
+        self.cd_obj.img_id = self.cd_obj.animation_database[self.cd_obj.action][math.floor(self.cd_obj.frame)]
+        self.cd_obj.img = self.cd_obj.animation_frames[self.cd_obj.img_id]
+        display.blit(pygame.transform.flip(self.cd_obj.img,self.cd_obj.flip,False), [self.rect.x-scroll.render_scroll[0], self.rect.y-30-scroll.render_scroll[1]])
+        self.cd_obj.frame += dt
+        if self.cd_obj.frame >= len(self.cd_obj.animation_database[self.cd_obj.action]):
+            self.cd_obj.frame = 0
         
     

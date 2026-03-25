@@ -4,8 +4,8 @@ from entities.animations import load_animation
 from entities.player.tail import Tail
 from core.settings import Settings
 import pygame, math
-
-def player_movements(player, tile_rects, display, cd, tail, scroll, dt):
+'''
+def handle_movements(player, tile_rects, display, cd, tail, scroll, dt):
     player.movement = [0, 0]
     if player.dashing:
         handle_player_dash(player, dt)
@@ -14,18 +14,17 @@ def player_movements(player, tile_rects, display, cd, tail, scroll, dt):
         move_right(player, tail)
         player.movement[1] += player.y_momentum
         tail.loc[1] = player.rect.y + 8
-    
-    
+
     set_player_y_momentum(player, dt)
 
     set_player_dash(player, dt, display, cd, scroll)
-    
+
     determine_player_action(player)
 
     player.rect, collisions = move(player.rect, player.movement, tile_rects, dt)
 
-    handle_y_collisions(collisions, player)
-    
+    handle_y_collisions(collisions)
+
     tail.update_points()
     update_tail_points(tail, display, scroll)
 
@@ -95,3 +94,4 @@ def draw_dash_cd(player, display, cd, scroll, dt):
     cd.frame += dt
     if cd.frame >= len(cd.animation_database[cd.action]):
         cd.frame = 0
+'''
