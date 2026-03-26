@@ -139,7 +139,7 @@ class Game():
             reach_checkpoint(self.player, self.level)
             self.screen.blit(self.surf, (0,0))
             pygame.display.update()
-
+'''
 clock = pygame.time.Clock()
 window_size = [640, 480]
 screen = pygame.display.set_mode(Settings.window_size)
@@ -173,7 +173,7 @@ frames = 0
 current_fps = 0
 last_time = time.time()
 #MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
-'''
+
 while True:
     dt = clock.tick(Settings.fps) / 1000  
     dt *= 60 # Running the game on 60fps, regardless of the framerate
