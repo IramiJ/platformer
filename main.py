@@ -31,7 +31,7 @@ class Game():
         self.clock = pygame.time.Clock()
         self.window_size = [640, 480]
         self.screen = pygame.display.set_mode(Settings.window_size)
-        self.display = pygame.Surface((window_size[0]//2,window_size[1]//2))
+        self.display = pygame.Surface((self.window_size[0]//2,self.window_size[1]//2))
         pygame.display.set_caption(Settings.caption)
 
         self.tiles = load_tiles('assets/tiles')
