@@ -170,12 +170,12 @@ class Game():
 
     def update(self):
         if self.logic_variables.MOVEMENTS and self.logic_variables.hitstop_timer <= 0:
+            self.update_tile_rects()
             self.player.update_movements(self.tile_rects, self.enemies.enemies, self.level.data["max_y"], self.dt)
             self.enemies.update_enemies(self.player, self.bullets, self.scroll, self.tile_rects, self.logic_variables, self.sparks, self.dt)
             self.scroll.player_scrolling(self.player, self.level)
             self.move_bullets()
-            self.move_sparks()       
-            self.update_tile_rects()        
+            self.move_sparks()                          
         else:
             self.logic_variables.hitstop_timer -= 1
         update_level(self.player, self.level, self.enemies, self.torches, self.texts, self.win_screen)
