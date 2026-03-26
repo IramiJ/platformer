@@ -82,7 +82,7 @@ class Game():
             self.logic_variables.MOVEMENTS = not self.overlay_active
             self.logic_variables.RENDER = True
             # Draw logic  
-            if logic_variables.RENDER:  
+            if self.logic_variables.RENDER:  
                 self.display.fill((0,0,0))
                 self.coins.draw_coins(self.display, self.scroll)       
                 self.tile_rects = []
