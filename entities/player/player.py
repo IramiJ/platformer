@@ -46,6 +46,21 @@ class Player(entity):
         self.respawn = False
         self.histstop_timer = 0
 
+    def update_movements(self, tile_rects, enemy_list, max_y,  dt):
+        self.handle_movements(tile_rects, dt)
+        self.pistol.shoot(enemy_list, dt)
+        self.die_through_falling(max_y) # self.level.data["max_y"]
+        self.remove_buffs(["speed boost", "jump boost", "double coin"])
+        self.update_mode_properties()
+        self.apply_buffs()
+        self.manage_attack_cd(dt)
+    
+    def run_render_logic(self, display, scroll, dt):
+        self.update_frames(dt)
+        self.draw(display, scroll, dt)
+        self.draw_dash_cd(display, scroll, dt)
+        self.draw_tail_points(display, scroll)
+    
     def die_through_falling(self, max_y):
         if self.rect.y > max_y:
             self.set_respawn()
@@ -174,19 +189,19 @@ class Player(entity):
         else:
             self.hp = self.max_hp
     
-    def handle_movements(self, tile_rects, display, tail, scroll, dt):
+    def handle_movements(self, tile_rects, dt):
         self.movement = [0, 0]
         if self.dashing:
             self.handle_dash(dt)
         else:   
-            self.move_left(tail)
-            self.move_right(tail)
+            self.move_left()
+            self.move_right()
             self.movement[1] += self.y_momentum
-            tail.loc[1] = self.rect.y + 8
+            self.tail.loc[1] = self.rect.y + 8
 
         self.set_y_momentum(dt)
 
-        self.set_dash(dt, display, scroll)
+        self.set_dash(dt)
 
         self.determine_action()
 
@@ -194,19 +209,23 @@ class Player(entity):
 
         self.handle_y_collisions(collisions)
 
-        tail.update_points()
-        self.update_tail_points(tail, display, scroll)
+        self.tail.update_points()
+        self.update_tail_points()
 
-    def update_tail_points(self, tail, display, scroll):
-        for i in range(len(tail.points)):
-            if tail.points[i].show:
-                tail.points[i].draw(display, scroll.render_scroll)
-                tail.points[i].dur -= i    
+    def update_tail_points(self):
+        for i in range(len(self.tail.points)):
+            if self.tail.points[i].show:
+                self.tail.points[i].dur -= i    
+    
+    def draw_tail_points(self, display, scroll):
+        for i in range(len(self.tail.points)):
+            if self.tail.points[i].show:
+                self.tail.points[i].draw(display, scroll.render_scroll)
 
-    def set_dash(self, dt, display, scroll):
+    def set_dash(self, dt):
         if self.dash_cooldown > 0:
             self.dash_cooldown -= dt
-            self.draw_dash_cd(display, scroll, dt)
+            
 
     def set_y_momentum(self, dt):
         self.y_momentum += 0.4 * dt
@@ -223,21 +242,21 @@ class Player(entity):
         if self.movement[0] == 0:
             self.change_action('idle')
 
-    def move_right(self, tail):
+    def move_right(self):
         if self.moving_right:
             self.movement[0] += self.velocity
-            for point in tail.points:
+            for point in self.tail.points:
                 point.show = True
-            tail.loc[0] = self.rect.x - 1 + self.movement[0]
-            tail.dir = 'r'
+            self.tail.loc[0] = self.rect.x - 1 + self.movement[0]
+            self.tail.dir = 'r'
 
-    def move_left(self, tail):
+    def move_left(self):
         if self.moving_left:
             self.movement[0] -= self.velocity
-            tail.loc[0] = self.rect.x + 17 + self.movement[0]
-            for point in tail.points:
+            self.tail.loc[0] = self.rect.x + 17 + self.movement[0]
+            for point in self.tail.points:
                 point.show = True
-            tail.dir = 'l'
+            self.tail.dir = 'l'
 
     def handle_dash(self, dt):
         self.y_momentum = 0
@@ -257,11 +276,12 @@ class Player(entity):
             self.y_momentum = 0    
 
     def draw_dash_cd(self, display, scroll, dt):
-        self.cd_obj.img_id = self.cd_obj.animation_database[self.cd_obj.action][math.floor(self.cd_obj.frame)]
-        self.cd_obj.img = self.cd_obj.animation_frames[self.cd_obj.img_id]
-        display.blit(pygame.transform.flip(self.cd_obj.img,self.cd_obj.flip,False), [self.rect.x-scroll.render_scroll[0], self.rect.y-30-scroll.render_scroll[1]])
-        self.cd_obj.frame += dt
-        if self.cd_obj.frame >= len(self.cd_obj.animation_database[self.cd_obj.action]):
-            self.cd_obj.frame = 0
+        if self.dash_cooldown > 0:
+            self.cd_obj.img_id = self.cd_obj.animation_database[self.cd_obj.action][math.floor(self.cd_obj.frame)]
+            self.cd_obj.img = self.cd_obj.animation_frames[self.cd_obj.img_id]
+            display.blit(pygame.transform.flip(self.cd_obj.img,self.cd_obj.flip,False), [self.rect.x-scroll.render_scroll[0], self.rect.y-30-scroll.render_scroll[1]])
+            self.cd_obj.frame += dt
+            if self.cd_obj.frame >= len(self.cd_obj.animation_database[self.cd_obj.action]):
+                self.cd_obj.frame = 0
         
     

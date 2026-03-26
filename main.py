@@ -1,7 +1,6 @@
 
 
 import pygame, time
-
 from ui.death_screen import Death_screen
 from world.torch import Torch
 pygame.init()
@@ -63,195 +62,122 @@ class Game():
 
     def run(self):
         while True:
-            self.dt = self.clock.tick(Settings.fps) / 1000  
-            self.dt *= 60 # Running the game on 60fps, regardless of the framerate
-            # FPS counting
-            self.frames += 1
+            self.update_dt()
+            self.update_fps_counter()
             
-            if time.time() - self.last_time >= 1:
-                self.current_fps = self.frames
-                self.frames = 0
-                self.last_time = time.time()
-            
-            kb_events(self.player, self.shop, self.pause_screen)
+            self.handle_input()
 
-            # Logic evaluations
-            self.dead = (self.player.hp <= 0) 
-            self.overlay_active = self.shop.displaying or self.pause_screen.displaying or self.win_screen.displaying or self.dead
-            # Logic handling
-            self.logic_variables.MOVEMENTS = not self.overlay_active
-            self.logic_variables.RENDER = True
-            # Draw logic  
-            if self.logic_variables.RENDER:  
-                self.display.fill((0,0,0))
-                self.coins.draw_coins(self.display, self.scroll)       
-                self.tile_rects = []
-                display_map(self.display, self.scroll, self.tile_rects, self.level.map, self.tiles)
-                self.player.update_frames(self.dt)
-                self.player.draw(self.display, self.scroll, self.dt)
-                self.texts.render_texts(self.display, self.scroll)
-                self.hp_bar.draw(self.display, self.player.max_hp, self.player.hp)
-                render_buffs(self.shop.data, self.display, self.player)
-                self.ammo.render_ammo(self.display, self.player)
-                for torch in self.torches:
-                    torch.draw(self.display, self.scroll)
-                for i, spark in sorted(enumerate(self.sparks), reverse=True):
-                    spark.draw(self.display, self.scroll)
-                self.large_font.render(self.display, f"fps: {self.current_fps}", [120, 0])
-
-
-            # Overlay displays
-            if self.shop.displaying:
-                self.shop.show(self.display, self.player)
-            elif self.pause_screen.displaying:
-                self.pause_screen.render(self.display)
-            elif self.win_screen.displaying:
-                self.win_screen.render(self.display)
-            elif self.dead:
-                self.death_screen.render(self.display)
-                if self.player.respawn:
-                    self.player.revive(self.level)
-                    reload_level(self.enemies, self.level, self.torches, self.player, self.texts)
-                
-            # Movement logic
-            if self.logic_variables.MOVEMENTS and self.logic_variables.hitstop_timer <= 0:
-                self.player.handle_movements(self.tile_rects, self.display, self.player.tail, self.scroll, self.dt)
-                self.enemies.handle_enemies(self.player, self.display, self.bullets, self.scroll, self.tile_rects, self.logic_variables, self.sparks, self.dt)
-                self.scroll.player_scrolling(self.player, self.level)
-                for bullet in self.bullets:
-                    bullet.move(self.player, self.display, self.bullets, self.scroll, self.dt)
-                self.player.pistol.shoot(self.enemies.enemies, self.dt)
-                # Player event logic 
-                self.player.die_through_falling(self.level.data["max_y"])
-                self.player.remove_buffs(["speed boost", "jump boost", "double coin"])
-                self.player.update_mode_properties()
-                self.player.apply_buffs()
-                self.player.manage_attack_cd(self.dt)
-                # Spark sword logic
-                for i, spark in sorted(enumerate(self.sparks), reverse=True):
-                    spark.move(1)
-                    if not spark.alive:
-                        self.sparks.pop(i)
-            else:
-                self.logic_variables.hitstop_timer -= 1
-            self.surf = pygame.transform.scale(self.display,Settings.window_size)
-            update_level(self.player, self.level, self.enemies, self.torches, self.texts, self.win_screen)
-            reach_checkpoint(self.player, self.level)
-            self.screen.blit(self.surf, (0,0))
-            pygame.display.update()
-'''
-clock = pygame.time.Clock()
-window_size = [640, 480]
-screen = pygame.display.set_mode(Settings.window_size)
-display = pygame.Surface((window_size[0]//2,window_size[1]//2))
-pygame.display.set_caption(Settings.caption)
-
-tiles = load_tiles('assets/tiles')
-level = Level_loader()
-level.load_level('world/levels/level1.json')
-player = Player(level.data['spawn'][0],level.data['spawn'][1],16,16)
-hp_bar = Hp_bar("assets/hp_bar/hp_bar_bg.png","assets/hp_bar/hp_bar_frame.png", 0, 0)
-small_font = Font('assets/fonts/small_font.png')
-large_font = Font('assets/fonts/large_font.png')
-coins = Coins()
-logic_variables = Logic_variables() 
-shop = Shop()
-pause_screen = Pause_screen()
-death_screen = Death_screen()
-win_screen = Win_screen()
-enemies = Enemies()
-ammo = Ammo()
-enemies.load_enemies(level)
-bullets = []
-torches = []
-sparks = []
-texts = Texts()
-texts.load_texts(level.data["texts"])
-load_torches(level.map, torches)
-scroll = Scroll()
-frames = 0
-current_fps = 0
-last_time = time.time()
-#MAIN LOOP-------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-while True:
-    dt = clock.tick(Settings.fps) / 1000  
-    dt *= 60 # Running the game on 60fps, regardless of the framerate
-    # FPS counting
-    frames += 1
-    
-    if time.time() - last_time >= 1:
-        current_fps = frames
-        frames = 0
-        last_time = time.time()
-    
-    kb_events(player, shop, pause_screen)
-
-    # Logic evaluations
-    dead = (player.hp <= 0) 
-    overlay_active = shop.displaying or pause_screen.displaying or win_screen.displaying or dead
-    # Logic handling
-    logic_variables.MOVEMENTS = not overlay_active
-    logic_variables.RENDER = True
-    # Draw logic  
-    if logic_variables.RENDER:  
-        display.fill((0,0,0))
-        coins.draw_coins(display, scroll)       
-        tile_rects = []
-        display_map(display, scroll, tile_rects, level.map, tiles)
-        player.update_frames(dt)
-        player.draw(display, scroll, dt)
-        texts.render_texts(display, scroll)
-        hp_bar.draw(display, player.max_hp, player.hp)
-        render_buffs(shop.data, display, player)
-        ammo.render_ammo(display, player)
-        for torch in torches:
-            torch.draw(display, scroll)
-        for i, spark in sorted(enumerate(sparks), reverse=True):
-            spark.draw(display, scroll)
-        large_font.render(display, f"fps: {current_fps}", [120, 0])
-
-
-    # Overlay displays
-    if shop.displaying:
-        shop.show(display, player)
-    elif pause_screen.displaying:
-        pause_screen.render(display)
-    elif win_screen.displaying:
-        win_screen.render(display)
-    elif dead:
-        death_screen.render(display)
-        if player.respawn:
-            player.revive(level)
-            reload_level(enemies, level, torches, player, texts)
+            self.evaluate_game_state()
         
-    # Movement logic
-    if logic_variables.MOVEMENTS and logic_variables.hitstop_timer <= 0:
-        player.handle_movements( tile_rects, display, player.tail, scroll, dt)
-        enemies.handle_enemies(player, display, bullets, scroll, tile_rects, logic_variables, sparks, dt)
-        scroll.player_scrolling(player, level)
-        for bullet in bullets:
-            bullet.move(player, display, bullets, scroll, dt)
-        player.pistol.shoot(enemies.enemies, dt)
-        # Player event logic 
-        player.die_through_falling(level.data["max_y"])
-        player.remove_buffs(["speed boost", "jump boost", "double coin"])
-        player.update_mode_properties()
-        player.apply_buffs()
-        player.manage_attack_cd(dt)
-        # Spark sword logic
-        for i, spark in sorted(enumerate(sparks), reverse=True):
+            self.render()
+            
+            self.update()
+               
+            self.present()
+    
+
+    def render(self):
+        if self.logic_variables.RENDER:  
+            self.fill_display()
+            self.coins.draw_coins(self.display, self.scroll)       
+            self.update_map()
+            self.player.run_render_logic(self.display, self.scroll, self.dt)
+            self.texts.render_texts(self.display, self.scroll)
+            self.hp_bar.draw(self.display, self.player.max_hp, self.player.hp)
+            render_buffs(self.shop.data, self.display, self.player)
+            self.ammo.render_ammo(self.display, self.player)
+            self.draw_torches()
+            self.draw_sparks()
+            self.render_fps_count()
+            self.display_overlays()
+
+    def update_dt(self):
+        self.dt = self.clock.tick(Settings.fps) / 1000  
+        self.dt *= 60 
+    
+    def update_fps_counter(self):
+        self.frames += 1
+            
+        if time.time() - self.last_time >= 1:
+            self.current_fps = self.frames
+            self.frames = 0
+            self.last_time = time.time()
+    
+    def evaluate_overlay_state(self):
+        self.dead = (self.player.hp <= 0) 
+        self.overlay_active = self.shop.displaying or self.pause_screen.displaying or self.win_screen.displaying or self.dead
+    
+    def update_logic_variables(self):
+        self.logic_variables.MOVEMENTS = not self.overlay_active
+        self.logic_variables.RENDER = True
+    
+    def display_overlays(self):
+        if self.shop.displaying:
+            self.shop.show(self.display, self.player)
+        elif self.pause_screen.displaying:
+            self.pause_screen.render(self.display)
+        elif self.win_screen.displaying:
+            self.win_screen.render(self.display)
+        elif self.dead:
+            self.death_screen.render(self.display)
+            if self.player.respawn:
+                self.player.revive(self.level)
+                reload_level(self.enemies, self.level, self.torches, self.player, self.texts)
+        
+    def move_bullets(self):
+        for bullet in self.bullets:
+            bullet.move(self.player, self.display, self.bullets, self.scroll, self.dt)
+    
+    def draw_torches(self):
+        for torch in self.torches:
+            torch.draw(self.display, self.scroll)
+    
+    def draw_sparks(self):
+        for i, spark in sorted(enumerate(self.sparks), reverse=True):
+            spark.draw(self.display, self.scroll)
+    
+    def move_sparks(self):
+        for i, spark in sorted(enumerate(self.sparks), reverse=True):
             spark.move(1)
             if not spark.alive:
-                sparks.pop(i)
-    else:
-        logic_variables.hitstop_timer -= 1
-    surf = pygame.transform.scale(display,Settings.window_size)
-    update_level(player, level, enemies, torches, texts, win_screen)
-    reach_checkpoint(player, level)
-    screen.blit(surf, (0,0))
-    pygame.display.update()
-'''
+                self.sparks.pop(i)
+    
+    def render_fps_count(self):
+        self.large_font.render(self.display, f"fps: {self.current_fps}", [120, 0])
+    
+    def fill_display(self):
+        self.display.fill((0,0,0))
+
+    def update_map(self):
+        self.tile_rects = []
+        display_map(self.display, self.scroll, self.tile_rects, self.level.map, self.tiles)
+
+    def draw_render_surf(self):
+        self.surf = pygame.transform.scale(self.display,Settings.window_size)
+        self.screen.blit(self.surf, (0,0))
+
+    def handle_input(self):
+        kb_events(self.player, self.shop, self.pause_screen)
+
+    def evaluate_game_state(self):
+        self.evaluate_overlay_state()
+        self.update_logic_variables()
+
+    def update(self):
+        if self.logic_variables.MOVEMENTS and self.logic_variables.hitstop_timer <= 0:
+            self.player.update_movements(self.tile_rects, self.enemies.enemies, self.level.data["max_y"], self.dt)
+            self.enemies.handle_enemies(self.player, self.display, self.bullets, self.scroll, self.tile_rects, self.logic_variables, self.sparks, self.dt)
+            self.scroll.player_scrolling(self.player, self.level)
+            self.move_bullets()
+            self.move_sparks()               
+        else:
+            self.logic_variables.hitstop_timer -= 1
+        update_level(self.player, self.level, self.enemies, self.torches, self.texts, self.win_screen)
+        reach_checkpoint(self.player, self.level)
+
+    def present(self):
+        self.draw_render_surf()
+        pygame.display.update()
 
 game = Game()
 game.run()
