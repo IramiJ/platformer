@@ -52,6 +52,7 @@ class Game():
         self.bullets = []
         self.torches = []
         self.sparks = []
+        self.tile_rects = []
         self.texts = Texts()
         self.texts.load_texts(self.level.data["texts"])
         load_torches(self.level.map, self.torches)
@@ -80,7 +81,7 @@ class Game():
         if self.logic_variables.RENDER:  
             self.fill_display()
             self.coins.draw_coins(self.display, self.scroll)       
-            self.update_map()
+            self.render_map()
             self.player.run_render_logic(self.display, self.scroll, self.dt)
             self.texts.render_texts(self.display, self.scroll)
             self.hp_bar.draw(self.display, self.player.max_hp, self.player.hp)
@@ -148,9 +149,12 @@ class Game():
     def fill_display(self):
         self.display.fill((0,0,0))
 
-    def update_map(self):
+    def render_map(self):
+        display_map(self.display, self.scroll, self.level.map, self.tiles)
+    
+    def update_tile_rects(self):
         self.tile_rects = []
-        display_map(self.display, self.scroll, self.tile_rects, self.level.map, self.tiles)
+        update_tile_rects(self.display, self.scroll, self.tile_rects, self.level.map)
 
     def draw_render_surf(self):
         self.surf = pygame.transform.scale(self.display,Settings.window_size)
@@ -169,7 +173,8 @@ class Game():
             self.enemies.handle_enemies(self.player, self.display, self.bullets, self.scroll, self.tile_rects, self.logic_variables, self.sparks, self.dt)
             self.scroll.player_scrolling(self.player, self.level)
             self.move_bullets()
-            self.move_sparks()               
+            self.move_sparks()       
+            self.update_tile_rects()        
         else:
             self.logic_variables.hitstop_timer -= 1
         update_level(self.player, self.level, self.enemies, self.torches, self.texts, self.win_screen)
