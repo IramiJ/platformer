@@ -58,8 +58,9 @@ class Player(entity):
     def run_render_logic(self, display, scroll, dt):
         self.update_frames(dt)
         self.draw(display, scroll, dt)
-        self.draw_dash_cd(display, scroll, dt)
+        self.draw_dash_cd(display, scroll)
         self.draw_tail_points(display, scroll)
+        print(self.cd_obj.frame)
     
     def die_through_falling(self, max_y):
         if self.rect.y > max_y:
@@ -115,7 +116,7 @@ class Player(entity):
     
 
     def dash(self):
-        if not self.dashing and self.dash_cooldown <= 0:           
+        if not self.dashing and self.dash_cooldown <= 0:   
             self.dashing = True
             self.dash_timer = self.dash_duration
             self.dash_cooldown = self.max_dash_cd   
@@ -275,13 +276,15 @@ class Player(entity):
         if collisions['top']:
             self.y_momentum = 0    
 
-    def draw_dash_cd(self, display, scroll, dt):
+    def draw_dash_cd(self, display, scroll): # TODO: fix the issue with the dash starting on the last frame of the cooldown animation
         if self.dash_cooldown > 0:
             self.cd_obj.img_id = self.cd_obj.animation_database[self.cd_obj.action][math.floor(self.cd_obj.frame)]
             self.cd_obj.img = self.cd_obj.animation_frames[self.cd_obj.img_id]
-            display.blit(pygame.transform.flip(self.cd_obj.img,self.cd_obj.flip,False), [self.rect.x-scroll.render_scroll[0], self.rect.y-30-scroll.render_scroll[1]])
-            self.cd_obj.frame += dt
+            self.cd_obj.frame = self.max_dash_cd -(self.dash_cooldown)
+            display.blit(pygame.transform.flip(self.cd_obj.img,self.cd_obj.flip,False), [self.rect.x-scroll.render_scroll[0], self.rect.y-30-scroll.render_scroll[1]])           
             if self.cd_obj.frame >= len(self.cd_obj.animation_database[self.cd_obj.action]):
                 self.cd_obj.frame = 0
+        else:
+            self.dash_cooldown = 0
         
     
