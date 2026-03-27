@@ -7,6 +7,8 @@ import pygame
 class Enemies:
     def __init__(self):
         self.enemy_types = {"Patroller": Patroller, "Chaser": Chaser, "Shooter": Shooter, "Heavy_Patroller": Heavy_Patroller}
+        self.max_enemy_amount = 0
+        self.current_enemy_amount = 0
         self.enemies = []
     def update_enemies(self, player, bullet_list, scroll, tiles, logic_variables, sparks, dt):
         for enemy in self.enemies:
@@ -23,6 +25,7 @@ class Enemies:
         self.enemies = [e for e in self.enemies if e.alive]
         if len(self.enemies) < length:
             player.coin_amount += 2
+        self.current_enemy_amount = len(self.enemies)
     def render_enemies(self, display, scroll, dt):
         for enemy in self.enemies:
             enemy.update_frames(dt)
@@ -35,6 +38,7 @@ class Enemies:
             enemy_class = self.enemy_types.get(enemy_name)
             for (x, y) in spawns:
                 self.enemies.append(enemy_class(x*16,y*16,16,16))
+        self.max_enemy_amount = len(self.enemies)
     
         
 

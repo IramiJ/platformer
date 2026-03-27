@@ -83,6 +83,7 @@ class Game():
             self.coins.draw_coins(self.display, self.scroll)       
             self.render_map()
             self.enemies.render_enemies(self.display, self.scroll, self.dt)
+            self.show_remaining_enemies()
             self.player.run_render_logic(self.display, self.scroll, self.dt)
             self.texts.render_texts(self.display, self.scroll)
             self.hp_bar.draw(self.display, self.player.max_hp, self.player.hp)
@@ -146,6 +147,9 @@ class Game():
     
     def render_fps_count(self):
         self.large_font.render(self.display, f"fps: {self.current_fps}", [120, 0])
+    
+    def show_remaining_enemies(self):
+        self.small_font.render(self.display, f"{self.enemies.current_enemy_amount}/{self.enemies.max_enemy_amount} enemies left", [0, 25])
     
     def fill_display(self):
         self.display.fill((0,0,0))
