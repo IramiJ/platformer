@@ -24,6 +24,7 @@ from ui.win_screen import Win_screen
 from entities.player.render_buffs import render_buffs
 from entities.player.render_ammo import Ammo
 from world.texts import Texts
+from ui.minimap import Minimap
 
 class Game():
     def __init__(self):
@@ -53,6 +54,7 @@ class Game():
         self.torches = []
         self.sparks = []
         self.tile_rects = []
+        self.minimap = Minimap()
         self.texts = Texts()
         self.texts.load_texts(self.level.data["texts"])
         load_torches(self.level.map, self.torches)
@@ -91,6 +93,7 @@ class Game():
             self.ammo.render_ammo(self.display, self.player)
             self.draw_torches()
             self.draw_sparks()
+            #self.minimap.render(self.display)
             self.render_fps_count()
             self.display_overlays()
 
@@ -179,7 +182,8 @@ class Game():
             self.enemies.update_enemies(self.player, self.bullets, self.scroll, self.tile_rects, self.logic_variables, self.sparks, self.dt)
             self.scroll.player_scrolling(self.player, self.level)
             self.move_bullets()
-            self.move_sparks()                          
+            self.move_sparks()
+            #self.minimap.update_map([self.player.rect.x, self.player.rect.y], self.level.map)                          
         else:
             self.logic_variables.hitstop_timer -= 1
         update_level(self.player, self.level, self.enemies, self.torches, self.texts, self.win_screen)
