@@ -93,7 +93,7 @@ class Game():
             self.ammo.render_ammo(self.display, self.player)
             self.draw_torches()
             self.draw_sparks()
-            #self.minimap.render(self.display)
+            self.minimap.render(self.display)
             self.render_fps_count()
             self.display_overlays()
 
@@ -183,7 +183,7 @@ class Game():
             self.scroll.player_scrolling(self.player, self.level)
             self.move_bullets()
             self.move_sparks()
-            #self.minimap.update_map([self.player.rect.x, self.player.rect.y], self.level.map)                          
+            self.minimap.update_map([self.player.rect.x, self.player.rect.y], self.level.map)                          
         else:
             self.logic_variables.hitstop_timer -= 1
         update_level(self.player, self.level, self.enemies, self.torches, self.texts, self.win_screen)
