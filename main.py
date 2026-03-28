@@ -85,6 +85,7 @@ class Game():
             self.coins.draw_coins(self.display, self.scroll)       
             self.render_map()
             self.enemies.render_enemies(self.display, self.scroll, self.dt)
+            self.render_bullets()
             self.show_remaining_enemies()
             self.player.run_render_logic(self.display, self.scroll, self.dt)
             self.texts.render_texts(self.display, self.scroll)
@@ -132,8 +133,11 @@ class Game():
         
     def move_bullets(self):
         for bullet in self.bullets:
-            bullet.move(self.player, self.display, self.bullets, self.scroll, self.dt)
+            bullet.move(self.player, self.bullets, self.scroll, self.dt)
     
+    def render_bullets(self):
+        for bullet in self.bullets:
+            bullet.render(self.display, self.scroll.render_scroll)
     def draw_torches(self):
         for torch in self.torches:
             torch.draw(self.display, self.scroll)

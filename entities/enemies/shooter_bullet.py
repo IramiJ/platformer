@@ -16,13 +16,13 @@ class Shooter_Bullet(simple_entity):
         self.angle =  math.atan2(y, x) + math.pi
     def transform_img(self):
         self.img = pygame.transform.rotate(self.base_img, math.degrees(self.angle))
-    def move(self, entity, display, bullet_list, scroll, dt):
-        self.render(display, scroll.render_scroll)
+    def move(self, entity, bullet_list, scroll, dt):
         self.loc[0] += math.cos(self.angle) * self.velocity * dt
         self.loc[1] += math.sin(self.angle) * self.velocity * dt
         if self.dmg_cd == 0:
             self.dmg_entity(entity, scroll)
         self.remove(bullet_list)
+    
     def remove(self, bullet_list):
         if math.sqrt((self.loc[0] - self.start[0])**2 + (self.loc[1] - self.start[1])**2) >= self.range:
             bullet_list.remove(self)
