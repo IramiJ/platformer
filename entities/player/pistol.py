@@ -96,7 +96,6 @@ class Pistol_Bullet(simple_entity):
             if self.dmg_cd == 0:
                 for enemy in enemies:
                     if self.collision_test(enemy.rect):
-                        print("damaged")
                         enemy.take_dmg(1)
                         enemy.stun()
                         self.dmg_cd = 1
