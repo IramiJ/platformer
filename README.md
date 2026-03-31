@@ -81,7 +81,7 @@ The project was **heavily refactored** to reduce coupling and improve maintainab
 Make sure Python is installed, then install dependencies:
 
 ```bash
-pip install pygame
+pip install pygame-ce
 ```
 
 ---
