@@ -1,64 +1,92 @@
 # Platformer Game
 
-A small 2D platformer game created with **Python and Pygame**, focusing on custom game systems such as enemy AI, combat mechanics and level loading.
+A 2D platformer built in **Python using Pygame**, focused on implementing custom game systems such as entity management, real-time physics, and modular AI behavior.
 
-This project was developed as a personal learning project to explore game architecture, physics, collision handling, and real-time system design.
+This project emphasizes **architecture, performance considerations, and clean system design**, without relying on an external game engine.
 
 All code, logic, and graphics were created by me.
 
 ---
 
-## Features
+## 🎮 Features
 
-## Core Gameplay
+### Core Gameplay
 
-- Player movement with gravity, jumping and collision handling
-- Camera scrolling with screen shake for impact feedback
-- Respawn system
+* Player movement with gravity, jumping, and collision handling
+* Camera scrolling with screen shake for impact feedback
+* Respawn system
 
-## Enemies & Combat
-- Modular enemy system with shared base logic
-- Multiple enemy types: 
-  - Patroller (horizontal Movement)
-  - Chaser (aggressive behavior when close)
-  - Shooter (projectile-based attacks)
-- Player ↔ enemy damage system
-- Projectile system with lifetime and collision handling
--Visual hit feedback on damage
+### Enemies & Combat
 
-## Levels & Progression
-- JSON-based level loader (work in progress)
-- Basic level structure with spawn points
-- In-game shop with upgrades:
-  - jump boost
-  - speed boost
-  - double coins
+* Modular enemy system with shared base logic
+* Multiple enemy types:
+
+  * **Patroller** (horizontal movement)
+  * **Chaser** (aggressive pursuit behavior)
+  * **Shooter** (projectile-based attacks)
+* Player ↔ enemy damage system
+* Projectile system with lifetime and collision handling
+* Visual hit feedback on damage
+
+### Levels & Progression
+
+* JSON-based level loader
+* Spawn points and structured level data
+* In-game shop with upgrades:
+
+  * Jump boost
+  * Speed boost
+  * Double coins
 
 ---
 
-## Screenshots
+## 🧠 Architecture
+
+The game is structured around a central game loop and modular subsystems:
+
+* **Game class** coordinating rendering, input, and updates
+* **Entity system** for player and enemies with shared base logic
+* **Enemy manager** handling AI behavior and updates
+* **Level system** driven by JSON configuration files
+* **Rendering system** with camera scrolling and screen shake
+
+The project was **heavily refactored** to reduce coupling and improve maintainability as complexity increased.
+
+---
+
+## ⚡ Performance Considerations
+
+* View-based rendering (only nearby tiles are drawn)
+* Optimized update loops for entities and projectiles
+* Reduced unnecessary computations in the main game loop
+
+---
+
+## 📸 Screenshots
+
 ![Gameplay](docs/gameplay.gif)
 ![Shop](docs/shop.png)
 
 ---
 
-## Tech Stack
+## 🛠 Tech Stack
 
-- Python
-- Pygame
+* Python
+* Pygame
 
 ---
 
-## Installation
+## 🚀 Installation
 
-Make sure Python is installed, then install pygame:
+Make sure Python is installed, then install dependencies:
 
 ```bash
 pip install pygame
 ```
+
 ---
 
-## Run
+## ▶️ Run
 
 ```bash
 python main.py
@@ -66,19 +94,27 @@ python main.py
 
 ---
 
-## What I learned
+## 🎯 Motivation
 
-- Designing and managing a custom game loop
-- Implementing physics and collision systems without a game engine
-- State- and timer-based gameplay logic (enemy AI, damage handling)
-- Structuring and refactoring a growing Python codebase
-- Separating game logic, assets, and data (JSON-based levels)
-- Debugging real-time systems and gameplay bugs
+This project was built to gain a deeper understanding of how real-time systems work under the hood, including game loops, entity management, and performance constraints.
 
-## Planned Improvements
+---
 
-- Checkpoints and level transitions
-- UI menus (pause, game over, win screen)
-- Save/load system
-- Audio system (sound effects and music)
-- Further enemy behaviors and polish
+## 📚 What I learned
+
+* Designing and structuring real-time systems
+* Building a custom game loop and entity system
+* Implementing physics and collision handling without a game engine
+* Refactoring to reduce coupling and improve maintainability
+* Managing game state and timing logic
+* Debugging complex real-time interactions
+
+---
+
+## 🔮 Planned Improvements
+
+* Checkpoints and level transitions
+* UI menus (pause, game over, win screen)
+* Save/load system
+* Audio system (sound effects and music)
+* Additional enemy behaviors and polish
