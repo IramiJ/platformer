@@ -65,6 +65,7 @@ The project was **heavily refactored** to reduce coupling and improve maintainab
 ## 📸 Screenshots
 
 ![Gameplay](docs/gameplay.gif)
+![Gameplay](docs/gameplay.png)
 ![Shop](docs/shop.png)
 
 ---
