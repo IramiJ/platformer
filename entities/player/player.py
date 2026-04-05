@@ -33,8 +33,8 @@ class Player(entity):
         self.max_hp = 5
         self.hp = 5
         self.dmg = 1
-        self.animation_database['idle'] = load_animation('assets/char/idle', [15,15,20,30,10,10], self)
-        self.animation_database['run'] = load_animation('assets/char/run', [5 for x in range(12)], self)
+        self.animation_database['idle'] = load_animation('assets/char/idle', [20,20,20], self)
+        self.animation_database['run'] = load_animation('assets/char/run', [3 for _ in range(14)], self)
         self.dmg_cd = 0
         self.cd_obj = entity(self.x, self.y + 15, 16, 16)
         self.cd_obj.animation_database['idle'] = load_animation('assets/cooldown/idle', [4 for x in range(15)], self.cd_obj)

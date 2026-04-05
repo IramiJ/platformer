@@ -2,7 +2,7 @@
     "type": "level",
     "id": 1,
     "map": "maps/map1.csv",
-    "spawn": [208, 624],
+    "spawn": [0, 352],
     "max_y": 1200,
     "enemies": {
         "Patroller": [[54, 36]],

@@ -37,7 +37,7 @@ class Game():
         self.tiles = load_tiles('assets/tiles')
         self.level = Level_loader()
         self.level.load_level('world/levels/level1.json')
-        self.player = Player(self.level.data['spawn'][0],self.level.data['spawn'][1],16,16)
+        self.player = Player(self.level.data['spawn'][0],self.level.data['spawn'][1],24,24)
         self.hp_bar = Hp_bar("assets/hp_bar/hp_bar_bg.png","assets/hp_bar/hp_bar_frame.png", 0, 0)
         self.small_font = Font('assets/fonts/small_font.png')
         self.large_font = Font('assets/fonts/large_font.png')
@@ -57,7 +57,6 @@ class Game():
         self.minimap = Minimap()
         self.texts = Texts()
         self.texts.load_texts(self.level.data["texts"])
-        load_torches(self.level.map, self.torches)
         self.scroll = Scroll()
         self.frames = 0
         self.current_fps = 0

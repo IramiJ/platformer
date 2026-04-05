@@ -60,9 +60,9 @@ def display_map(display: pygame.Surface, scroll, tile_rects, map, dict):
         y += 1
 '''
 
-TILE = 16
-SKIP_TILES = {"-1", "10", "12"}
-NON_COLLISION_TILES = {"-1", "10", "12", "11"}
+TILE = 24
+SKIP_TILES = {"-1"}
+NON_COLLISION_TILES = {"-1", "8", "19", "29", "39", "47", "48"}
 def display_map(display: pygame.Surface, scroll, tilemap, tile_dict):
 
     scroll_x, scroll_y = scroll.render_scroll
