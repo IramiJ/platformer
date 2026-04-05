@@ -6,7 +6,7 @@ from entities.particles import Particle
 class Sword(entity):
     def __init__(self, x, y):
         super().__init__(x,y,21,7)
-        self.img = pygame.image.load("assets/constants/curve_sword.png").convert()
+        self.img = pygame.image.load("assets/constants/broken_sword.png").convert()
         self.img.set_colorkey((0,0,0))
         self.particles = []
         self.flip = False
@@ -67,21 +67,24 @@ class Sword(entity):
         self.set_flip(player_flip)
         self.update_location(player_flip, player_rect)
 
+        '''
         if player_dash_state:
             self.draw_slice(display, scroll, dt)
 
         self.add_particles()
-        display.blit(pygame.transform.flip(self.img, self.flip, False), [self.loc[0] - scroll.render_scroll[0], self.loc[1] - scroll.render_scroll[1]])
         self.draw_particles(display, scroll)
+        '''
+        display.blit(pygame.transform.flip(self.img, self.flip, False), [self.loc[0] - scroll.render_scroll[0], self.loc[1] - scroll.render_scroll[1]])
+        
         
     def set_flip(self, flip):
         self.flip = flip
     
     def update_location(self, player_flip, player_rect):
         if not player_flip:
-            self.loc = [player_rect.right-6, player_rect.y+6]
+            self.loc = [player_rect.right-6, player_rect.y+13]
         else:
-            self.loc = [player_rect.left-self.img.get_width()+6, player_rect.y+6]
+            self.loc = [player_rect.left-self.img.get_width()+6, player_rect.y+13]
     
     def draw_particles(self, display, scroll):
         for particle in self.particles:

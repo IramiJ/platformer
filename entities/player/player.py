@@ -59,7 +59,7 @@ class Player(entity):
         self.update_frames(dt)
         self.draw(display, scroll, dt)
         self.draw_dash_cd(display, scroll)
-        self.draw_tail_points(display, scroll)
+        # self.draw_tail_points(display, scroll)
     
     def die_through_falling(self, max_y):
         if self.rect.y > max_y:
@@ -197,7 +197,7 @@ class Player(entity):
             self.move_left()
             self.move_right()
             self.movement[1] += self.y_momentum
-            self.tail.loc[1] = self.rect.y + 8
+            # self.tail.loc[1] = self.rect.y + 8
 
         self.set_y_momentum(dt)
 
@@ -209,8 +209,8 @@ class Player(entity):
 
         self.handle_y_collisions(collisions)
 
-        self.tail.update_points()
-        self.update_tail_points()
+        # self.tail.update_points()
+        # self.update_tail_points()
 
     def update_tail_points(self):
         for i in range(len(self.tail.points)):
