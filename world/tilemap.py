@@ -27,7 +27,7 @@ def load_tiles(path):
     dict = {}
     files = os.listdir(path)
     for file in files:
-        name = str(int(file.split('.')[0]) - 1)
+        name = str(int(file.split('.')[0]))
         dict[name] = pygame.image.load(path + '/' + file).convert()
         dict[name].set_colorkey((0,0,0))
     return dict
