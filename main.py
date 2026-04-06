@@ -2,7 +2,6 @@
 
 import pygame, time
 from ui.death_screen import Death_screen
-from world.torch import Torch
 pygame.init()
 from ui.Font_renderer import Font
 from ui.shopping import Shop
@@ -11,7 +10,6 @@ from entities.entity import *
 from entities.player.player import Player
 from entities.hp_bar import Hp_bar
 from core.settings import Settings
-from entities.animations import draw_constants, load_animation
 from world.scrolling import Scroll
 from core.kb_event_handling import Keyboard_event_handler
 from entities.enemies.enemies import Enemies
