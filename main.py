@@ -12,9 +12,8 @@ from entities.player.player import Player
 from entities.hp_bar import Hp_bar
 from core.settings import Settings
 from entities.animations import draw_constants, load_animation
-# from entities.player.player_movements import player_movements
 from world.scrolling import Scroll
-from core.kb_event_handling import kb_events
+from core.kb_event_handling import Keyboard_event_handler
 from entities.enemies.enemies import Enemies
 from entities.coins import Coins
 from world.level_loader import Level_loader, update_level, reach_checkpoint, reload_level
@@ -61,6 +60,7 @@ class Game():
         self.frames = 0
         self.current_fps = 0
         self.last_time = time.time()
+        self.keyboard_event_handler = Keyboard_event_handler()
 
     def run(self):
         while True:
@@ -172,7 +172,7 @@ class Game():
         self.screen.blit(self.surf, (0,0))
 
     def handle_input(self):
-        kb_events(self.player, self.shop, self.pause_screen)
+        self.keyboard_event_handler.handle_keyboard_events(self.player, self.shop, self.pause_screen)
 
     def evaluate_game_state(self):
         self.evaluate_overlay_state()

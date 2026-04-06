@@ -4,7 +4,7 @@ class Heavy_Patroller(Patroller):
     def __init__(self,x,y,width=16,height=16):
         super().__init__(x,y,width,height)
         self.max_hp = 6
-        self.currenthp = 6
+        self.current_hp = 6
         self.true_velocity = 1
     def move(self, dt):
         self.movement = [0, 0]

@@ -40,9 +40,9 @@ class Player(entity):
         self.cd_obj.animation_database['idle'] = load_animation('assets/cooldown/idle', [4 for x in range(15)], self.cd_obj)
         self.tail = Tail('assets/tail/grey.png',[self.rect.x-2, self.rect.y+8])
         self.sword = Sword(self.rect.x, self.rect.y)
-        self.pistol = Pistol(self.rect.y, self.rect.y)
+        self.pistol = Pistol(self.rect.x, self.rect.y)
         self.action = "idle"
-        self.mode = "meele"
+        self.mode = "melee"
         self.respawn = False
         self.histstop_timer = 0
 
@@ -63,17 +63,16 @@ class Player(entity):
     
     def die_through_falling(self, max_y):
         if self.rect.y > max_y:
-            self.set_respawn()
+            self.set_respawn_location()
     
     def remove_buffs(self, buff_list):
-        c = self.buffs.copy()   
         for buff in buff_list:
             if buff not in self.buffs:
                 if buff == "speed boost":
                     self.velocity = 3
                 elif buff == "jump boost":
                     self.jump_momentum = -10
-                elif buff == "double coins":
+                elif buff == "double coin":
                     self.double_coin_buff = False
 
     def apply_buffs(self):
@@ -102,7 +101,7 @@ class Player(entity):
 
     def draw(self, display, scroll, dt):
 #        pygame.draw.rect(display, (255,0,0), pygame.Rect(self.rect.left - scroll.render_scroll[0], self.rect.top - scroll.render_scroll[1], 16, 16))
-        if self.mode == "meele":
+        if self.mode == "melee":
             self.sword.draw(self.flip, self.dashing, self.rect, display, scroll, dt)
         elif self.mode == "ranged":
             self.pistol.draw(self, display, scroll)
@@ -121,13 +120,13 @@ class Player(entity):
             self.dash_cooldown = self.max_dash_cd   
 
     def switch_mode(self):
-        if self.mode == "meele":
+        if self.mode == "melee":
             self.mode   = "ranged"
         elif self.mode == "ranged" and not self.pistol.reloading:
-            self.mode = "meele"
+            self.mode = "melee"
 
     def update_mode_properties(self):
-        if self.mode == "meele":
+        if self.mode == "melee":
             self.velocity = 3
             self.dash_duration = 20
             self.dmg = 2
@@ -138,7 +137,7 @@ class Player(entity):
 
 
     def attack(self, enemy, logic_variables, sparks, dt):
-        if self.dmg_cd <= 0 and self.dashing and self.mode == "meele":
+        if self.dmg_cd <= 0 and self.dashing and self.mode == "melee":
             if self.rect.colliderect(enemy.rect):
                 self.attack_on_hit(enemy, logic_variables, sparks)
 
@@ -175,7 +174,7 @@ class Player(entity):
     
     def revive(self, level):
         if self.respawn:
-            self.hp = 5
+            self.hp = self.max_hp
             level.id = 1
             self.set_respawn_location()
             self.respawn = False
@@ -207,7 +206,7 @@ class Player(entity):
 
         self.rect, collisions = move_collisions(self.rect, self.movement, tile_rects, dt)
 
-        self.handle_y_collisions(collisions)
+        self.handle_y_collisions(collisions, dt)
 
         # self.tail.update_points()
         # self.update_tail_points()
@@ -265,12 +264,12 @@ class Player(entity):
         if self.dash_timer <= 0:
             self.dashing = False    
         
-    def handle_y_collisions(self, collisions):
+    def handle_y_collisions(self, collisions, dt):
         if collisions['bottom']:
             self.y_momentum = 0
             self.air_timer = 0
         else:
-            self.air_timer += 1
+            self.air_timer += dt
 
         if collisions['top']:
             self.y_momentum = 0    
