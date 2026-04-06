@@ -13,7 +13,7 @@ class Player(entity):
         self.spawn_point = [self.rect.x, self.rect.y]
         self.moving_left = False
         self.moving_right = False
-        self.coin_amount = 0
+        self.coin_amount = 1000
         self.y_momentum = 0
         self.velocity = 3
         self.jump_momentum = -10

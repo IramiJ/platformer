@@ -20,7 +20,7 @@ from world.level_loader import Level_loader, update_level, reach_checkpoint, rel
 from core.logic_variables import Logic_variables
 from ui.pause_screen import Pause_screen
 from ui.win_screen import Win_screen
-from entities.player.render_buffs import render_buffs
+from entities.player.buff_renderer import Buff_renderer
 from entities.player.render_ammo import Ammo
 from world.texts import Texts
 from ui.minimap import Minimap
@@ -61,6 +61,7 @@ class Game():
         self.current_fps = 0
         self.last_time = time.time()
         self.keyboard_event_handler = Keyboard_event_handler()
+        self.buff_renderer = Buff_renderer(self.small_font, self.shop.data)
 
     def run(self):
         while True:
@@ -89,7 +90,7 @@ class Game():
             self.player.run_render_logic(self.display, self.scroll, self.dt)
             self.texts.render_texts(self.display, self.scroll)
             self.hp_bar.draw(self.display, self.player.max_hp, self.player.hp)
-            render_buffs(self.shop.data, self.display, self.player)
+            self.buff_renderer.render_buffs(self.display, self.player)
             self.ammo.render_ammo(self.display, self.player)
             self.draw_torches()
             self.draw_sparks()
@@ -188,7 +189,7 @@ class Game():
             self.move_sparks()
             self.minimap.update_map([self.player.rect.x, self.player.rect.y], self.level.map)                          
         else:
-            self.logic_variables.hitstop_timer -= 1
+            self.logic_variables.hitstop_timer -= self.dt
         update_level(self.player, self.level, self.enemies, self.torches, self.texts, self.win_screen)
         reach_checkpoint(self.player, self.level)
 
