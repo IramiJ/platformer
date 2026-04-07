@@ -13,7 +13,7 @@ class Ammo():
         self.cd_obj.animation_database['idle'] = load_animation('assets/cooldown/idle', [8 for x in range(15)], self.cd_obj)
     def render_ammo(self, display, player):
         self.render_pistol(display)
-        if not player.pistol.reloading:
+        if not player.bow.reloading:
             self.render_ammo_amount(display, player)
         else:
             self.update_dash_img(display)
@@ -27,7 +27,7 @@ class Ammo():
             self.cd_obj.frame = 0    
 
     def render_ammo_amount(self, display, player):
-        self.small_font.render(display, str(player.pistol.ammo), (self.amount_padding, 15))
+        self.small_font.render(display, str(player.bow.ammo), (self.amount_padding, 15))
 
     def render_pistol(self, display):
         display.blit(self.pistol_img, [0, 15])

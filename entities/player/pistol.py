@@ -3,7 +3,7 @@ from entities.entity import simple_entity, entity
 from entities.animations import load_animation
 
 
-class Pistol: # TODO: rewrite this to a bow class
+class Bow: # TODO: rewrite this to a bow class
     def __init__(self, x, y):
         self.offsets = {"run": [(6, 16), (5, 16), (3, 16), (2, 15), (5, 17), (7, 15), (6, 16), (8, 16), (11, 14), (16, 15), (12, 16), (9, 16)], 
                         "idle": [(6, 16), (6, 16), (6,17)]} 

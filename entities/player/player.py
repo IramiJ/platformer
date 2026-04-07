@@ -1,7 +1,7 @@
 from entities.entity import entity
 from entities.player.tail import Tail
 from entities.player.sword import Sword
-from entities.player.pistol import Pistol
+from entities.player.pistol import Bow
 from entities.animations import load_animation
 from entities.spark import Spark
 from world.collisions import move_collisions
@@ -40,7 +40,7 @@ class Player(entity):
         self.cd_obj.animation_database['idle'] = load_animation('assets/cooldown/idle', [4 for x in range(15)], self.cd_obj)
         self.tail = Tail('assets/tail/grey.png',[self.rect.x-2, self.rect.y+8])
         self.sword = Sword(self.rect.x, self.rect.y)
-        self.pistol = Pistol(self.rect.x, self.rect.y)
+        self.bow = Bow(self.rect.x, self.rect.y)
         self.action = "idle"
         self.mode = "melee"
         self.respawn = False
@@ -48,7 +48,7 @@ class Player(entity):
 
     def update_movements(self, tile_rects, enemy_list, max_y,  dt):
         self.handle_movements(tile_rects, dt)
-        self.pistol.shoot(enemy_list, dt)
+        self.bow.shoot(enemy_list, dt)
         self.die_through_falling(max_y) # self.level.data["max_y"]
         self.remove_buffs(["speed boost", "jump boost", "double coin"])
         self.update_mode_properties()
@@ -105,8 +105,8 @@ class Player(entity):
         if self.mode == "melee":
             self.sword.draw(self.flip, self.dashing, self.rect, display, scroll, self.frame, self.action)
         elif self.mode == "ranged":
-            self.pistol.draw(self, display, scroll)
-        for bullet in self.pistol.bullets:
+            self.bow.draw(self, display, scroll)
+        for bullet in self.bow.bullets:
             bullet.render(display, scroll.render_scroll)
         self.sword.particles = [p for p in self.sword.particles if p.duration > 0]
         
@@ -123,7 +123,7 @@ class Player(entity):
     def switch_mode(self):
         if self.mode == "melee":
             self.mode   = "ranged"
-        elif self.mode == "ranged" and not self.pistol.reloading:
+        elif self.mode == "ranged" and not self.bow.reloading:
             self.mode = "melee"
 
     def update_mode_properties(self):

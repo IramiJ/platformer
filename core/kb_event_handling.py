@@ -43,10 +43,10 @@ class Keyboard_event_handler():
                         player.switch_mode()
                     elif event.key == self.keybinds["shoot"]:
                         if player.mode == "ranged":
-                            player.pistol.add_bullet()
+                            player.bow.add_bullet()
                     elif event.key == self.keybinds["reload"]:
                         if player.mode == "ranged":
-                            player.pistol.reload()
+                            player.bow.reload()
 
             elif event.type == pygame.KEYUP:
                 if event.key == self.keybinds["right"]:
