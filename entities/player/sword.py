@@ -17,6 +17,8 @@ class Sword(entity):
         # Keeps track of the player hand
         self.offsets = {"run": [(6, 16), (5, 16), (3, 16), (2, 15), (5, 17), (7, 15), (6, 16), (8, 16), (11, 14), (16, 15), (12, 16), (9, 16)], 
                         "idle": [(6, 16), (6, 16), (6,17)]} 
+        self.angles = {"run": [0, -10, -25, -45, -25, 0, 0, 10, 25, 45, 35, 25],
+                       "idle": [0, 0, 0]}
     def add_particles(self):
         if self.particle_cd == 0:
             self.spawn_particles()
@@ -69,7 +71,8 @@ class Sword(entity):
     def draw(self, player_flip, player_dash_state, player_rect, display, scroll, player_frame, player_action):
         self.set_flip(player_flip)
         self.update_location(player_flip, player_rect, player_frame, player_action)
-
+        frame = self.get_animation_frame(player_frame, player_action)
+        angle = self.angles[player_action][frame]
         '''
         if player_dash_state:
             self.draw_slice(display, scroll, dt)
@@ -77,17 +80,15 @@ class Sword(entity):
         self.add_particles()
         self.draw_particles(display, scroll)
         '''
-        display.blit(pygame.transform.flip(self.img, self.flip, False), [self.loc[0] - scroll.render_scroll[0], self.loc[1] - scroll.render_scroll[1]])
+        # display.blit(pygame.transform.flip(self.img, self.flip, False), [self.loc[0] - scroll.render_scroll[0], self.loc[1] - scroll.render_scroll[1]])
+        self.draw_rotated(display, scroll, angle)
         
         
     def set_flip(self, flip):
         self.flip = flip
     
     def update_location(self, player_flip, player_rect, player_frame, player_action):
-        if player_action == "run":
-            frame = math.floor(player_frame / 4)
-        elif player_action == "idle":
-            frame = math.floor(player_frame / 20)
+        frame = self.get_animation_frame(player_frame, player_action)
         if player_flip:
             self.loc = [player_rect.left-self.img.get_width()+(24-self.offsets[player_action][frame][0]), player_rect.y+self.offsets[player_action][frame][1]-2]      
         else:
@@ -97,4 +98,22 @@ class Sword(entity):
         for particle in self.particles:
             particle.render(display, scroll)
     
+    def get_animation_frame(self, player_frame, player_action):
+        if player_action == "run":
+            return math.floor(player_frame / 4)
+        elif player_action == "idle":
+            return math.floor(player_frame / 20)
+        return 0
     #TODO: implement a function which calculates the angle, by which the sword needs to be rotated based on the position.
+    def draw_rotated(self, display, scroll, angle):
+        img = pygame.transform.flip(self.img, self.flip, False)
+
+        if self.flip:
+            angle = -angle
+        
+        rotated_img = pygame.transform.rotate(img, angle)
+
+        original_rect = img.get_rect(topleft=self.loc)
+        rotated_rect = rotated_img.get_rect(center=original_rect.center)
+
+        display.blit(rotated_img, [rotated_rect.x - scroll.render_scroll[0], rotated_rect.y - scroll.render_scroll[1]])
