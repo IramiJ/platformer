@@ -50,4 +50,4 @@ dist/
 *.cache
 
 # Optional: ignore exported builds
-exports/
+.codex

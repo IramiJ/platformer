@@ -110,10 +110,22 @@ class Sword(entity):
 
         if self.flip:
             angle = -angle
-        
-        rotated_img = pygame.transform.rotate(img, angle)
 
         original_rect = img.get_rect(topleft=self.loc)
-        rotated_rect = rotated_img.get_rect(center=original_rect.center)
 
-        display.blit(rotated_img, [rotated_rect.x - scroll.render_scroll[0], rotated_rect.y - scroll.render_scroll[1]])
+        if self.flip:
+            hilt_offset = pygame.Vector2(img.get_width(), img.get_height() / 2)
+        else:
+            hilt_offset = pygame.Vector2(0, img.get_height() / 2)
+
+        hilt_pos = pygame.Vector2(original_rect.topleft) + hilt_offset
+
+        offset_from_center_to_hilt = hilt_pos - pygame.Vector2(original_rect.center)
+
+        rotated_img = pygame.transform.rotate(img, angle)
+        rotated_offset = offset_from_center_to_hilt.rotate(-angle)
+
+        rotated_center = hilt_pos - rotated_offset
+        rotated_rect = rotated_img.get_rect(center=rotated_center)
+
+        display.blit(rotated_img, [rotated_rect.x - scroll.render_scroll[0],rotated_rect.y - scroll.render_scroll[1]])
