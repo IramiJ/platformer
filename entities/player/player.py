@@ -34,6 +34,7 @@ class Player(entity):
         self.hp = 5
         self.dmg = 1
         self.animation_database['idle'] = load_animation('assets/char/idle', [20,20,20], self)
+        # TODO: polish the run animation
         self.animation_database['run'] = load_animation('assets/char/run', [3 for _ in range(14)], self)
         self.dmg_cd = 0
         self.cd_obj = entity(self.x, self.y + 15, 16, 16)

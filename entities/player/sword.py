@@ -5,6 +5,7 @@ from entities.particles import Particle
 
 class Sword(entity):
     def __init__(self, x, y):
+        #TODO: implement an offset array for the animation frames
         super().__init__(x,y,21,7)
         self.img = pygame.image.load("assets/constants/broken_sword.png").convert()
         self.img.set_colorkey((0,0,0))
@@ -81,6 +82,7 @@ class Sword(entity):
         self.flip = flip
     
     def update_location(self, player_flip, player_rect):
+        #TODO: Make the position dependant on the offset for the animation frames of the player
         if not player_flip:
             self.loc = [player_rect.right-6, player_rect.y+13]
         else:
@@ -89,3 +91,5 @@ class Sword(entity):
     def draw_particles(self, display, scroll):
         for particle in self.particles:
             particle.render(display, scroll)
+    
+    #TODO: implement a function which calculates the angle, by which the sword needs to be rotated based on the position.

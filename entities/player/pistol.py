@@ -3,8 +3,9 @@ from entities.entity import simple_entity, entity
 from entities.animations import load_animation
 
 
-class Pistol:
+class Pistol: # TODO: rewrite this to a bow class
     def __init__(self, x, y):
+        #TODO: add an offset by which the bow is moved based on the player animation frames
         self.loc = [x, y]
         self.img = pygame.image.load("assets/constants/pistol.png").convert()
         self.img.set_colorkey((0,0,0))
@@ -31,6 +32,7 @@ class Pistol:
         self.flip = player.flip
     
     def set_location(self, player):
+        #TODO: make location dependant on the offset of each animation frame of the player.
         if not self.flip:
             self.loc = [player.rect.right-6, player.rect.y+6]
         else:
@@ -68,6 +70,8 @@ class Pistol:
         if not self.reloading:
             self.reload_cd = 120
             self.reloading = True
+
+    # TODO: make a function which angles the bow depending on the location
 
 
 class Pistol_Bullet(simple_entity):
