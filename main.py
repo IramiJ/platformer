@@ -13,7 +13,6 @@ from core.settings import Settings
 from world.scrolling import Scroll
 from core.kb_event_handling import Keyboard_event_handler
 from entities.enemies.enemies import Enemies
-from entities.coins import Coins
 from world.level_loader import Level_loader, update_level, reach_checkpoint, reload_level
 from core.logic_variables import Logic_variables
 from ui.pause_screen import Pause_screen
@@ -38,7 +37,6 @@ class Game():
         self.hp_bar = Hp_bar("assets/hp_bar/hp_bar_bg.png","assets/hp_bar/hp_bar_frame.png", 0, 0)
         self.small_font = Font('assets/fonts/small_font.png')
         self.large_font = Font('assets/fonts/large_font.png')
-        self.coins = Coins()
         self.logic_variables = Logic_variables() 
         self.shop = Shop()
         self.pause_screen = Pause_screen()
@@ -79,8 +77,7 @@ class Game():
 
     def render(self):
         if self.logic_variables.RENDER:  
-            self.fill_display()
-            self.coins.draw_coins(self.display, self.scroll)       
+            self.fill_display()       
             self.render_map()
             self.enemies.render_enemies(self.display, self.scroll, self.dt)
             self.render_bullets()
