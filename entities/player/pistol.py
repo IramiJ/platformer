@@ -5,9 +5,12 @@ from entities.animations import load_animation
 
 class Pistol: # TODO: rewrite this to a bow class
     def __init__(self, x, y):
-        #TODO: add an offset by which the bow is moved based on the player animation frames
+        self.offsets = {"run": [(6, 16), (5, 16), (3, 16), (2, 15), (5, 17), (7, 15), (6, 16), (8, 16), (11, 14), (16, 15), (12, 16), (9, 16)], 
+                        "idle": [(6, 16), (6, 16), (6,17)]} 
+        self.angles = {"run": [0, -10, -25, -45, -25, 0, 0, 10, 25, 45, 35, 25],
+                       "idle": [0, 0, 0]}
         self.loc = [x, y]
-        self.img = pygame.image.load("assets/constants/pistol.png").convert()
+        self.img = pygame.image.load("assets/constants/bow.png").convert()
         self.img.set_colorkey((0,0,0))
         self.bullets = []
         self.flip = False
@@ -24,23 +27,32 @@ class Pistol: # TODO: rewrite this to a bow class
         self.update_cds()
         
         self.set_flip(player)
-        self.set_location(player)
-        
-        display.blit(pygame.transform.flip(self.img, self.flip, False), [self.loc[0] - scroll.render_scroll[0], self.loc[1] - scroll.render_scroll[1]])
+        self.update_location(player.flip, player.rect, player.frame, player.action)
+        frame = self.get_animation_frame(player.frame, player.action)
+        angle = self.angles[player.action][frame] 
+        self.draw_rotated(display, scroll, angle)
 
     def set_flip(self, player):
         self.flip = player.flip
     
-    def set_location(self, player):
-        #TODO: make location dependant on the offset of each animation frame of the player.
-        if not self.flip:
-            self.loc = [player.rect.right-6, player.rect.y+6]
+    def update_location(self, player_flip, player_rect, player_frame, player_action):
+        frame = self.get_animation_frame(player_frame, player_action)
+        if player_flip:
+            self.loc = [player_rect.left-(self.img.get_width())//2+(24-self.offsets[player_action][frame][0]), player_rect.y+self.offsets[player_action][frame][1]-self.img.get_height()]      
         else:
-            self.loc = [player.rect.left-self.img.get_width()+6, player.rect.y+6]
+            self.loc = [player_rect.right-(24-self.offsets[player_action][frame][0])-(self.img.get_width())//2, player_rect.y+self.offsets[player_action][frame][1]-self.img.get_height()]
 
+    def get_animation_frame(self, player_frame, player_action):
+        if player_action == "run":
+            return math.floor(player_frame / 4)
+        elif player_action == "idle":
+            return math.floor(player_frame / 20)
+        return 0
+    
     def shoot(self, enemy_list, dt):
         for bullet in self.bullets:
             bullet.move(enemy_list, self.bullets, dt)
+        
     
     def update_cds(self):
         if self.shoot_cd > 0:
@@ -72,7 +84,27 @@ class Pistol: # TODO: rewrite this to a bow class
             self.reloading = True
 
     # TODO: make a function which angles the bow depending on the location
+    def draw_rotated(self, display, scroll, angle):
+        img = pygame.transform.flip(self.img, self.flip, False)
 
+        if self.flip:
+            angle = -angle
+
+        original_rect = img.get_rect(topleft=self.loc)
+
+        handle_offset = pygame.Vector2(img.get_width()/2, 0)
+
+        handle_pos = pygame.Vector2(original_rect.topleft) + handle_offset
+
+        offset_from_center_to_hilt = handle_pos - pygame.Vector2(original_rect.center)
+
+        rotated_img = pygame.transform.rotate(img, angle)
+        rotated_offset = offset_from_center_to_hilt.rotate(-angle)
+
+        rotated_center = handle_pos - rotated_offset
+        rotated_rect = rotated_img.get_rect(center=rotated_center)
+
+        display.blit(rotated_img, [rotated_rect.x - scroll.render_scroll[0],rotated_rect.y - scroll.render_scroll[1]])    
 
 class Pistol_Bullet(simple_entity):
         def __init__(self, loc, flip):
