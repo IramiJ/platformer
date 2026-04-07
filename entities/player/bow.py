@@ -83,7 +83,6 @@ class Bow: # TODO: rewrite this to a bow class
             self.reload_cd = 120
             self.reloading = True
 
-    # TODO: make a function which angles the bow depending on the location
     def draw_rotated(self, display, scroll, angle):
         img = pygame.transform.flip(self.img, self.flip, False)
 
@@ -115,17 +114,17 @@ class Arrow(simple_entity):
             self.range = 200
             self.dmg_cd = 0
             self.flip = flip
-        def move(self, enemy_list, bullet_list, dt):
+        def move(self, enemy_list, arrow_list, dt):
             self.dmg_entity(enemy_list)
             if not self.flip:
                 self.loc[0] += self.velocity * dt
             else:
                 self.loc[0] -= self.velocity * dt          
-            self.remove(bullet_list)
+            self.remove(arrow_list)
             
-        def remove(self, bullet_list):
+        def remove(self, arrow_list):
             if math.sqrt((self.loc[0] - self.start[0])**2 + (self.loc[1] - self.start[1])**2) >= self.range:
-                bullet_list.remove(self)
+                arrow_list.remove(self)
 
         def dmg_entity(self, enemies):
             
@@ -135,4 +134,7 @@ class Arrow(simple_entity):
                         enemy.take_dmg(1)
                         enemy.stun()
                         self.dmg_cd = 1
+
+        def render(self, display, scroll):
+            display.blit(pygame.transform.flip(self.img, self.flip, False), (self.loc[0]-scroll[0], self.loc[1]-scroll[1]))
 
