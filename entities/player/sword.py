@@ -84,7 +84,6 @@ class Sword(entity):
         self.flip = flip
     
     def update_location(self, player_flip, player_rect, player_frame, player_action):
-        #TODO: Make the position dependant on the offset for the animation frames of the player
         if player_action == "run":
             frame = math.floor(player_frame / 4)
         elif player_action == "idle":
