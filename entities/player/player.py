@@ -48,7 +48,7 @@ class Player(entity):
 
     def update_movements(self, tile_rects, enemy_list, max_y,  dt):
         self.handle_movements(tile_rects, dt)
-        self.bow.shoot(enemy_list, dt)
+        self.bow.move_arrows(enemy_list, dt)
         self.die_through_falling(max_y) # self.level.data["max_y"]
         self.remove_buffs(["speed boost", "jump boost", "double coin"])
         self.update_mode_properties()

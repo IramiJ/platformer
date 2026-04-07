@@ -49,7 +49,7 @@ class Bow: # TODO: rewrite this to a bow class
             return math.floor(player_frame / 20)
         return 0
     
-    def shoot(self, enemy_list, dt):
+    def move_arrows(self, enemy_list, dt):
         for arrow in self.arrows:
             arrow.move(enemy_list, self.arrows, dt)
         
@@ -68,12 +68,13 @@ class Bow: # TODO: rewrite this to a bow class
         if self.ammo <= 0 and not self.reloading:
             self.reload()
 
+    
     def add_arrow(self):
         if self.reload_cd == 0:
             if self.shoot_cd <= 0:
-                b_loc = self.loc.copy()
+                arrow_loc = self.loc.copy()
                 flip = bool(self.flip)
-                self.arrows.append(Arrow(b_loc, flip))
+                self.arrows.append(Arrow(arrow_loc, flip))
                 self.shoot_cd = self.max_shoot_cd
                 self.ammo -= 1
         
