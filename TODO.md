@@ -1,7 +1,11 @@
 # TODO 
 
 ## Next
-- Completely switch to the new assets
+- Add Trees
+- Make trees lose leafs
+- Add wind which makes the tree lose more leaves/make leaves move faster
+- Bushes also losing leaves
+- Player can make bushes rustle on contact
 
 ## Ideas
 - Implement a leaf system, where trees and bushes occasionally lose leaves based on the wind
