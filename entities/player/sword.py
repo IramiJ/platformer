@@ -104,7 +104,6 @@ class Sword(entity):
         elif player_action == "idle":
             return math.floor(player_frame / 20)
         return 0
-    #TODO: implement a function which calculates the angle, by which the sword needs to be rotated based on the position.
     def draw_rotated(self, display, scroll, angle):
         img = pygame.transform.flip(self.img, self.flip, False)
 
