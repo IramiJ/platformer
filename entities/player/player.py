@@ -1,7 +1,7 @@
 from entities.entity import entity
 from entities.player.tail import Tail
 from entities.player.sword import Sword
-from entities.player.pistol import Bow
+from entities.player.bow import Bow
 from entities.animations import load_animation
 from entities.spark import Spark
 from world.collisions import move_collisions
@@ -106,8 +106,8 @@ class Player(entity):
             self.sword.draw(self.flip, self.dashing, self.rect, display, scroll, self.frame, self.action)
         elif self.mode == "ranged":
             self.bow.draw(self, display, scroll)
-        for bullet in self.bow.bullets:
-            bullet.render(display, scroll.render_scroll)
+        for arrow in self.bow.arrows:
+            arrow.render(display, scroll.render_scroll)
         self.sword.particles = [p for p in self.sword.particles if p.duration > 0]
         
 

@@ -12,7 +12,7 @@ class Bow: # TODO: rewrite this to a bow class
         self.loc = [x, y]
         self.img = pygame.image.load("assets/constants/bow.png").convert()
         self.img.set_colorkey((0,0,0))
-        self.bullets = []
+        self.arrows = []
         self.flip = False
         self.reloading = False
         self.add_ammo = False
@@ -50,8 +50,8 @@ class Bow: # TODO: rewrite this to a bow class
         return 0
     
     def shoot(self, enemy_list, dt):
-        for bullet in self.bullets:
-            bullet.move(enemy_list, self.bullets, dt)
+        for arrow in self.arrows:
+            arrow.move(enemy_list, self.arrows, dt)
         
     
     def update_cds(self):
@@ -68,12 +68,12 @@ class Bow: # TODO: rewrite this to a bow class
         if self.ammo <= 0 and not self.reloading:
             self.reload()
 
-    def add_bullet(self):
+    def add_arrow(self):
         if self.reload_cd == 0:
             if self.shoot_cd <= 0:
                 b_loc = self.loc.copy()
                 flip = bool(self.flip)
-                self.bullets.append(Pistol_Bullet(b_loc, flip))
+                self.arrows.append(Arrow(b_loc, flip))
                 self.shoot_cd = self.max_shoot_cd
                 self.ammo -= 1
         
@@ -106,9 +106,9 @@ class Bow: # TODO: rewrite this to a bow class
 
         display.blit(rotated_img, [rotated_rect.x - scroll.render_scroll[0],rotated_rect.y - scroll.render_scroll[1]])    
 
-class Pistol_Bullet(simple_entity):
+class Arrow(simple_entity):
         def __init__(self, loc, flip):
-            super().__init__('assets/constants/pistol_bullet.png',  loc)
+            super().__init__('assets/constants/arrow.png',  loc)
             self.start = self.loc.copy()
             self.base_img = self.img.copy()
             self.velocity = 5

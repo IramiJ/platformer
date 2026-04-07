@@ -43,7 +43,7 @@ class Keyboard_event_handler():
                         player.switch_mode()
                     elif event.key == self.keybinds["shoot"]:
                         if player.mode == "ranged":
-                            player.bow.add_bullet()
+                            player.bow.add_arrow()
                     elif event.key == self.keybinds["reload"]:
                         if player.mode == "ranged":
                             player.bow.reload()
