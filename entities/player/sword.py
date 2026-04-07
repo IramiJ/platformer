@@ -60,7 +60,7 @@ class Sword(entity):
         if not self.flip:
             display.blit(pygame.transform.flip(self.slice_animation[math.floor(self.slice_frame)],self.flip,False), [self.loc[0]+10-scroll.render_scroll[0], self.loc[1]-scroll.render_scroll[1]-16])
         else:
-            display.blit(pygame.transform.flip(self.slice_animation[math.floor(self.slice_frame)],self.flip,False), [self.loc[0]-self.slice_animation[math.floor(self.slice_frame)].get_width()+10-scroll.render_scroll[0], self.loc[1]-scroll.render_scroll[1]-16])
+            display.blit(pygame.transform.flip(self.slice_animation[math.floor(self.slice_frame)],self.flip,False), [self.loc[0]-self.slice_animation[math.floor(self.slice_frame)].get_width()-scroll.render_scroll[0], self.loc[1]-scroll.render_scroll[1]-16])
         self.update_slice_frame(dt)
 
     def update_slice_frame(self, dt):
@@ -68,15 +68,15 @@ class Sword(entity):
         if self.slice_frame >= len(self.slice_animation):
             self.slice_frame = 0
 
-    def draw(self, player_flip, player_dash_state, player_rect, display, scroll, player_frame, player_action):
+    def draw(self, player_flip, player_dash_state, player_rect, display, scroll, player_frame, player_action, dt):
         self.set_flip(player_flip)
         self.update_location(player_flip, player_rect, player_frame, player_action)
         frame = self.get_animation_frame(player_frame, player_action)
         angle = self.angles[player_action][frame]
-        '''
+        
         if player_dash_state:
             self.draw_slice(display, scroll, dt)
-
+        '''
         self.add_particles()
         self.draw_particles(display, scroll)
         '''

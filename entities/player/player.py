@@ -103,7 +103,7 @@ class Player(entity):
 #        pygame.draw.rect(display, (255,0,0), pygame.Rect(self.rect.left - scroll.render_scroll[0], self.rect.top - scroll.render_scroll[1], 16, 16))
         display.blit(pygame.transform.flip(self.img,self.flip,False), [self.rect.x-scroll.render_scroll[0], self.rect.y-scroll.render_scroll[1]])
         if self.mode == "melee":
-            self.sword.draw(self.flip, self.dashing, self.rect, display, scroll, self.frame, self.action)
+            self.sword.draw(self.flip, self.dashing, self.rect, display, scroll, self.frame, self.action, dt)
         elif self.mode == "ranged":
             self.bow.draw(self, display, scroll)
         for arrow in self.bow.arrows:
