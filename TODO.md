@@ -1,9 +1,8 @@
 # TODO 
 
 ## Next
+- Make bow behave like an actual bow, not a pistol
 - Completely switch to the new assets
-- Turn pistol class into bow class
-- Make sword and bow move to the player hand, based on animation frame of the player
 
 ## Ideas
 - Implement a leaf system, where trees and bushes occasionally lose leaves based on the wind
@@ -13,3 +12,9 @@
 - Implement an inventory system
 - Implement a save/quit game with level progression
 - Add a buffs/permanent upgrades system
+
+## Completed
+### 2026-04
+- Polish the player run animation more
+- Make sword and bow move to the player hand, based on animation frame of the player
+- Turn pistol class into bow class
