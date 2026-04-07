@@ -10,7 +10,7 @@ class Bow: # TODO: rewrite this to a bow class
         self.angles = {"run": [0, -10, -25, -45, -25, 0, 0, 10, 25, 45, 35, 25],
                        "idle": [0, 0, 0]}
         self.loc = [x, y]
-        self.img = pygame.image.load("assets/constants/bow.png").convert()
+        self.img = pygame.image.load("assets/weapons/bow.png").convert()
         self.img.set_colorkey((0,0,0))
         self.arrows = []
         self.flip = False
@@ -19,7 +19,7 @@ class Bow: # TODO: rewrite this to a bow class
         self.max_shoot_cd = 30
         self.shoot_cd = 1
         self.ammo = 5
-        self.ammo_img = pygame.image.load("assets/constants/cd_pistol.png").convert()
+        self.ammo_img = pygame.image.load("assets/weapons/cd_pistol.png").convert()
         self.ammo_img.set_colorkey((0,0,0))
         self.reload_cd = 0
 
@@ -108,7 +108,7 @@ class Bow: # TODO: rewrite this to a bow class
 
 class Arrow(simple_entity):
         def __init__(self, loc, flip):
-            super().__init__('assets/constants/arrow.png',  loc)
+            super().__init__('assets/weapons/arrow.png',  loc)
             self.start = self.loc.copy()
             self.base_img = self.img.copy()
             self.velocity = 5

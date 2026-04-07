@@ -1,7 +1,6 @@
 # TODO 
 
 ## Next
-- Make bow behave like an actual bow, not a pistol
 - Completely switch to the new assets
 
 ## Ideas
@@ -18,3 +17,4 @@
 - Polish the player run animation more
 - Make sword and bow move to the player hand, based on animation frame of the player
 - Turn pistol class into bow class
+- Make bow behave like an actual bow, not a pistol

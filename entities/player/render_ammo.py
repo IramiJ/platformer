@@ -6,7 +6,7 @@ from ui.Font_renderer import Font
 class Ammo():
     def __init__(self):
         self.small_font = Font('assets/fonts/small_font.png')
-        self.pistol_img = pygame.image.load("assets/constants/cd_pistol.png").convert()
+        self.pistol_img = pygame.image.load("assets/weapons/cd_pistol.png").convert()
         self.pistol_img.set_colorkey((0,0,0))
         self.amount_padding = self.pistol_img.get_width() + 5
         self.cd_obj = entity(self.amount_padding, 9, 16, 16)
