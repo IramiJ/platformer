@@ -5,7 +5,6 @@ from entities.particles import Particle
 
 class Sword(entity):
     def __init__(self, x, y):
-        #TODO: implement an offset array for the animation frames
         super().__init__(x,y,21,7)
         self.img = pygame.image.load("assets/constants/broken_sword.png").convert()
         self.img.set_colorkey((0,0,0))
@@ -15,6 +14,9 @@ class Sword(entity):
         self.load_slice_animation()
         self.slice_frame = 0
         self.animation_database["idle"] = [self.img]
+        # Keeps track of the player hand
+        self.offsets = {"run": [(6, 16), (5, 16), (3, 16), (2, 15), (5, 17), (7, 15), (6, 16), (8, 16), (11, 14), (16, 15), (12, 16), (9, 16)], 
+                        "idle": [(6, 16), (6, 16), (6,17)]} 
     def add_particles(self):
         if self.particle_cd == 0:
             self.spawn_particles()
@@ -64,9 +66,9 @@ class Sword(entity):
         if self.slice_frame >= len(self.slice_animation):
             self.slice_frame = 0
 
-    def draw(self, player_flip, player_dash_state, player_rect, display, scroll, dt):
+    def draw(self, player_flip, player_dash_state, player_rect, display, scroll, player_frame, player_action):
         self.set_flip(player_flip)
-        self.update_location(player_flip, player_rect)
+        self.update_location(player_flip, player_rect, player_frame, player_action)
 
         '''
         if player_dash_state:
@@ -81,12 +83,16 @@ class Sword(entity):
     def set_flip(self, flip):
         self.flip = flip
     
-    def update_location(self, player_flip, player_rect):
+    def update_location(self, player_flip, player_rect, player_frame, player_action):
         #TODO: Make the position dependant on the offset for the animation frames of the player
-        if not player_flip:
-            self.loc = [player_rect.right-6, player_rect.y+13]
+        if player_action == "run":
+            frame = math.floor(player_frame / 4)
+        elif player_action == "idle":
+            frame = math.floor(player_frame / 20)
+        if player_flip:
+            self.loc = [player_rect.left-self.img.get_width()+(24-self.offsets[player_action][frame][0]), player_rect.y+self.offsets[player_action][frame][1]-2]      
         else:
-            self.loc = [player_rect.left-self.img.get_width()+6, player_rect.y+13]
+            self.loc = [player_rect.right-(24-self.offsets[player_action][frame][0]), player_rect.y+self.offsets[player_action][frame][1]-2]
     
     def draw_particles(self, display, scroll):
         for particle in self.particles:

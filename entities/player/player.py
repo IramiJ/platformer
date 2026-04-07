@@ -35,7 +35,7 @@ class Player(entity):
         self.dmg = 1
         self.animation_database['idle'] = load_animation('assets/char/idle', [20,20,20], self)
         # TODO: polish the run animation
-        self.animation_database['run'] = load_animation('assets/char/run', [3 for _ in range(14)], self)
+        self.animation_database['run'] = load_animation('assets/char/run', [4 for _ in range(12)], self)
         self.dmg_cd = 0
         self.cd_obj = entity(self.x, self.y + 15, 16, 16)
         self.cd_obj.animation_database['idle'] = load_animation('assets/cooldown/idle', [4 for x in range(15)], self.cd_obj)
@@ -102,14 +102,15 @@ class Player(entity):
 
     def draw(self, display, scroll, dt):
 #        pygame.draw.rect(display, (255,0,0), pygame.Rect(self.rect.left - scroll.render_scroll[0], self.rect.top - scroll.render_scroll[1], 16, 16))
+        display.blit(pygame.transform.flip(self.img,self.flip,False), [self.rect.x-scroll.render_scroll[0], self.rect.y-scroll.render_scroll[1]])
         if self.mode == "melee":
-            self.sword.draw(self.flip, self.dashing, self.rect, display, scroll, dt)
+            self.sword.draw(self.flip, self.dashing, self.rect, display, scroll, self.frame, self.action)
         elif self.mode == "ranged":
             self.pistol.draw(self, display, scroll)
         for bullet in self.pistol.bullets:
             bullet.render(display, scroll.render_scroll)
         self.sword.particles = [p for p in self.sword.particles if p.duration > 0]
-        display.blit(pygame.transform.flip(self.img,self.flip,False), [self.rect.x-scroll.render_scroll[0], self.rect.y-scroll.render_scroll[1]])
+        
 
     
     
