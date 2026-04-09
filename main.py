@@ -21,6 +21,8 @@ from entities.player.buff_renderer import Buff_renderer
 from entities.player.render_ammo import Ammo
 from world.texts import Texts
 from ui.minimap import Minimap
+from world.foliage.leafSystem import LeafSystem
+from world.foliage.tree import Tree
 
 class Game():
     def __init__(self):
@@ -58,6 +60,8 @@ class Game():
         self.last_time = time.time()
         self.keyboard_event_handler = Keyboard_event_handler()
         self.buff_renderer = Buff_renderer(self.small_font, self.shop.data)
+        self.leafSystem = LeafSystem()
+        self.tree = Tree([220, 510])
 
     def run(self):
         while True:
@@ -82,6 +86,8 @@ class Game():
             self.enemies.render_enemies(self.display, self.scroll, self.dt)
             self.render_bullets()
             self.show_remaining_enemies()
+            self.tree.render(self.display, self.scroll)
+            self.leafSystem.render_leaves(self.display, self.scroll)
             self.player.run_render_logic(self.display, self.scroll, self.dt)
             self.texts.render_texts(self.display, self.scroll)
             self.hp_bar.draw(self.display, self.player.max_hp, self.player.hp)
@@ -181,7 +187,9 @@ class Game():
             self.scroll.player_scrolling(self.player, self.level)
             self.move_bullets()
             self.move_sparks()
-            self.minimap.update_map([self.player.rect.x, self.player.rect.y], self.level.map)                          
+            self.tree.generate_leaves(self.leafSystem.leaf_imgs, self.leafSystem.leaves)     
+            self.leafSystem.update_leaves(self.dt)
+            self.minimap.update_map([self.player.rect.x, self.player.rect.y], self.level.map)                     
         else:
             self.logic_variables.hitstop_timer -= self.dt
         update_level(self.player, self.level, self.enemies, self.torches, self.texts, self.win_screen)

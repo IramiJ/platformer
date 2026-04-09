@@ -24,8 +24,8 @@ class Leaf:
         self.flutter_amp = random.uniform(0.15, 0.5)
         self.flutter_speed = random.uniform(2.0, 5.0)
 
-    def render(self, display: pygame.Surface):
-        display.blit(self.img, (self.loc[0], self.loc[1]))
+    def render(self, display: pygame.Surface, scroll):
+        display.blit(self.img, (self.loc[0]-scroll.render_scroll[0], self.loc[1] - scroll.render_scroll[1]))
 
     def update(self, wind,  dt: float):
         self.phase += self.flutter_speed * dt

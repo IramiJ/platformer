@@ -9,14 +9,16 @@ class LeafSystem:
         for leaf in os.listdir(path := "tests/tree_test/leaves"):
             img_path = path + "/" + leaf
             self.leaf_imgs.append(img_path)
-    def render_leaves(self, display: pygame.Surface, dt: float):
+
+    def render_leaves(self, display: pygame.Surface, scroll):
         for leaf in self.leaves[:]:
-            leaf.render(display, dt)
-            leaf.duration -= dt
-            # optional cleanup when "dead" or off-screen:
-            if leaf.duration <= 0 or leaf.loc[1] > 700:
+            leaf.render(display, scroll)
+            if leaf.duration <= 0:
                 self.leaves.remove(leaf)
     
     def update_leaves(self, dt):
+        dt_seconds = dt / 60
+        self.wind.update(dt_seconds)
         for leaf in self.leaves[:]:
-            leaf.update(self.wind, dt)
+            leaf.update(self.wind, dt_seconds)
+            leaf.duration -= dt_seconds

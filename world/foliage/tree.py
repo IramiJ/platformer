@@ -12,4 +12,5 @@ class Tree:
         loc = self.loc.copy()
         loc[0] += random.randint(0, 40)
         loc[1] += random.randint(0, 10)
-        leaf_list.append(Leaf(leaf_imgs[random.randint(0, 8)], loc, random.randint(1, 10)))
+        if random.randint(0, 10) == 0:
+            leaf_list.append(Leaf(leaf_imgs[random.randint(0, 8)], loc, random.randint(1, 10)))
