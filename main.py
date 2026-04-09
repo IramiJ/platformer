@@ -87,7 +87,6 @@ class Game():
             self.hp_bar.draw(self.display, self.player.max_hp, self.player.hp)
             self.buff_renderer.render_buffs(self.display, self.player)
             self.ammo.render_ammo(self.display, self.player)
-            self.draw_torches()
             self.draw_sparks()
             self.minimap.render(self.display)
             self.render_fps_count()

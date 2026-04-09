@@ -5,9 +5,7 @@ screen = pygame.display.set_mode((500, 500))
 display = pygame.Surface((250, 250))
 clock = pygame.time.Clock()
 
-tree_img = pygame.image.load("tree.png").convert()
-tree_img.set_colorkey((0,0,0))
-tree_loc = [100, 100]
+
 
 class Wind:
     def __init__(self):
@@ -83,38 +81,43 @@ class Leaf:
 
         self.rect.x, self.rect.y = self.loc[0], self.loc[1]
     
-    
-leaves = []
-global leave_list
-leave_list = []
+class Tree:
+    def __init__(self, loc):
+        self.img = pygame.image.load("tree.png").convert()
+        self.img.set_colorkey((0,0,0))
+        self.loc = loc
+    def render(self, display: pygame.Surface):
+        display.blit(self.img, self.loc)
+    def add_leaves(self, leaf_imgs, leaf_list):
+        loc = self.loc.copy()
+        loc[0] += random.randint(0, 40)
+        loc[1] += random.randint(0, 10)
+        leaf_list.append(Leaf(leaf_imgs[random.randint(0, 8)], loc, random.randint(1, 10)))
+
+leaf_imgs = []
+leaf_list = []
 def load_leaves(path):
     for leaf in os.listdir(path):
         img_path = path + "/" + leaf
-        leaves.append(img_path)
+        leaf_imgs.append(img_path)
 
-def add_leaves():
-    global leave_list
-    loc = tree_loc.copy()
-    loc[0] += random.randint(0, 40)
-    loc[1] += random.randint(0, 10)
-    leave_list.append(Leaf(leaves[random.randint(0, 8)], loc, random.randint(1, 10)))
 
-def render_leaves(surface: pygame.Surface, dt: float):
-    global leave_list
-    for leaf in leave_list[:]:
+
+def render_leaves(surface: pygame.Surface, leaf_list, dt: float):
+    for leaf in leaf_list[:]:
         leaf.render(surface, dt)
         leaf.duration -= dt
         # optional cleanup when "dead" or off-screen:
         if leaf.duration <= 0 or leaf.loc[1] > 260:
-            leave_list.remove(leaf)
+            leaf_list.remove(leaf)
 
-
+t1 = Tree([100,100])
 load_leaves("leaves")
 while True:
     dt = clock.tick(60) / 1000
     wind.update(dt)
     display.fill((0,0,0))
-    display.blit(tree_img, tree_loc)
+    t1.render(display)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -127,8 +130,8 @@ while True:
                 wind.winding = False
 
     if random.randint(1, wind.leaf_spawn_rate) == 1:
-        add_leaves()
-    render_leaves(display, dt)
+        t1.add_leaves(leaf_imgs, leaf_list)
+    render_leaves(display, leaf_list, dt)
     
     screen.blit(pygame.transform.scale(display, (500, 500)))
     print(wind.leaf_spawn_rate)
