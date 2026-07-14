@@ -4,7 +4,8 @@ from entities.animations import load_animation
 from entities.player.tail import Tail
 from core.settings import Settings
 import pygame, math
-'''
+
+"""
 def handle_movements(player, tile_rects, display, cd, tail, scroll, dt):
     player.movement = [0, 0]
     if player.dashing:
@@ -94,4 +95,4 @@ def draw_dash_cd(player, display, cd, scroll, dt):
     cd.frame += dt
     if cd.frame >= len(cd.animation_database[cd.action]):
         cd.frame = 0
-'''
+"""

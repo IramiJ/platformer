@@ -1,4 +1,8 @@
 import pygame, sys, json
+from entities.player.player import Player
+from ui.shopping import Shop
+from ui.pause_screen import Pause_screen
+
 
 def load_keybinds(path="core/keybinds.json"):
     with open(path, "r") as f:
@@ -13,10 +17,14 @@ def load_keybinds(path="core/keybinds.json"):
 
     return binds
 
-class Keyboard_event_handler():
+
+class Keyboard_event_handler:
     def __init__(self):
         self.keybinds = load_keybinds()
-    def handle_keyboard_events(self, player, shop, pause_screen):    
+
+    def handle_keyboard_events(
+        self, player: Player, shop: Shop, pause_screen: Pause_screen
+    ):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()

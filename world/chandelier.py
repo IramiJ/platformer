@@ -1,31 +1,47 @@
 import random, pygame
 from entities.particles import simple_particle
+
+
 class Chandelier:
     def __init__(self, loc):
         self.loc = loc
         self.particles = []
         self.img = pygame.image.load("assets/constants/chandelier.png").convert()
-        self.img.set_colorkey((0,0,0))
+        self.img.set_colorkey((0, 0, 0))
         self.set_up_particles()
-    
+
     def set_up_particles(self):
-        self.particle_spawns = [self.loc.copy() for x in range (3)]
+        self.particle_spawns = [self.loc.copy() for x in range(3)]
         self.particle_spawns[0][0] += 4
-        self.particle_spawns [0][1] += 4
+        self.particle_spawns[0][1] += 4
         self.particle_spawns[1][0] += 8
-        self.particle_spawns [1][1] += 4
+        self.particle_spawns[1][1] += 4
         self.particle_spawns[2][0] += 12
-        self.particle_spawns [2][1] += 4
+        self.particle_spawns[2][1] += 4
 
     def add_particles(self):
         for spawn in self.particle_spawns:
-            if random.randint(1, 50) == 50: # 2% spawn chance per frame
-                self.particles.append(simple_particle(spawn.copy(), [random.randint(-10, 10)/100, 0], random.randint(14, 24)/10))
+            if random.randint(1, 50) == 50:  # 2% spawn chance per frame
+                self.particles.append(
+                    simple_particle(
+                        spawn.copy(),
+                        [random.randint(-10, 10) / 100, 0],
+                        random.randint(14, 24) / 10,
+                    )
+                )
 
-    def draw_particles(self, display, scroll):        
+    def draw_particles(self, display, scroll):
         for particle in self.particles:
             self.move_particle(particle)
-            pygame.draw.circle(display, (255,255,255), [particle.loc[0]-scroll.render_scroll[0], particle.loc[1]-scroll.render_scroll[1]], particle.radius)
+            pygame.draw.circle(
+                display,
+                (255, 255, 255),
+                [
+                    particle.loc[0] - scroll.render_scroll[0],
+                    particle.loc[1] - scroll.render_scroll[1],
+                ],
+                particle.radius,
+            )
             self.remove_particle_on_check(particle)
         self.add_particles()
 
@@ -37,8 +53,14 @@ class Chandelier:
 
     def remove_particle_on_check(self, particle):
         if particle.radius <= 0:
-            self.particles.remove(particle)    
+            self.particles.remove(particle)
 
     def draw(self, display: pygame.Surface, scroll):
-        display.blit(self.img, [self.loc[0]-scroll.render_scroll[0], self.loc[1]-scroll.render_scroll[1]])
+        display.blit(
+            self.img,
+            [
+                self.loc[0] - scroll.render_scroll[0],
+                self.loc[1] - scroll.render_scroll[1],
+            ],
+        )
         self.draw_particles(display, scroll)

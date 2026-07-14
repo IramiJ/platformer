@@ -1,6 +1,7 @@
 import math, pygame
 
-class Spark():
+
+class Spark:
     def __init__(self, loc, angle, speed, color, scale=1):
         self.loc = loc
         self.angle = angle
@@ -10,7 +11,9 @@ class Spark():
         self.alive = True
 
     def point_towards(self, angle, rate):
-        rotate_direction = ((angle - self.angle + math.pi * 3) % (math.pi * 2)) - math.pi
+        rotate_direction = (
+            (angle - self.angle + math.pi * 3) % (math.pi * 2)
+        ) - math.pi
         try:
             rotate_sign = abs(rotate_direction) / rotate_direction
         except ZeroDivisionError:
@@ -21,8 +24,10 @@ class Spark():
             self.angle += rate * rotate_sign
 
     def calculate_movement(self, dt):
-        return [math.cos(self.angle) * self.speed * dt, math.sin(self.angle) * self.speed * dt]
-
+        return [
+            math.cos(self.angle) * self.speed * dt,
+            math.sin(self.angle) * self.speed * dt,
+        ]
 
     def velocity_adjust(self, friction, force, terminal_velocity, dt):
         movement = self.calculate_movement(dt)
@@ -35,9 +40,9 @@ class Spark():
         self.loc[0] += movement[0]
         self.loc[1] += movement[1]
 
-        #self.point_towards(math.pi / 2, 0.02)
-        #self.velocity_adjust(0.975, 0.2, 8, dt)
-        #self.angle += 0.1
+        # self.point_towards(math.pi / 2, 0.02)
+        # self.velocity_adjust(0.975, 0.2, 8, dt)
+        # self.angle += 0.1
 
         self.speed -= 0.1
 
@@ -47,9 +52,37 @@ class Spark():
     def draw(self, surf, scroll):
         if self.alive:
             points = [
-                [self.loc[0] + math.cos(self.angle) * self.speed * self.scale - scroll.render_scroll[0], self.loc[1] + math.sin(self.angle) * self.speed * self.scale - scroll.render_scroll[1]],
-                [self.loc[0] + math.cos(self.angle + math.pi / 2) * self.speed * self.scale * 0.3 - scroll.render_scroll[0], self.loc[1] + math.sin(self.angle + math.pi / 2) * self.speed * self.scale * 0.3 - scroll.render_scroll[1]],
-                [self.loc[0] - math.cos(self.angle) * self.speed * self.scale * 3.5 - scroll.render_scroll[0], self.loc[1] - math.sin(self.angle) * self.speed * self.scale * 3.5 - scroll.render_scroll[1]],
-                [self.loc[0] + math.cos(self.angle - math.pi / 2) * self.speed * self.scale * 0.3 - scroll.render_scroll[0], self.loc[1] - math.sin(self.angle + math.pi / 2) * self.speed * self.scale * 0.3 - scroll.render_scroll[1]],
-                ]
+                [
+                    self.loc[0]
+                    + math.cos(self.angle) * self.speed * self.scale
+                    - scroll.render_scroll[0],
+                    self.loc[1]
+                    + math.sin(self.angle) * self.speed * self.scale
+                    - scroll.render_scroll[1],
+                ],
+                [
+                    self.loc[0]
+                    + math.cos(self.angle + math.pi / 2) * self.speed * self.scale * 0.3
+                    - scroll.render_scroll[0],
+                    self.loc[1]
+                    + math.sin(self.angle + math.pi / 2) * self.speed * self.scale * 0.3
+                    - scroll.render_scroll[1],
+                ],
+                [
+                    self.loc[0]
+                    - math.cos(self.angle) * self.speed * self.scale * 3.5
+                    - scroll.render_scroll[0],
+                    self.loc[1]
+                    - math.sin(self.angle) * self.speed * self.scale * 3.5
+                    - scroll.render_scroll[1],
+                ],
+                [
+                    self.loc[0]
+                    + math.cos(self.angle - math.pi / 2) * self.speed * self.scale * 0.3
+                    - scroll.render_scroll[0],
+                    self.loc[1]
+                    - math.sin(self.angle + math.pi / 2) * self.speed * self.scale * 0.3
+                    - scroll.render_scroll[1],
+                ],
+            ]
             pygame.draw.polygon(surf, self.color, points)

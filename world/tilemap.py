@@ -2,35 +2,43 @@ import os, csv, pygame, math
 from .torch import Torch
 from .chandelier import Chandelier
 
+
 def load_map(path):
-    f = open(path + '.txt', 'r')
+    f = open(path + ".txt", "r")
     data = f.read()
     f.close()
-    data = data.split('\n')
+    data = data.split("\n")
     map = []
     for row in data:
         map.append(list(row))
     return map
+
+
 def read_csv(filename):
     map = []
     with open(os.path.join(filename)) as data:
-        data = csv.reader(data, delimiter=',')
+        data = csv.reader(data, delimiter=",")
         for row in data:
             map.append(list(row))
     return map
+
+
 def last_x(map):
     counter = -1
     for i in map[0]:
         counter += 1
     return counter * 16
+
+
 def load_tiles(path):
     dict = {}
     files = os.listdir(path)
     for file in files:
-        name = str(int(file.split('.')[0]))
-        dict[name] = pygame.image.load(path + '/' + file).convert()
-        dict[name].set_colorkey((0,0,0))
+        name = str(int(file.split(".")[0]))
+        dict[name] = pygame.image.load(path + "/" + file).convert()
+        dict[name].set_colorkey((0, 0, 0))
     return dict
+
 
 def load_torches(map, torch_list):
     torch_types = {"10": Torch, "12": Chandelier}
@@ -40,12 +48,13 @@ def load_torches(map, torch_list):
         x = 0
         for tile in row:
             if tile == "10" or tile == "12":
-                position = [x*16, y*16]
+                position = [x * 16, y * 16]
                 torch_list.append(torch_types[tile](position))
             x += 1
         y += 1
-    
-'''
+
+
+"""
 def display_map(display: pygame.Surface, scroll, tile_rects, map, dict):
     # TODO: optimize the rendering by only rendering whats actually needed
     y = 0
@@ -58,11 +67,13 @@ def display_map(display: pygame.Surface, scroll, tile_rects, map, dict):
                     tile_rects.append(pygame.Rect(x*16,y*16,16,16))
             x += 1
         y += 1
-'''
+"""
 
 TILE = 24
 SKIP_TILES = {"-1"}
 NON_COLLISION_TILES = {"-1", "8", "19", "29", "39", "47", "48"}
+
+
 def display_map(display: pygame.Surface, scroll, tilemap, tile_dict):
 
     scroll_x, scroll_y = scroll.render_scroll
@@ -72,7 +83,7 @@ def display_map(display: pygame.Surface, scroll, tilemap, tile_dict):
     x0 = max(0, int(scroll_x // TILE) - 1)
     y0 = max(0, int(scroll_y // TILE) - 1)
     x1 = min(len(tilemap[0]), int(math.ceil((scroll_x + screen_w) / TILE)) + 1)
-    y1 = min(len(tilemap),    int(math.ceil((scroll_y + screen_h) / TILE)) + 1)
+    y1 = min(len(tilemap), int(math.ceil((scroll_y + screen_h) / TILE)) + 1)
 
     for y in range(y0, y1):
         row = tilemap[y]
@@ -94,7 +105,7 @@ def update_tile_rects(display, scroll, tile_rects, tilemap):
     x0 = max(0, int(scroll_x // TILE) - 1)
     y0 = max(0, int(scroll_y // TILE) - 1)
     x1 = min(len(tilemap[0]), int(math.ceil((scroll_x + screen_w) / TILE)) + 1)
-    y1 = min(len(tilemap),    int(math.ceil((scroll_y + screen_h) / TILE)) + 1)
+    y1 = min(len(tilemap), int(math.ceil((scroll_y + screen_h) / TILE)) + 1)
 
     for y in range(y0, y1):
         row = tilemap[y]
@@ -106,4 +117,3 @@ def update_tile_rects(display, scroll, tile_rects, tilemap):
             world_x = x * TILE
             world_y = y * TILE
             tile_rects.append(pygame.Rect(world_x, world_y, TILE, TILE))
-

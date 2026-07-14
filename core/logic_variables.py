@@ -1,5 +1,5 @@
 class Logic_variables:
     def __init__(self):
-        self.MOVEMENTS = True
-        self.RENDER = True
+        self.MOVEMENTS: bool = True
+        self.RENDER: bool = True
         self.hitstop_timer = 0

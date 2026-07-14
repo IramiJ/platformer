@@ -2,21 +2,23 @@ from entities.entity import entity
 from world.collisions import collision_test
 import pygame, math
 
+
 class Enemy(entity):
-    def __init__(self,x,y,width,height):
-        super().__init__(x,y,width,height)
+    def __init__(self, x, y, width, height):
+        super().__init__(x, y, width, height)
         self.max_hp = 3
         self.current_hp = 3
         self.velocity = 1
         self.alive = True
         self.dmg_timer = 0
-        
+
     def update_frames(self, dt):
         self.frame += dt
         if self.frame >= len(self.animation_database[self.action]):
             self.frame = 0
         self.img_id = self.animation_database[self.action][math.floor(self.frame)]
         self.img = self.animation_frames[self.img_id]
+
     def draw_dmg_timer(self, to_blit):
         if self.dmg_timer > 0:
             if self.dmg_timer == 5:
@@ -26,13 +28,19 @@ class Enemy(entity):
             self.dmg_timer -= 1
         else:
             self.dmg_timer = 0
+
     def draw(self, display, scroll):
         to_blit = self.img.copy()
         self.draw_dmg_timer(to_blit)
-        display.blit(pygame.transform.flip(to_blit,self.flip,False), [self.rect.x-scroll[0], self.rect.y-scroll[1]])
+        display.blit(
+            pygame.transform.flip(to_blit, self.flip, False),
+            [self.rect.x - scroll[0], self.rect.y - scroll[1]],
+        )
+
     def die(self):
         self.current_hp = 0
         self.alive = False
+
     def take_dmg(self, dmg):
         if not self.alive:
             return
@@ -41,6 +49,7 @@ class Enemy(entity):
         self.taking_dmg = True
         if self.current_hp <= 0:
             self.die()
+
     def collision(self, tiles):
         hit_list = collision_test(self.rect, tiles)
         for tile in hit_list:

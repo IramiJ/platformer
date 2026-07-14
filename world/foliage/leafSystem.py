@@ -1,6 +1,7 @@
 import pygame, os
 from .wind import Wind
 
+
 class LeafSystem:
     def __init__(self):
         self.wind = Wind()
@@ -15,7 +16,7 @@ class LeafSystem:
             leaf.render(display, scroll)
             if leaf.duration <= 0:
                 self.leaves.remove(leaf)
-    
+
     def update_leaves(self, dt):
         dt_seconds = dt / 60
         self.wind.update(dt_seconds)

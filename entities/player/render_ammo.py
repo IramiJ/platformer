@@ -3,14 +3,18 @@ from entities.entity import entity
 from entities.animations import load_animation
 from ui.Font_renderer import Font
 
-class Ammo():
+
+class Ammo:
     def __init__(self):
-        self.small_font = Font('assets/fonts/small_font.png')
+        self.small_font = Font("assets/fonts/small_font.png")
         self.pistol_img = pygame.image.load("assets/weapons/cd_pistol.png").convert()
-        self.pistol_img.set_colorkey((0,0,0))
+        self.pistol_img.set_colorkey((0, 0, 0))
         self.amount_padding = self.pistol_img.get_width() + 5
         self.cd_obj = entity(self.amount_padding, 9, 16, 16)
-        self.cd_obj.animation_database['idle'] = load_animation('assets/cooldown/idle', [8 for x in range(15)], self.cd_obj)
+        self.cd_obj.animation_database["idle"] = load_animation(
+            "assets/cooldown/idle", [8 for x in range(15)], self.cd_obj
+        )
+
     def render_ammo(self, display, player):
         self.render_pistol(display)
         if not player.bow.reloading:
@@ -19,12 +23,14 @@ class Ammo():
             self.update_dash_img(display)
 
     def update_dash_img(self, display):
-        self.cd_obj.img_id = self.cd_obj.animation_database[self.cd_obj.action][self.cd_obj.frame]
+        self.cd_obj.img_id = self.cd_obj.animation_database[self.cd_obj.action][
+            self.cd_obj.frame
+        ]
         self.cd_obj.img = self.cd_obj.animation_frames[self.cd_obj.img_id]
-        display.blit(self.cd_obj.img,  (self.cd_obj.x, self.cd_obj.y))
+        display.blit(self.cd_obj.img, (self.cd_obj.x, self.cd_obj.y))
         self.cd_obj.frame += 1
         if self.cd_obj.frame >= len(self.cd_obj.animation_database[self.cd_obj.action]):
-            self.cd_obj.frame = 0    
+            self.cd_obj.frame = 0
 
     def render_ammo_amount(self, display, player):
         self.small_font.render(display, str(player.bow.ammo), (self.amount_padding, 15))

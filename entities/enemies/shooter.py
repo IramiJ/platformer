@@ -5,48 +5,67 @@ from entities.hp_bar import Hp_bar
 from core.settings import Settings
 import math, pygame
 
+
 class Shooter(Enemy):
-    def __init__(self,x,y,width,height):
-        super().__init__(x,y,width,height)
+    def __init__(self, x, y, width, height):
+        super().__init__(x, y, width, height)
         self.spawn_point = [self.x, self.y]
         self.aggro_range = 300
-        self.action = 'idle'
+        self.action = "idle"
         self.max_hp = 2
         self.current_hp = 2
-        self.animation_database['idle'] = load_animation('assets/enemies/shooter/idle', [20,20,20,20,20,20], self)
-        self.animation_database['shoot'] = load_animation('assets/enemies/shooter/shoot', [20, 20], self)
-        self.hp_bar = Hp_bar('assets/hp_bar/enemy_hp_bar_bg.png','assets/hp_bar/enemy_hp_bar_frame.png',self.x,self.y-20)
+        self.animation_database["idle"] = load_animation(
+            "assets/enemies/shooter/idle", [20, 20, 20, 20, 20, 20], self
+        )
+        self.animation_database["shoot"] = load_animation(
+            "assets/enemies/shooter/shoot", [20, 20], self
+        )
+        self.hp_bar = Hp_bar(
+            "assets/hp_bar/enemy_hp_bar_bg.png",
+            "assets/hp_bar/enemy_hp_bar_frame.png",
+            self.x,
+            self.y - 20,
+        )
         self.attack_cd = 0
         self.collision_cd = 0
         self.stunned = False
         self.stun_cd = 0
         self.shoot_count = 0
-        
 
     def render(self, display, scroll):
         if not self.alive:
-            return 
+            return
         self.draw(display, scroll)
         self.update_hp_bar(scroll)
         self.hp_bar.draw(display, self.max_hp, self.current_hp)
+
     def update_hp_bar(self, scroll):
-        self.hp_bar.x = self.rect.x-scroll[0]
-        self.hp_bar.y = self.rect.y-scroll[1]-20
+        self.hp_bar.x = self.rect.x - scroll[0]
+        self.hp_bar.y = self.rect.y - scroll[1] - 20
+
     def attack(self, player, bullet_list, scroll):
         self.handle_stun_state()
         if not self.stunned:
             self.reduce_attack_cd()
             self.check_attack_state(player, bullet_list)
         self.update_player_phsyical_dmg(player, scroll)
+
     def check_attack_state(self, player, bullet_list):
-        if math.sqrt((self.spawn_point[0] - player.rect.x)**2 + (self.spawn_point[1] - player.rect.y)**2) <= self.aggro_range:
+        if (
+            math.sqrt(
+                (self.spawn_point[0] - player.rect.x) ** 2
+                + (self.spawn_point[1] - player.rect.y) ** 2
+            )
+            <= self.aggro_range
+        ):
             self.shoot(bullet_list, player)
         else:
-            self.change_action('idle')
+            self.change_action("idle")
+
     def shoot(self, bullet_list, player):
-        self.change_action('shoot')
+        self.change_action("shoot")
         if self.attack_cd == 0:
-            if self.shoot_count == 2:                    
+            if self.shoot_count == 2:
                 self.attack_cd = 2 * Settings.fps
                 self.shoot_count = 0
             else:
@@ -57,23 +76,21 @@ class Shooter(Enemy):
     def stun(self):
         self.stun_cd = 20
         self.stunned = True
-        
+
     def handle_stun_state(self):
-        if self.stunned: 
+        if self.stunned:
             self.stun_cd -= 1
             if self.stun_cd == 0:
                 self.stunned = False
-    
+
     def reduce_attack_cd(self):
-        if self.attack_cd > 0:           
+        if self.attack_cd > 0:
             self.attack_cd -= 1
-    
+
     def update_player_phsyical_dmg(self, player, scroll):
         if self.collision_cd > 0:
             self.collision_cd -= 1
 
         elif self.rect.colliderect(player.rect) and not player.dashing:
             player.take_dmg(scroll)
-            self.collision_cd  = 30  
-
-             
+            self.collision_cd = 30
