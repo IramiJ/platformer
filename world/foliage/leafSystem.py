@@ -7,7 +7,7 @@ class LeafSystem:
         self.wind = Wind()
         self.leaf_imgs = []
         self.leaves = []
-        for leaf in os.listdir(path := "tests/tree_test/leaves"):
+        for leaf in os.listdir(path := "emulations/tree_emulation/leaves"):
             img_path = path + "/" + leaf
             self.leaf_imgs.append(img_path)
 
