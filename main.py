@@ -242,6 +242,9 @@ class Game:
         self.draw_render_surf()
         pygame.display.update()
 
+def main():
+    game = Game()
+    game.run()
 
-game = Game()
-game.run()
+if __name__ == "__main__":
+    main()

@@ -19,7 +19,7 @@
 
 ## 2. Make the game loop deterministic and testable
 
-- [ ] Add an `if __name__ == __main__:` entry-point guard.
+- [x] Add an `if __name__ == __main__:` entry-point guard.
 - [ ] Make every production module importable without starting the game or opening a window.
 - [ ] Separate state updates from rendering.
 - [ ] Move animation, cooldown, damage-flash, particle, and cleanup updates out of render methods.
@@ -33,8 +33,8 @@
 
 - [ ] Import `Patroller` directly in `heavy_patroller.py` and remove the circular import.
 - [x] Remove or repair the broken `player_movements.py` module.
-- [ ] Remove or convert `ui/test.py` into an automated test.
-- [ ] Move the interactive tree prototype from `tests/` to `experiments/` or remove it.
+- [x] Remove or convert `ui/test.py` into an automated test.
+- [x] Move the interactive tree prototype from `tests/` to `experiments/` or remove it.
 - [x] Move foliage images from `tests/tree_test/` to `assets/foliage/`.
 - [ ] Resolve asset and configuration paths relative to the project instead of the current working directory.
 - [ ] Validate enemy names, keybinds, shop entries, maps, and referenced asset paths when loading data.
