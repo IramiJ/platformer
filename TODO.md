@@ -64,7 +64,7 @@
 - [x] Stop shadowing built-ins such as `map` and `dict`.
 - [x] Remove commented-out implementations and dead code.
 - [ ] Remove unused systems or integrate them completely.
-- [ ] Remove or archive `*_old` assets, old maps, sketches, and unused editor-session files.
+- [x] Remove or archive `*_old` assets, old maps, sketches, and unused editor-session files.
 - [ ] Add type hints to core data structures and public methods.
 - [ ] Add short docstrings to the main game, level, entity, collision, and rendering systems.
 - [ ] Normalize Git author information and add a `.mailmap` if needed.

@@ -1,4 +1,4 @@
-from .enemies import Patroller
+from .patroller import Patroller
 
 
 class Heavy_Patroller(Patroller):
