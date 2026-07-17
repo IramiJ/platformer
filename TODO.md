@@ -32,10 +32,10 @@
 ## 3. Fix broken and fragile modules
 
 - [ ] Import `Patroller` directly in `heavy_patroller.py` and remove the circular import.
-- [ ] Remove or repair the broken `player_movements.py` module.
+- [x] Remove or repair the broken `player_movements.py` module.
 - [ ] Remove or convert `ui/test.py` into an automated test.
 - [ ] Move the interactive tree prototype from `tests/` to `experiments/` or remove it.
-- [ ] Move foliage images from `tests/tree_test/` to `assets/foliage/`.
+- [x] Move foliage images from `tests/tree_test/` to `assets/foliage/`.
 - [ ] Resolve asset and configuration paths relative to the project instead of the current working directory.
 - [ ] Validate enemy names, keybinds, shop entries, maps, and referenced asset paths when loading data.
 
@@ -62,7 +62,7 @@
 - [x] Replace wildcard imports with explicit imports.
 - [ ] Split combined imports into individual lines.
 - [x] Stop shadowing built-ins such as `map` and `dict`.
-- [ ] Remove commented-out implementations and dead code.
+- [x] Remove commented-out implementations and dead code.
 - [ ] Remove unused systems or integrate them completely.
 - [ ] Remove or archive `*_old` assets, old maps, sketches, and unused editor-session files.
 - [ ] Add type hints to core data structures and public methods.

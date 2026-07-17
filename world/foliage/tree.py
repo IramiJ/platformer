@@ -4,7 +4,7 @@ from .leaf import Leaf
 
 class Tree:
     def __init__(self, loc):
-        self.img = pygame.image.load("emulations/tree_emulation/tree.png").convert()
+        self.img = pygame.image.load("assets/foliage/tree.png").convert()
         self.img.set_colorkey((0, 0, 0))
         self.loc = loc
 
