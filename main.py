@@ -4,8 +4,8 @@ from ui.death_screen import Death_screen
 pygame.init()
 from ui.Font_renderer import Font
 from ui.shopping import Shop
-from world.tilemap import *
-from entities.entity import *
+from world.tilemap import load_tiles, display_map, update_tile_rects
+from entities.entity import entity, simple_entity
 from entities.player.player import Player
 from entities.hp_bar import Hp_bar
 from core.settings import Settings, TILE_SIZE
