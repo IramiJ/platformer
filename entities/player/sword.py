@@ -15,7 +15,7 @@ class Sword(entity):
         self.load_slice_animation()
         self.slice_frame = 0
         self.animation_database["idle"] = [self.img]
-        # Keeps track of the player hand
+        """ Keeps track of the player hand """
         self.offsets = {
             "run": [
                 (6, 16),
@@ -129,10 +129,10 @@ class Sword(entity):
         if player_dash_state:
             self.draw_slice(display, scroll, dt)
         """
+        Sword particle code
         self.add_particles()
         self.draw_particles(display, scroll)
         """
-        # display.blit(pygame.transform.flip(self.img, self.flip, False), [self.loc[0] - scroll.render_scroll[0], self.loc[1] - scroll.render_scroll[1]])
         self.draw_rotated(display, scroll, angle)
 
     def set_flip(self, flip):

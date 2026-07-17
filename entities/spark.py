@@ -40,10 +40,12 @@ class Spark:
         self.loc[0] += movement[0]
         self.loc[1] += movement[1]
 
-        # self.point_towards(math.pi / 2, 0.02)
-        # self.velocity_adjust(0.975, 0.2, 8, dt)
-        # self.angle += 0.1
-
+        """
+        More Settings for the spark behaviour
+        self.point_towards(math.pi / 2, 0.02)
+        self.velocity_adjust(0.975, 0.2, 8, dt)
+        self.angle += 0.1
+        """
         self.speed -= 0.1
 
         if self.speed <= 0:

@@ -42,7 +42,10 @@ class Enemies:
             enemy.update_frames(dt)
             enemy.render(display, scroll.render_scroll)
 
-    #            pygame.draw.rect(display, (255,0,0), pygame.Rect(enemy.rect.left - scroll.render_scroll[0], enemy.rect.top - scroll.render_scroll[1], 16, 16))
+    """
+    Hitbox for debugging purposes
+    pygame.draw.rect(display, (255,0,0), pygame.Rect(enemy.rect.left - scroll.render_scroll[0], enemy.rect.top - scroll.render_scroll[1], 16, 16))
+    """
     def load_enemies(self, level):
         self.enemies = []
         enemies = level.data["enemies"]

@@ -9,40 +9,40 @@ def load_map(path):
     data = f.read()
     f.close()
     data = data.split("\n")
-    map = []
+    tilemap = []
     for row in data:
-        map.append(list(row))
-    return map
+        tilemap.append(list(row))
+    return tilemap
 
 
 def read_csv(filename):
-    map = []
+    tilemap = []
     with open(os.path.join(filename)) as data:
         data = csv.reader(data, delimiter=",")
         for row in data:
-            map.append(list(row))
-    return map
+            tilemap.append(list(row))
+    return tilemap
 
 
-def last_x(map):
-    return len(map[0]) * TILE_SIZE
+def last_x(tilemap):
+    return len(tilemap[0]) * TILE_SIZE
 
 
 def load_tiles(path):
-    dict = {}
+    tiles_by_id = {}
     files = os.listdir(path)
     for file in files:
         name = str(int(file.split(".")[0]))
-        dict[name] = pygame.image.load(path + "/" + file).convert()
-        dict[name].set_colorkey((0, 0, 0))
-    return dict
+        tiles_by_id[name] = pygame.image.load(path + "/" + file).convert()
+        tiles_by_id[name].set_colorkey((0, 0, 0))
+    return tiles_by_id
 
 
-def load_torches(map, torch_list):
+def load_torches(tilemap, torch_list):
     torch_types = {"10": Torch, "12": Chandelier}
     y = 0
     torch_list.clear()
-    for row in map:
+    for row in tilemap:
         x = 0
         for tile in row:
             if tile == "10" or tile == "12":
@@ -51,21 +51,6 @@ def load_torches(map, torch_list):
             x += 1
         y += 1
 
-
-"""
-def display_map(display: pygame.Surface, scroll, tile_rects, map, dict):
-    # TODO: optimize the rendering by only rendering whats actually needed
-    y = 0
-    for row in map:
-        x = 0
-        for tile in row:
-            if tile != '-1' and tile != "10" and tile != "12":
-                display.blit(dict[tile], (x*16-scroll.render_scroll[0], y*16-scroll.render_scroll[1]))
-                if all(tile != str(x) for x in range(10,12)):
-                    tile_rects.append(pygame.Rect(x*16,y*16,16,16))
-            x += 1
-        y += 1
-"""
 
 SKIP_TILES = {"-1"}
 NON_COLLISION_TILES = {"-1", "8", "19", "29", "39", "47", "48"}

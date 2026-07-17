@@ -61,7 +61,7 @@
 - [ ] Rename classes, files, methods, and constants consistently according to PEP 8.
 - [x] Replace wildcard imports with explicit imports.
 - [ ] Split combined imports into individual lines.
-- [ ] Stop shadowing built-ins such as `map` and `dict`.
+- [x] Stop shadowing built-ins such as `map` and `dict`.
 - [ ] Remove commented-out implementations and dead code.
 - [ ] Remove unused systems or integrate them completely.
 - [ ] Remove or archive `*_old` assets, old maps, sketches, and unused editor-session files.

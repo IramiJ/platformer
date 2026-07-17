@@ -21,7 +21,7 @@ class Chandelier:
 
     def add_particles(self):
         for spawn in self.particle_spawns:
-            if random.randint(1, 50) == 50:  # 2% spawn chance per frame
+            if random.randint(1, 50) == 50:
                 self.particles.append(
                     simple_particle(
                         spawn.copy(),

@@ -14,8 +14,9 @@ class Heavy_Patroller(Patroller):
             self.move_right()
         if self.direction == "l":
             self.move_left()
-        self.rect.x += self.movement[0] * dt  # actual movement of the enemy
-
+        """ actual movement of the enemy """
+        self.rect.x += self.movement[0] * dt  
+        
     def move_right(self):
         if self.rect.x >= self.spawn_point[0] + self.distance:
             self.direction = "l"

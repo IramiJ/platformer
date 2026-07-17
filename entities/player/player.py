@@ -56,7 +56,7 @@ class Player(entity):
     def update_movements(self, tile_rects, enemy_list, max_y, dt):
         self.handle_movements(tile_rects, dt)
         self.bow.move_arrows(enemy_list, dt)
-        self.die_through_falling(max_y)  # self.level.data["max_y"]
+        self.die_through_falling(max_y)
         self.remove_buffs(["speed boost", "jump boost", "double coin"])
         self.update_mode_properties()
         self.apply_buffs()
@@ -106,7 +106,10 @@ class Player(entity):
         self.img = self.animation_frames[self.img_id]
 
     def draw(self, display, scroll, dt):
-        #        pygame.draw.rect(display, (255,0,0), pygame.Rect(self.rect.left - scroll.render_scroll[0], self.rect.top - scroll.render_scroll[1], 16, 16))
+        """
+        Hitbox for debugging purposes
+        pygame.draw.rect(display, (255,0,0), pygame.Rect(self.rect.left - scroll.render_scroll[0], self.rect.top - scroll.render_scroll[1], 16, 16))
+        """
         display.blit(
             pygame.transform.flip(self.img, self.flip, False),
             [
@@ -242,10 +245,11 @@ class Player(entity):
         )
 
         self.handle_y_collisions(collisions, dt)
-
-        # self.tail.update_points()
-        # self.update_tail_points()
-
+        """
+        Tail points
+        self.tail.update_points()
+        self.update_tail_points()
+        """
     def update_tail_points(self):
         for i in range(len(self.tail.points)):
             if self.tail.points[i].show:
