@@ -1,7 +1,7 @@
 {
     "id": 2,
     "map": "maps/arena1.csv",
-    "spawn": [176, 432],
+    "spawn": [7, 18],
     "max_y": 2000,
     "enemies": {
         "Patroller": [[20, 27], [54, 32], [84, 38]],

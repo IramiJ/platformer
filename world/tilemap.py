@@ -1,6 +1,7 @@
 import os, csv, pygame, math
 from .torch import Torch
 from .chandelier import Chandelier
+from core.settings import TILE_SIZE
 
 
 def load_map(path):
@@ -24,10 +25,7 @@ def read_csv(filename):
 
 
 def last_x(map):
-    counter = -1
-    for i in map[0]:
-        counter += 1
-    return counter * 16
+    return len(map[0]) * TILE_SIZE
 
 
 def load_tiles(path):
@@ -48,7 +46,7 @@ def load_torches(map, torch_list):
         x = 0
         for tile in row:
             if tile == "10" or tile == "12":
-                position = [x * 16, y * 16]
+                position = [x * TILE_SIZE, y * TILE_SIZE]
                 torch_list.append(torch_types[tile](position))
             x += 1
         y += 1
@@ -69,7 +67,6 @@ def display_map(display: pygame.Surface, scroll, tile_rects, map, dict):
         y += 1
 """
 
-TILE = 24
 SKIP_TILES = {"-1"}
 NON_COLLISION_TILES = {"-1", "8", "19", "29", "39", "47", "48"}
 
@@ -80,10 +77,10 @@ def display_map(display: pygame.Surface, scroll, tilemap, tile_dict):
     screen_w, screen_h = display.get_size()
 
     # visible tile range (add 1 tile padding to avoid pop-in)
-    x0 = max(0, int(scroll_x // TILE) - 1)
-    y0 = max(0, int(scroll_y // TILE) - 1)
-    x1 = min(len(tilemap[0]), int(math.ceil((scroll_x + screen_w) / TILE)) + 1)
-    y1 = min(len(tilemap), int(math.ceil((scroll_y + screen_h) / TILE)) + 1)
+    x0 = max(0, int(scroll_x // TILE_SIZE) - 1)
+    y0 = max(0, int(scroll_y // TILE_SIZE) - 1)
+    x1 = min(len(tilemap[0]), int(math.ceil((scroll_x + screen_w) / TILE_SIZE)) + 1)
+    y1 = min(len(tilemap), int(math.ceil((scroll_y + screen_h) / TILE_SIZE)) + 1)
 
     for y in range(y0, y1):
         row = tilemap[y]
@@ -92,8 +89,8 @@ def display_map(display: pygame.Surface, scroll, tilemap, tile_dict):
             if tile in SKIP_TILES:
                 continue
 
-            world_x = x * TILE
-            world_y = y * TILE
+            world_x = x * TILE_SIZE
+            world_y = y * TILE_SIZE
 
             display.blit(tile_dict[tile], (world_x - scroll_x, world_y - scroll_y))
 
@@ -102,10 +99,10 @@ def update_tile_rects(display, scroll, tile_rects, tilemap):
     scroll_x, scroll_y = scroll.render_scroll
     screen_w, screen_h = display.get_size()
 
-    x0 = max(0, int(scroll_x // TILE) - 1)
-    y0 = max(0, int(scroll_y // TILE) - 1)
-    x1 = min(len(tilemap[0]), int(math.ceil((scroll_x + screen_w) / TILE)) + 1)
-    y1 = min(len(tilemap), int(math.ceil((scroll_y + screen_h) / TILE)) + 1)
+    x0 = max(0, int(scroll_x // TILE_SIZE) - 1)
+    y0 = max(0, int(scroll_y // TILE_SIZE) - 1)
+    x1 = min(len(tilemap[0]), int(math.ceil((scroll_x + screen_w) / TILE_SIZE)) + 1)
+    y1 = min(len(tilemap), int(math.ceil((scroll_y + screen_h) / TILE_SIZE)) + 1)
 
     for y in range(y0, y1):
         row = tilemap[y]
@@ -114,6 +111,6 @@ def update_tile_rects(display, scroll, tile_rects, tilemap):
             if tile in NON_COLLISION_TILES:
                 continue
 
-            world_x = x * TILE
-            world_y = y * TILE
-            tile_rects.append(pygame.Rect(world_x, world_y, TILE, TILE))
+            world_x = x * TILE_SIZE
+            world_y = y * TILE_SIZE
+            tile_rects.append(pygame.Rect(world_x, world_y, TILE_SIZE, TILE_SIZE))

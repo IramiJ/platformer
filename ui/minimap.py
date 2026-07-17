@@ -1,5 +1,5 @@
 import pygame, math
-
+from core.settings import TILE_SIZE
 
 class Minimap:
     def __init__(self):
@@ -13,7 +13,7 @@ class Minimap:
         self.center = [0, 0]
 
     def update_map(self, player_pos, tilemap):
-        self.center = [round(player_pos[0] / 24), round(player_pos[1] / 24)]
+        self.center = [int(player_pos[0] // TILE_SIZE), int(player_pos[1] // TILE_SIZE)]
         minimap_x = self.center[0] - self.size[0] // 2
         minimap_y = self.center[1] - self.size[1] // 2
         for y in range(minimap_y, minimap_y + self.size[1]):

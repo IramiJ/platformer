@@ -8,7 +8,7 @@ from world.tilemap import *
 from entities.entity import *
 from entities.player.player import Player
 from entities.hp_bar import Hp_bar
-from core.settings import Settings
+from core.settings import Settings, TILE_SIZE
 from world.scrolling import Scroll
 from core.kb_event_handling import Keyboard_event_handler
 from entities.enemies.enemies import Enemies
@@ -43,7 +43,7 @@ class Game:
         self.level = Level_loader()
         self.level.load_level("world/levels/level1.json")
         self.player = Player(
-            self.level.data["spawn"][0], self.level.data["spawn"][1], 24, 24
+            self.level.data["spawn"][0] * TILE_SIZE, self.level.data["spawn"][1] * TILE_SIZE    , 24, 24
         )
         self.hp_bar = Hp_bar(
             "assets/hp_bar/hp_bar_bg.png", "assets/hp_bar/hp_bar_frame.png", 0, 0

@@ -2,8 +2,8 @@
 
 ## 1. Stabilize the complete game flow
 
-- [ ] Define one central `TILE_SIZE = 24` constant.
-- [ ] Replace every hard-coded 16/24 tile conversion with `TILE_SIZE`.
+- [x] Define one central `TILE_SIZE = 24` constant.
+- [x] Replace every hard-coded 16/24 tile conversion with `TILE_SIZE`.
 - [ ] Use one coordinate convention for player spawns, enemies, checkpoints, texts, torches, camera limits, minimap data, and level exits.
 - [ ] Migrate all level JSON files to the unified coordinate convention.
 - [ ] Replace single-point level exits with rectangular trigger zones.

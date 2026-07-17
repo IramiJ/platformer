@@ -1,7 +1,7 @@
 {
     "id": 3,
     "map": "maps/map2.csv",
-    "spawn": [128, 288],
+    "spawn": [5, 12],
     "max_y": 3000,
     "enemies": {
         "Patroller": [[35, 52], [50, 53]],
@@ -9,5 +9,5 @@
         "Shooter": [[36, 14], [47, 17], [58, 12], [42, 35]]
     },
     "checkpoints": [[86, 39], [21, 58]], 
-    "end_coordinates": [1552, 800]
+    "end_coordinates": [97, 50]
 }

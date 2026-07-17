@@ -1,5 +1,5 @@
 from ui.Font_renderer import Font
-
+from core.settings import TILE_SIZE
 
 class Texts:
     def __init__(self):
@@ -15,7 +15,7 @@ class Texts:
                 display,
                 text,
                 [
-                    self.strings[text][0] * 16 - scroll.render_scroll[0],
-                    self.strings[text][1] * 16 - scroll.render_scroll[1],
+                    self.strings[text][0] * TILE_SIZE - scroll.render_scroll[0],
+                    self.strings[text][1] * TILE_SIZE - scroll.render_scroll[1],
                 ],
             )

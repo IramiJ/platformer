@@ -3,6 +3,7 @@ from world.tilemap import read_csv
 
 from .tilemap import load_torches
 
+from core.settings import TILE_SIZE
 
 class Level_loader:
     def __init__(self):
@@ -23,8 +24,8 @@ class Level_loader:
 
 def update_level(player, level, enemies, torches, texts, win_screen):
     if (
-        player.rect.x >= level.data["end_coordinates"][0]
-        and player.rect.y == level.data["end_coordinates"][1]
+        player.rect.x >= level.data["end_coordinates"][0] * TILE_SIZE
+        and player.rect.y == level.data["end_coordinates"][1] * TILE_SIZE
     ):
         try:
             level.next_level()
@@ -45,15 +46,15 @@ def reload_level(enemies, level, torches, player, texts):
 
 
 def initialize_player(player, level):
-    player.spawn_point[0] = level.data["spawn"][0]
-    player.spawn_point[1] = level.data["spawn"][1]
-    player.rect.x = level.data["spawn"][0]
-    player.rect.y = level.data["spawn"][1]
+    player.spawn_point[0] = level.data["spawn"][0] * TILE_SIZE
+    player.spawn_point[1] = level.data["spawn"][1] * TILE_SIZE
+    player.rect.x = level.data["spawn"][0] * TILE_SIZE
+    player.rect.y = level.data["spawn"][1] * TILE_SIZE
     player.movement = [0, 0]
 
 
 def reach_checkpoint(player, level):
     for checkpoint in level.data["checkpoints"]:
-        if player.rect.collidepoint((checkpoint[0] * 16, checkpoint[1] * 16)):
-            player.spawn_point = [checkpoint[0] * 16, checkpoint[1] * 16]
+        if player.rect.collidepoint((checkpoint[0] * TILE_SIZE, checkpoint[1] * TILE_SIZE)):
+            player.spawn_point = [checkpoint[0] * TILE_SIZE, checkpoint[1] * TILE_SIZE]
             return

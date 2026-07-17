@@ -2,7 +2,7 @@
     "type": "level",
     "id": 1,
     "map": "maps/map1.csv",
-    "spawn": [0, 352],
+    "spawn": [0, 20],
     "max_y": 1200,
     "enemies": {
         "Patroller": [[54, 36]],
@@ -11,7 +11,7 @@
         "Shooter": [[152, 30]]
     },
     "checkpoints": [[92, 40]],
-    "end_coordinates": [3008, 640],
+    "end_coordinates": [188, 40],
     "texts": {
         "press SPACE to jump": [20, 36],
         "press E to dash": [33, 26],
