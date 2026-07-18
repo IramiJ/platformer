@@ -8,11 +8,13 @@ from core.settings import TILE_SIZE
 class Level_loader:
     def __init__(self):
         self.id = 1
+        self.max_y_px = 0
 
     def load_level(self, json_file):
         with open(json_file, "r") as file:
             self.data = json.load(file)
         self.map = read_csv(self.data["map"])
+        self.max_y_px = self.data["max_y"] * TILE_SIZE
 
     def reload_level(self):
         self.load_level(f"world/levels/level{self.id}.json")

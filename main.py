@@ -207,7 +207,7 @@ class Game:
         if self.logic_variables.MOVEMENTS and self.logic_variables.hitstop_timer <= 0:
             self.update_tile_rects()
             self.player.update_movements(
-                self.tile_rects, self.enemies.enemies, self.level.data["max_y"], self.dt
+                self.tile_rects, self.enemies.enemies, self.level.max_y_px, self.dt
             )
             self.enemies.update_enemies(
                 self.player,

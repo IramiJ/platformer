@@ -6,6 +6,7 @@ from entities.animations import load_animation
 from entities.spark import Spark
 from world.collisions import move_collisions
 import math, pygame, random
+from core.settings import TILE_SIZE
 
 
 class Player(entity):

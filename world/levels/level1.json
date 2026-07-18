@@ -3,7 +3,7 @@
     "id": 1,
     "map": "maps/map1.csv",
     "spawn": [0, 20],
-    "max_y": 1200,
+    "max_y": 50,
     "enemies": {
         "Patroller": [[54, 36]],
         "Heavy_Patroller": [],

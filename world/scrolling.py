@@ -1,6 +1,6 @@
 from world.tilemap import last_x
 from random import randint
-
+from core.settings import TILE_SIZE
 
 class Scroll:
     def __init__(self):
@@ -19,7 +19,7 @@ class Scroll:
             self.true_scroll[0] += -self.true_scroll[0] - 308 + last_x(level.map)
         else:
             self.true_scroll[0] += player.rect.x - self.true_scroll[0] - 150
-        if player.rect.y > level.data["max_y"]:
+        if player.rect.y > level.max_y_px:
             self.true_scroll[1] -= self.true_scroll[1] - 204
         else:
             self.true_scroll[1] += player.rect.y - self.true_scroll[1] - 100

@@ -2,7 +2,7 @@
     "id": 3,
     "map": "maps/map2.csv",
     "spawn": [5, 12],
-    "max_y": 3000,
+    "max_y": 200,
     "enemies": {
         "Patroller": [[35, 52], [50, 53]],
         "Chaser": [[43, 61]],

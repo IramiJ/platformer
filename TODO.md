@@ -31,7 +31,7 @@
 
 ## 3. Fix broken and fragile modules
 
-- [ ] Import `Patroller` directly in `heavy_patroller.py` and remove the circular import.
+- [x] Import `Patroller` directly in `heavy_patroller.py` and remove the circular import.
 - [x] Remove or repair the broken `player_movements.py` module.
 - [x] Remove or convert `ui/test.py` into an automated test.
 - [x] Move the interactive tree prototype from `tests/` to `experiments/` or remove it.
