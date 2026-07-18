@@ -1,6 +1,6 @@
 from world.tilemap import last_x
 from random import randint
-from core.settings import TILE_SIZE
+from core.settings import TILE_SIZE, Settings
 
 class Scroll:
     def __init__(self):
@@ -13,16 +13,16 @@ class Scroll:
         ]
 
     def player_scrolling(self, player, level):
-        if player.rect.x < 150:
-            self.true_scroll[0] -= self.true_scroll[0]
-        elif player.rect.x + 16 > last_x(level.map) - 160:
-            self.true_scroll[0] += -self.true_scroll[0] - 308 + last_x(level.map)
+        if player.rect.x < (Settings.window_size[0]/2 - TILE_SIZE)/2:
+            self.true_scroll[0] = 0
+        elif player.rect.x + 16 > last_x(level.map) - Settings.window_size[0]/2:
+            self.true_scroll[0] = -(Settings.window_size[0] - TILE_SIZE/2) + last_x(level.map)
         else:
-            self.true_scroll[0] += player.rect.x - self.true_scroll[0] - 150
+            self.true_scroll[0] = player.rect.x - (Settings.window_size[0]/2 - TILE_SIZE)/2
         if player.rect.y > level.max_y_px:
-            self.true_scroll[1] -= self.true_scroll[1] - 204
+            self.true_scroll[1] = 0
         else:
-            self.true_scroll[1] += player.rect.y - self.true_scroll[1] - 100
+            self.true_scroll[1] = player.rect.y - Settings.window_size[1]/5
         self.render_scroll = [
             a + b for a, b in zip(self.true_scroll, self.shake_offset)
         ]
