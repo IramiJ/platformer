@@ -1,4 +1,6 @@
-def collision_test(rect, tiles):
+import pygame
+
+def collision_test(rect: pygame.Rect, tiles: list[pygame.Rect]) -> list[pygame.Rect]:
     hit_list = []
     for tile in tiles:
         if rect.colliderect(tile):
@@ -6,14 +8,14 @@ def collision_test(rect, tiles):
     return hit_list
 
 
-def move_collisions(rect, movement, tiles, dt):
+def move_collisions(rect: pygame.FRect, movement: list[int], tiles: list[pygame.Rect], dt: int | float) -> tuple[pygame.Rect, dict[str, bool]]:
     collision_types = {"top": False, "bottom": False, "left": False, "right": False}
     x_movement(rect, movement, dt, tiles, collision_types)
     y_movement(rect, movement, dt, tiles, collision_types)
     return rect, collision_types
 
 
-def x_movement(rect, movement, dt, tiles, collision_types):
+def x_movement(rect: pygame.Rect, movement: list[int], dt: int | float, tiles, collision_types: dict[str, bool]) -> None:
     rect.x += movement[0] * dt
     hit_list = collision_test(rect, tiles)
     for tile in hit_list:
@@ -25,7 +27,7 @@ def x_movement(rect, movement, dt, tiles, collision_types):
             collision_types["left"] = True
 
 
-def y_movement(rect, movement, dt, tiles, collision_types):
+def y_movement(rect: pygame.Rect, movement: list[int], dt: int | float, tiles: list[pygame.Rect], collision_types: dict[str, bool]) -> None:
     rect.y += movement[1] * dt
     hit_list = collision_test(rect, tiles)
     for tile in hit_list:

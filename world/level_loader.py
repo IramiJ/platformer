@@ -1,61 +1,73 @@
+from __future__ import annotations
+
 import json
+from typing import TYPE_CHECKING
+
 from world.tilemap import read_csv
-
-from .tilemap import load_torches
-
 from core.settings import TILE_SIZE
+from .coordinates import tile_position_to_pixel, tile_to_pixel
+
+if TYPE_CHECKING:
+    from entities.enemies.enemies import Enemies
+    from entities.player.player import Player
+    from world.texts import Texts
+
 
 class Level_loader:
+
+    """Load Level configuartion and tilemap data from disk.
+    
+    Coordinates in level JSON files are stored in tile-space. 
+    Derived runtime values such as 'max_y_px' are converted to pixel space when the level is loaded
+    
+    """
+
     def __init__(self):
         self.id = 1
         self.max_y_px = 0
 
-    def load_level(self, json_file):
+    def load_level(self, json_file) -> None:
         with open(json_file, "r") as file:
             self.data = json.load(file)
         self.map = read_csv(self.data["map"])
-        self.max_y_px = self.data["max_y"] * TILE_SIZE
+        self.max_y_px = tile_to_pixel(self.data["max_y"])
 
-    def reload_level(self):
+    def reload_level(self) -> None:
         self.load_level(f"world/levels/level{self.id}.json")
 
-    def next_level(self):
+    def next_level(self) -> None:
         self.id += 1
         self.load_level(f"world/levels/level{self.id}.json")
 
 
-def update_level(player, level, enemies, torches, texts, win_screen):
+def update_level(player: Player, level: Level_loader, enemies: Enemies, texts: Texts, win_screen) -> None:
     if (
-        player.rect.x >= level.data["end_coordinates"][0] * TILE_SIZE
-        and player.rect.y == level.data["end_coordinates"][1] * TILE_SIZE
+        player.rect.x >= tile_to_pixel(level.data["end_coordinates"][0])
+        and player.rect.y == tile_to_pixel(level.data["end_coordinates"][1])
     ):
         try:
             level.next_level()
         except:
             win_screen.displaying = True
         enemies.load_enemies(level)
-        load_torches(level.map, torches)
         texts.load_texts(level.data["texts"])
         initialize_player(player, level)
 
 
-def reload_level(enemies, level, torches, player, texts):
+def reload_level(enemies: Enemies, level: Level_loader, player: Player, texts: Texts) -> None:
     level.reload_level()
     enemies.load_enemies(level)
     texts.load_texts(level.data["texts"])
-    load_torches(level.map, torches)
     initialize_player(player, level)
 
 
-def initialize_player(player, level):
-    player.spawn_point[0] = level.data["spawn"][0] * TILE_SIZE
-    player.spawn_point[1] = level.data["spawn"][1] * TILE_SIZE
-    player.rect.x = level.data["spawn"][0] * TILE_SIZE
-    player.rect.y = level.data["spawn"][1] * TILE_SIZE
+def initialize_player(player: Player, level: Level_loader) -> None:
+    player.spawn_point = tile_position_to_pixel(level.data["spawn"])
+    player.rect.x, player.rect.y = tile_position_to_pixel(level.data["spawn"])
     player.movement = [0, 0]
 
 
-def reach_checkpoint(player, level):
+def reach_checkpoint(player: Player, level: Level_loader) -> None:
     for checkpoint in level.data["checkpoints"]:
         if player.rect.collidepoint((checkpoint[0] * TILE_SIZE, checkpoint[1] * TILE_SIZE)):
             player.spawn_point = [checkpoint[0] * TILE_SIZE, checkpoint[1] * TILE_SIZE]

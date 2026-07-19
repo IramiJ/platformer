@@ -8,4 +8,4 @@ def pixel_to_tile(value: int | float) -> int:
 
 def tile_position_to_pixel(position: list[int]) -> list[int]:
     x, y = position
-    return tile_position_to_pixel(x), tile_position_to_pixel(y)
+    return tile_to_pixel(x), tile_to_pixel(y)

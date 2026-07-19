@@ -1,3 +1,11 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from world.level_loader import Level_loader
+    from world.scrolling import Scroll
+
 from entities.entity import entity
 from entities.player.tail import Tail
 from entities.player.sword import Sword
@@ -6,7 +14,6 @@ from entities.animations import load_animation
 from entities.spark import Spark
 from world.collisions import move_collisions
 import math, pygame, random
-from core.settings import TILE_SIZE
 
 
 class Player(entity):
@@ -54,7 +61,7 @@ class Player(entity):
         self.respawn = False
         self.histstop_timer = 0
 
-    def update_movements(self, tile_rects, enemy_list, max_y, dt):
+    def update_movements(self, tile_rects: list[pygame.Rect], enemy_list, max_y: int, dt: float) -> None:
         self.handle_movements(tile_rects, dt)
         self.bow.move_arrows(enemy_list, dt)
         self.die_through_falling(max_y)
@@ -63,13 +70,13 @@ class Player(entity):
         self.apply_buffs()
         self.manage_attack_cd(dt)
 
-    def run_render_logic(self, display, scroll, dt):
+    def run_render_logic(self, display: pygame.Surface, scroll: Scroll, dt: float) -> None:
         self.update_frames(dt)
         self.draw(display, scroll, dt)
         self.draw_dash_cd(display, scroll)
         # self.draw_tail_points(display, scroll)
 
-    def die_through_falling(self, max_y):
+    def die_through_falling(self, max_y: int) -> None:
         if self.rect.y > max_y:
             self.set_respawn_location()
 
@@ -99,14 +106,14 @@ class Player(entity):
             else:
                 self.buffs.pop(buff)
 
-    def update_frames(self, dt):
+    def update_frames(self, dt: float):
         self.frame += dt
         if self.frame >= len(self.animation_database[self.action]):
             self.frame = 0
         self.img_id = self.animation_database[self.action][math.floor(self.frame)]
         self.img = self.animation_frames[self.img_id]
 
-    def draw(self, display, scroll, dt):
+    def draw(self, display: pygame.Surface, scroll: Scroll, dt: float) -> None:
         """
         Hitbox for debugging purposes
         pygame.draw.rect(display, (255,0,0), pygame.Rect(self.rect.left - scroll.render_scroll[0], self.rect.top - scroll.render_scroll[1], 16, 16))
@@ -135,19 +142,19 @@ class Player(entity):
             arrow.render(display, scroll.render_scroll)
         self.sword.particles = [p for p in self.sword.particles if p.duration > 0]
 
-    def dash(self):
+    def dash(self) -> None:
         if not self.dashing and self.dash_cooldown <= 0:
             self.dashing = True
             self.dash_timer = self.dash_duration
             self.dash_cooldown = self.max_dash_cd
 
-    def switch_mode(self):
+    def switch_mode(self) -> None:
         if self.mode == "melee":
             self.mode = "ranged"
         elif self.mode == "ranged" and not self.bow.reloading:
             self.mode = "melee"
 
-    def update_mode_properties(self):
+    def update_mode_properties(self) -> None:
         if self.mode == "melee":
             self.velocity = 3
             self.dash_duration = 20
@@ -157,7 +164,7 @@ class Player(entity):
             self.dash_duration = 10
             self.dmg = 1
 
-    def attack(self, enemy, logic_variables, sparks, dt):
+    def attack(self, enemy, logic_variables, sparks: list[Spark], dt: float) -> None:
         if self.dmg_cd <= 0 and self.dashing and self.mode == "melee":
             if self.rect.colliderect(enemy.rect):
                 self.attack_on_hit(enemy, logic_variables, sparks)
@@ -178,7 +185,7 @@ class Player(entity):
             )
         )
 
-    def heal_on_stun(self, enemy, sparks):
+    def heal_on_stun(self, enemy, sparks: list[Spark]) -> None:
         if enemy.stunned:
             sparks.append(
                 Spark(
@@ -193,39 +200,39 @@ class Player(entity):
         else:
             self.heal(1)
 
-    def match_damage_cooldown(self):
+    def match_damage_cooldown(self) -> None:
         self.dmg_cd = self.dash_cooldown
 
-    def manage_attack_cd(self, dt):
+    def manage_attack_cd(self, dt) -> None:
         if self.dmg_cd > 0:
             self.dmg_cd -= dt
 
-    def take_dmg(self, scroll):
+    def take_dmg(self, scroll) -> None:
         self.hp -= 1
         scroll.shake_timer = 10
         scroll.shake_strength = 3
 
-    def set_respawn_location(self):
+    def set_respawn_location(self) -> None:
         self.rect.x = self.spawn_point[0]
         self.rect.y = self.spawn_point[1]
 
-    def revive(self, level):
+    def revive(self, level: Level_loader) -> None:
         if self.respawn:
             self.hp = self.max_hp
             level.id = 1
             self.set_respawn_location()
             self.respawn = False
 
-    def activate_hitstop(self, logic_variables):
+    def activate_hitstop(self, logic_variables) -> None:
         logic_variables.hitstop_timer = 3
 
-    def heal(self, amount):
+    def heal(self, amount: int) -> None:
         if self.hp + amount < self.max_hp:
             self.hp += amount
         else:
             self.hp = self.max_hp
 
-    def handle_movements(self, tile_rects, dt):
+    def handle_movements(self, tile_rects: list[pygame.Rect], dt: float) -> None:
         self.movement = [0, 0]
         if self.dashing:
             self.handle_dash(dt)
@@ -251,26 +258,26 @@ class Player(entity):
         self.tail.update_points()
         self.update_tail_points()
         """
-    def update_tail_points(self):
+    def update_tail_points(self) -> None:
         for i in range(len(self.tail.points)):
             if self.tail.points[i].show:
                 self.tail.points[i].dur -= i
 
-    def draw_tail_points(self, display, scroll):
+    def draw_tail_points(self, display: pygame.Surface, scroll: Scroll) -> None:
         for i in range(len(self.tail.points)):
             if self.tail.points[i].show:
                 self.tail.points[i].draw(display, scroll.render_scroll)
 
-    def set_dash(self, dt):
+    def set_dash(self, dt: float) -> None:
         if self.dash_cooldown > 0:
             self.dash_cooldown -= dt
 
-    def set_y_momentum(self, dt):
+    def set_y_momentum(self, dt: float) -> None:
         self.y_momentum += 0.4 * dt
         if self.y_momentum > 7:
             self.y_momentum = 7
 
-    def determine_action(self):
+    def determine_action(self) -> None:
         if self.movement[0] > 0:
             self.change_action("run")
             self.flip = False
@@ -280,7 +287,7 @@ class Player(entity):
         if self.movement[0] == 0:
             self.change_action("idle")
 
-    def move_right(self):
+    def move_right(self) -> None:
         if self.moving_right:
             self.movement[0] += self.velocity
             for point in self.tail.points:
@@ -288,7 +295,7 @@ class Player(entity):
             self.tail.loc[0] = self.rect.x - 1 + self.movement[0]
             self.tail.dir = "r"
 
-    def move_left(self):
+    def move_left(self) -> None:
         if self.moving_left:
             self.movement[0] -= self.velocity
             self.tail.loc[0] = self.rect.x + 17 + self.movement[0]
@@ -296,14 +303,14 @@ class Player(entity):
                 point.show = True
             self.tail.dir = "l"
 
-    def handle_dash(self, dt):
+    def handle_dash(self, dt: float) -> None:
         self.y_momentum = 0
         self.movement[0] = self.dash_speed * (-1 if self.flip else 1)
         self.dash_timer -= 1 * dt
         if self.dash_timer <= 0:
             self.dashing = False
 
-    def handle_y_collisions(self, collisions, dt):
+    def handle_y_collisions(self, collisions: dict[str, bool], dt: float) -> None:
         if collisions["bottom"]:
             self.y_momentum = 0
             self.air_timer = 0
@@ -313,7 +320,7 @@ class Player(entity):
         if collisions["top"]:
             self.y_momentum = 0
 
-    def draw_dash_cd(self, display, scroll):
+    def draw_dash_cd(self, display: pygame.Surface, scroll: Scroll) -> None:
         if self.dash_cooldown > 0:
             self.cd_obj.frame = self.max_dash_cd - (self.dash_cooldown)
             self.cd_obj.img_id = self.cd_obj.animation_database[self.cd_obj.action][

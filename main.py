@@ -145,7 +145,7 @@ class Game:
             if self.player.respawn:
                 self.player.revive(self.level)
                 reload_level(
-                    self.enemies, self.level, self.torches, self.player, self.texts
+                    self.enemies, self.level, self.player, self.texts
                 )
 
     def move_bullets(self):
@@ -232,7 +232,6 @@ class Game:
             self.player,
             self.level,
             self.enemies,
-            self.torches,
             self.texts,
             self.win_screen,
         )

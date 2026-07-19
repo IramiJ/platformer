@@ -1,10 +1,20 @@
-import os, csv, pygame, math
+from __future__ import annotations
+
+import csv
+import math
+import os
+import pygame
+
 from .torch import Torch
 from .chandelier import Chandelier
 from core.settings import TILE_SIZE
 
+from typing import TYPE_CHECKING
 
-def load_map(path):
+if TYPE_CHECKING: 
+    from world.scrolling import Scroll
+
+def load_map(path: str) -> list[list[str]]:
     f = open(path + ".txt", "r")
     data = f.read()
     f.close()
@@ -15,7 +25,7 @@ def load_map(path):
     return tilemap
 
 
-def read_csv(filename):
+def read_csv(filename: str) -> list[list[str]]:
     tilemap = []
     with open(os.path.join(filename)) as data:
         data = csv.reader(data, delimiter=",")
@@ -24,11 +34,11 @@ def read_csv(filename):
     return tilemap
 
 
-def last_x(tilemap):
+def last_x(tilemap: list[list[str]]) -> int:
     return len(tilemap[0]) * TILE_SIZE
 
 
-def load_tiles(path):
+def load_tiles(path: str) -> dict[str, pygame.Surface]:
     tiles_by_id = {}
     files = os.listdir(path)
     for file in files:
@@ -38,7 +48,7 @@ def load_tiles(path):
     return tiles_by_id
 
 
-def load_torches(tilemap, torch_list):
+def load_torches(tilemap: list[list[str]], torch_list) -> None:
     torch_types = {"10": Torch, "12": Chandelier}
     y = 0
     torch_list.clear()
@@ -56,7 +66,7 @@ SKIP_TILES = {"-1"}
 NON_COLLISION_TILES = {"-1", "8", "19", "29", "39", "47", "48"}
 
 
-def display_map(display: pygame.Surface, scroll, tilemap, tile_dict):
+def display_map(display: pygame.Surface, scroll: Scroll, tilemap: list[list[str]], tile_dict: dict[str, pygame.Surface]) -> None:
 
     scroll_x, scroll_y = scroll.render_scroll
     screen_w, screen_h = display.get_size()
@@ -80,7 +90,7 @@ def display_map(display: pygame.Surface, scroll, tilemap, tile_dict):
             display.blit(tile_dict[tile], (world_x - scroll_x, world_y - scroll_y))
 
 
-def update_tile_rects(display, scroll, tile_rects, tilemap):
+def update_tile_rects(display: pygame.Surface, scroll: Scroll, tile_rects: list[pygame.Rect], tilemap: list[list[str]]) -> None:
     scroll_x, scroll_y = scroll.render_scroll
     screen_w, screen_h = display.get_size()
 
