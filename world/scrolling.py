@@ -17,8 +17,8 @@ class Scroll:
     def player_scrolling(self, player: Player, level: Level_loader) -> None:
         if player.rect.x < (Settings.window_size[0]/2 - TILE_SIZE)/2:
             self.true_scroll[0] = 0
-        elif player.rect.x + 16 > last_x(level.map) - Settings.window_size[0]/2:
-            self.true_scroll[0] = -(Settings.window_size[0] - TILE_SIZE/2) + last_x(level.map)
+        elif player.rect.x - Settings.window_size[0]/4 + TILE_SIZE > last_x(level.map) - Settings.window_size[0]/2:
+            self.true_scroll[0] =  last_x(level.map) - Settings.window_size[0]/2
         else:
             self.true_scroll[0] = player.rect.x - (Settings.window_size[0]/2 - TILE_SIZE)/2
         if player.rect.y > level.max_y_px:
