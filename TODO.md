@@ -4,8 +4,8 @@
 
 - [x] Define one central `TILE_SIZE = 24` constant.
 - [x] Replace every hard-coded 16/24 tile conversion with `TILE_SIZE`.
-- [ ] Use one coordinate convention for player spawns, enemies, checkpoints, texts, torches, camera limits, minimap data, and level exits.
-- [ ] Migrate all level JSON files to the unified coordinate convention.
+- [x] Use one coordinate convention for player spawns, enemies, checkpoints, texts, torches, camera limits, minimap data, and level exits.
+- [x] Migrate all level JSON files to the unified coordinate convention.
 - [ ] Replace single-point level exits with rectangular trigger zones.
 - [ ] Add a validated level schema with required fields and useful error messages.
 - [ ] Add the missing `texts` field to level 3.
@@ -65,8 +65,8 @@
 - [x] Remove commented-out implementations and dead code.
 - [ ] Remove unused systems or integrate them completely.
 - [x] Remove or archive `*_old` assets, old maps, sketches, and unused editor-session files.
-- [ ] Add type hints to core data structures and public methods.
-- [ ] Add short docstrings to the main game, level, entity, collision, and rendering systems.
+- [#] Add type hints to core data structures and public methods.
+- [#] Add short docstrings to the main game, level, entity, collision, and rendering systems.
 - [ ] Normalize Git author information and add a `.mailmap` if needed.
 
 ## 6. Measure and improve performance

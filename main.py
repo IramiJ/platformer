@@ -1,4 +1,5 @@
-import pygame, time
+import pygame
+import time
 from ui.death_screen import Death_screen
 
 pygame.init()
@@ -27,6 +28,7 @@ from world.texts import Texts
 from ui.minimap import Minimap
 from world.foliage.leafSystem import LeafSystem
 from world.foliage.tree import Tree
+from world.coordinates import tile_to_pixel
 
 
 class Game:
@@ -43,7 +45,7 @@ class Game:
         self.level = Level_loader()
         self.level.load_level("world/levels/level1.json")
         self.player = Player(
-            self.level.data["spawn"][0] * TILE_SIZE, self.level.data["spawn"][1] * TILE_SIZE    , 24, 24
+            tile_to_pixel(self.level.data["spawn"][0]), tile_to_pixel(self.level.data["spawn"][1]), 24, 24
         )
         self.hp_bar = Hp_bar(
             "assets/hp_bar/hp_bar_bg.png", "assets/hp_bar/hp_bar_frame.png", 0, 0

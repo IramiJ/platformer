@@ -4,6 +4,7 @@ from entities.enemies.shooter import Shooter
 from .heavy_patroller import Heavy_Patroller
 import pygame
 from core.settings import TILE_SIZE
+from world.coordinates import tile_to_pixel
 
 
 class Enemies:
@@ -52,5 +53,5 @@ class Enemies:
         for enemy_name, spawns in enemies.items():
             enemy_class = self.enemy_types.get(enemy_name)
             for x, y in spawns:
-                self.enemies.append(enemy_class(x * TILE_SIZE, y * TILE_SIZE, 16, 16))
+                self.enemies.append(enemy_class(tile_to_pixel(x), tile_to_pixel(y), 16, 16))
         self.max_enemy_amount = len(self.enemies)

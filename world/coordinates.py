@@ -6,6 +6,6 @@ def tile_to_pixel(value: int) -> int:
 def pixel_to_tile(value: int | float) -> int:
     return int(value // TILE_SIZE)
 
-def tile_position_to_pixel(position: list[int]) -> list[int]:
+def tile_position_to_pixel(position: list[int]) -> tuple[int, int]:
     x, y = position
     return tile_to_pixel(x), tile_to_pixel(y)
