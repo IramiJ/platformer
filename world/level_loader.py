@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import pygame
 from typing import TYPE_CHECKING
 
 from world.tilemap import read_csv
@@ -25,12 +26,18 @@ class Level_loader:
     def __init__(self):
         self.id = 1
         self.max_y_px = 0
+        self.end_rect = None
 
-    def load_level(self, json_file) -> None:
+    def load_level(self, json_file: str) -> None:
         with open(json_file, "r") as file:
             self.data = json.load(file)
         self.map = read_csv(self.data["map"])
         self.max_y_px = tile_to_pixel(self.data["max_y"])
+        self.end_rect = pygame.Rect(
+            *tile_position_to_pixel(self.data["end_coordinates"]),
+            TILE_SIZE,
+            TILE_SIZE,
+        )
 
     def reload_level(self) -> None:
         self.load_level(f"world/levels/level{self.id}.json")
@@ -41,10 +48,7 @@ class Level_loader:
 
 
 def update_level(player: Player, level: Level_loader, enemies: Enemies, texts: Texts, win_screen) -> None:
-    if (
-        player.rect.x >= tile_to_pixel(level.data["end_coordinates"][0])
-        and player.rect.y == tile_to_pixel(level.data["end_coordinates"][1])
-    ):
+    if player.rect.colliderect(level.end_rect):
         try:
             level.next_level()
         except:
