@@ -91,17 +91,10 @@ def display_map(display: pygame.Surface, scroll: Scroll, tilemap: list[list[str]
 
 
 def update_tile_rects(display: pygame.Surface, scroll: Scroll, tile_rects: list[pygame.Rect], tilemap: list[list[str]]) -> None:
-    scroll_x, scroll_y = scroll.render_scroll
-    screen_w, screen_h = display.get_size()
 
-    x0 = max(0, int(scroll_x // TILE_SIZE) - 1)
-    y0 = max(0, int(scroll_y // TILE_SIZE) - 1)
-    x1 = min(len(tilemap[0]), int(math.ceil((scroll_x + screen_w) / TILE_SIZE)) + 1)
-    y1 = min(len(tilemap), int(math.ceil((scroll_y + screen_h) / TILE_SIZE)) + 1)
-
-    for y in range(y0, y1):
+    for y in range(0, len(tilemap)):
         row = tilemap[y]
-        for x in range(x0, x1):
+        for x in range(0, len(row)):
             tile = row[x]
             if tile in NON_COLLISION_TILES:
                 continue

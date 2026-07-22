@@ -18,15 +18,25 @@ class Enemies:
         self.max_enemy_amount = 0
         self.current_enemy_amount = 0
         self.enemies = []
+        self.active_range_x = TILE_SIZE * 20
+        self.active_range_y = TILE_SIZE * 15
+
+    def enemy_is_active(self, enemy, player) -> bool:
+        return (
+            abs(enemy.rect.centerx - player.rect.centerx) <= self.active_range_x
+            and abs(enemy.rect.centery - player.rect.centery) <= self.active_range_y
+        )
 
     def update_enemies(
         self, player, bullet_list, scroll, tiles, logic_variables, sparks, dt
     ):
         for enemy in self.enemies:
+            if not self.enemy_is_active(enemy, player):
+                continue
             if isinstance(enemy, Chaser):
                 enemy.move(player, tiles, dt)
             elif not isinstance(enemy, Shooter):
-                enemy.move(dt)
+                enemy.move(dt, tiles)
             if isinstance(enemy, Shooter):
                 enemy.attack(player, bullet_list, scroll)
             else:

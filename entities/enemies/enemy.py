@@ -1,5 +1,5 @@
 from entities.entity import entity
-from world.collisions import collision_test
+from world.collisions import collision_test, move_collisions
 import pygame, math
 
 
@@ -11,6 +11,7 @@ class Enemy(entity):
         self.velocity = 1
         self.alive = True
         self.dmg_timer = 0
+        self.y_momentum = 0
 
     def update_frames(self, dt):
         self.frame += dt
@@ -50,10 +51,26 @@ class Enemy(entity):
         if self.current_hp <= 0:
             self.die()
 
-    def collision(self, tiles):
+    def handle_tile_collisions(self, tiles):
         hit_list = collision_test(self.rect, tiles)
         for tile in hit_list:
+            if self.movement[1] > 0:
+                self.rect.bottom = tile.top
+                self.y_momentum = 0
             if self.movement[0] > 0:
                 self.rect.right = tile.left
             elif self.movement[0] < 0:
                 self.rect.left = tile.right
+
+    def collision(self, tiles) -> None:
+        self.handle_tile_collisions(tiles)
+
+    def move_with_tile_collisions(self, dt: float, tiles: list[pygame.Rect]) -> None:
+        self.rect, collisions = move_collisions(self.rect, self.movement, tiles, dt)
+        if collisions["bottom"] or collisions["top"]:
+            self.y_momentum = 0
+    
+    def set_y_momentum(self, dt: float) -> None:
+        self.y_momentum += 0.4 * dt
+        if self.y_momentum > 7:
+            self.y_momentum = 7

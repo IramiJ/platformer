@@ -8,7 +8,7 @@ class Heavy_Patroller(Patroller):
         self.current_hp = 6
         self.true_velocity = 1
 
-    def move(self, dt):
+    def move(self, dt, tiles=None):
         self.movement = [0, 0]
         if self.direction == "r":
             self.move_right()

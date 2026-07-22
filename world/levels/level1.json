@@ -5,7 +5,7 @@
     "spawn": [0, 14],
     "max_y": 28,
     "enemies": {
-        "Patroller": [[51, 8]],
+        "Patroller": [[51,8]],
         "Heavy_Patroller": [],
         "Chaser": [],
         "Shooter": [[70, 13]]
