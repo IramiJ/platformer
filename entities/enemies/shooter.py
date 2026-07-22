@@ -38,6 +38,12 @@ class Shooter(Enemy):
         self.draw(display, scroll)
         self.update_hp_bar(scroll)
         self.hp_bar.draw(display, self.max_hp, self.current_hp)
+    
+    def move(self, dt:float, tiles: list[list[str]]) -> None:
+        self.movement = [0, 0]
+        self.set_y_momentum(dt)
+        self.movement[1] += self.y_momentum
+        self.move_with_tile_collisions(dt, tiles)
 
     def update_hp_bar(self, scroll):
         self.hp_bar.x = self.rect.x - scroll[0]

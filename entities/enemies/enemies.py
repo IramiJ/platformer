@@ -35,7 +35,7 @@ class Enemies:
                 continue
             if isinstance(enemy, Chaser):
                 enemy.move(player, tiles, dt)
-            elif not isinstance(enemy, Shooter):
+            else:
                 enemy.move(dt, tiles)
             if isinstance(enemy, Shooter):
                 enemy.attack(player, bullet_list, scroll)
