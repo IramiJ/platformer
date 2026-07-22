@@ -28,8 +28,8 @@ from world.texts import Texts
 from ui.minimap import Minimap
 from world.foliage.leafSystem import LeafSystem
 from world.foliage.tree import Tree
-from world.coordinates import tile_to_pixel
-
+from world.coordinates import tile_position_to_pixel, tile_to_pixel
+from world.tilemap import last_x
 
 class Game:
     def __init__(self):
@@ -74,7 +74,7 @@ class Game:
         self.keyboard_event_handler = Keyboard_event_handler()
         self.buff_renderer = Buff_renderer(self.small_font, self.shop.data)
         self.leafSystem = LeafSystem()
-        self.tree = Tree([220, 510])
+        self.tree = Tree([240, 320])
 
     def run(self):
         while True:
