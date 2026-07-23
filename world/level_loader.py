@@ -46,6 +46,9 @@ class Level_loader:
         self.id += 1
         self.load_level(f"world/levels/level{self.id}.json")
 
+    def validate_level(self):
+        pass
+
 
 def update_level(player: Player, level: Level_loader, enemies: Enemies, texts: Texts, win_screen) -> None:
     if player.rect.colliderect(level.end_rect):

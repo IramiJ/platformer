@@ -6,7 +6,7 @@
 - [x] Replace every hard-coded 16/24 tile conversion with `TILE_SIZE`.
 - [x] Use one coordinate convention for player spawns, enemies, checkpoints, texts, torches, camera limits, minimap data, and level exits.
 - [x] Migrate all level JSON files to the unified coordinate convention.
-- [ ] Replace single-point level exits with rectangular trigger zones.
+- [x] Replace single-point level exits with rectangular trigger zones.
 - [ ] Add a validated level schema with required fields and useful error messages.
 - [ ] Add the missing `texts` field to level 3.
 - [ ] Make all level files use the same fields and data types.
