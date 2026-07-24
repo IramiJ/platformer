@@ -47,7 +47,17 @@ class Level_loader:
         self.load_level(f"world/levels/level{self.id}.json")
 
     def validate_level(self):
-        pass
+        required_fields = ["type",
+                            "id",
+                            "map",
+                            "spawn",
+                            "max_y",
+                            "enemies"
+                            "checkpoints",
+                            "end_coordinates",
+                            "texts"]
+        for field in self.data:
+            pass
 
 
 def update_level(player: Player, level: Level_loader, enemies: Enemies, texts: Texts, win_screen) -> None:
