@@ -1,4 +1,6 @@
-import pygame, sys, json
+import pygame
+import sys
+import json
 from entities.player.player import Player
 from ui.shopping import Shop
 from ui.pause_screen import Pause_screen

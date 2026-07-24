@@ -3,7 +3,8 @@ from entities.enemies.shooter_bullet import Shooter_Bullet
 from entities.animations import load_animation
 from entities.hp_bar import Hp_bar
 from core.settings import Settings
-import math, pygame
+import math
+import pygame
 
 
 class Shooter(Enemy):

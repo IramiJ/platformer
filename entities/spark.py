@@ -1,4 +1,5 @@
-import math, pygame
+import math
+import pygame
 
 
 class Spark:

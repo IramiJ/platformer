@@ -60,7 +60,7 @@
 
 - [ ] Rename classes, files, methods, and constants consistently according to PEP 8.
 - [x] Replace wildcard imports with explicit imports.
-- [ ] Split combined imports into individual lines.
+- [x] Split combined imports into individual lines.
 - [x] Stop shadowing built-ins such as `map` and `dict`.
 - [x] Remove commented-out implementations and dead code.
 - [ ] Remove unused systems or integrate them completely.

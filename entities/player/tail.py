@@ -1,6 +1,7 @@
 from entities.entity import simple_entity
 from core.settings import Settings
-import math, random
+import math
+import random
 
 
 class Tail:

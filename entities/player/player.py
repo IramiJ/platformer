@@ -13,7 +13,9 @@ from entities.player.bow import Bow
 from entities.animations import load_animation
 from entities.spark import Spark
 from world.collisions import move_collisions
-import math, pygame, random
+import math
+import pygame
+import random
 
 
 class Player(entity):

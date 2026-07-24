@@ -1,4 +1,6 @@
-import pygame, random, math
+import pygame
+import random
+import math
 
 
 class Leaf:

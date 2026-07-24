@@ -1,4 +1,6 @@
-import pygame, os, json
+import pygame
+import os
+import json
 from ui.Font_renderer import Font
 from entities.animations import draw_constants
 

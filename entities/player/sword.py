@@ -1,6 +1,8 @@
 from entities.entity import entity
 from entities.animations import load_animation
-import random, pygame, math
+import random
+import pygame
+import math
 from entities.particles import Particle
 
 

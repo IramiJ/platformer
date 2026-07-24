@@ -1,4 +1,5 @@
-import random, pygame
+import random
+import pygame
 from entities.particles import simple_particle
 
 

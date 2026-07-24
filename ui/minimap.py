@@ -1,4 +1,5 @@
-import pygame, math
+import pygame
+import math
 from core.settings import TILE_SIZE
 from world.coordinates import pixel_to_tile
 

@@ -1,4 +1,5 @@
-import pygame, math
+import pygame
+import math
 from entities.entity import simple_entity, entity
 from entities.animations import load_animation
 
