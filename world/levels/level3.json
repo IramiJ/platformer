@@ -1,6 +1,6 @@
 {
     "id": 3,
-    "map": "maps/map2.csv",
+    "map": "maps/map3.csv",
     "spawn": [5, 12],
     "max_y": 200,
     "enemies": {
@@ -9,5 +9,6 @@
         "Shooter": [[36, 14], [47, 17], [58, 12], [42, 35]]
     },
     "checkpoints": [[86, 39], [21, 58]], 
-    "end_coordinates": [97, 50]
+    "end_coordinates": [97, 50],
+    "texts": {}
 }
