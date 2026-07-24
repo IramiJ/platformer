@@ -7,9 +7,9 @@
 - [x] Use one coordinate convention for player spawns, enemies, checkpoints, texts, torches, camera limits, minimap data, and level exits.
 - [x] Migrate all level JSON files to the unified coordinate convention.
 - [x] Replace single-point level exits with rectangular trigger zones.
-- [ ] Add a validated level schema with required fields and useful error messages.
+- [x] Add a validated level schema with required fields and useful error messages.
 - [ ] Add the missing `texts` field to level 3.
-- [ ] Make all level files use the same fields and data types.
+- [x] Make all level files use the same fields and data types.
 - [ ] Replace the bare `except` in the level transition logic with specific exception handling.
 - [ ] Clamp minimap reads to the map boundaries and render out-of-bounds cells as empty tiles.
 - [ ] Reset bullets, arrows, sparks, movement, momentum, cooldowns, and temporary state on level reload and transition.
