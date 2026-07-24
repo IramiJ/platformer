@@ -1,4 +1,5 @@
 from __future__ import annotations
+from pathlib import Path
 
 import json
 import pygame
@@ -13,6 +14,90 @@ if TYPE_CHECKING:
     from entities.player.player import Player
     from world.texts import Texts
 
+class LevelValidationError(ValueError):
+    pass
+
+def is_position(value) -> bool:
+    return (
+        isinstance(value, list)
+        and len(value) == 2
+        and all(type(number) is int for number in value)
+    )
+
+def validate_level(data: dict, filename: str) -> None:
+        errors = []
+        
+        required_fields = {
+            "id": int,
+            "map": str,
+            "spawn": list,
+            "max_y": int,
+            "enemies": dict,
+            "checkpoints": list,
+            "end_coordinates": list,
+            "texts": dict
+        }
+
+        for field, expected_type in required_fields.items():
+            if field not in data:
+                errors.append(f"Required field '{field} is missing")
+            elif not isinstance(data[field], expected_type):
+                errors.append(
+                    f"'{field}' must be {expected_type.__name__}, but type ist {type(data[field]).__name__}"
+                )
+        if "spawn" in data and not is_position(data["spawn"]):
+            errors.append("'spawn' must be a position like [1, 1]")
+
+        if "end_coordinates" in data and not is_position(data["end_coordinates"]):
+            errors.append("'end_coordinates' must be a position like [1, 1]")
+
+        if "checkpoints" in data and isinstance(data["checkpoints"], list):
+            for index, checkpoint in enumerate(data["checkpoints"]):
+                if not is_position(checkpoint):
+                    errors.append(f"'checkpoints[{index}] must be a position like [1, 1]")
+
+        validate_enemies(data.get("enemies"), errors)
+        validate_texts(data.get("texts"), errors)
+
+        if isinstance(data.get("map"), str):
+            project_root = Path(__file__).resolve().parents[1]
+            map_path = project_root / data["map"]
+
+            if not map_path.is_file():
+                errors.append(f"Map-file doesn't exist: {data["map"]}")
+
+        if errors:
+            details = "\n".join(f"- {error}" for error in errors)
+            raise LevelValidationError(f"Invalid Leveldata: {filename}\n{details}")
+
+def validate_enemies(enemies, errors):
+    if not isinstance(enemies, dict):
+        return
+
+    valid_enemy_names = {"Patroller", "Heavy_Patroller", "Shooter", "Chaser"}
+
+    for enemy_name, positions in enemies.items():
+        if enemy_name not in valid_enemy_names:
+            if enemy_name not in valid_enemy_names:
+                errors.append(f"Unknown enemy type: '{enemy_name}'")
+
+        if not isinstance(positions, list):
+            errors.append(f"'enemies.{enemy_name}' musst be a list")
+            continue
+
+        for index, position in enumerate(positions):
+            if not is_position(position):
+                errors.append(f"'enemies.{enemy_name}[{index}] musst be [x, y]")
+
+def validate_texts(texts, errors):
+    if not isinstance(texts, dict):
+        pass
+    for text, position in texts.items():
+        if not isinstance(text, str):
+            errors.append("Every text key must be a string")
+
+        if not is_position(position):
+            errors.append(f"Position of text '{text}' must be [x, y]")
 
 class Level_loader:
 
@@ -31,6 +116,7 @@ class Level_loader:
     def load_level(self, json_file: str) -> None:
         with open(json_file, "r") as file:
             self.data = json.load(file)
+        validate_level(self.data, json_file)
         self.map = read_csv(self.data["map"])
         self.max_y_px = tile_to_pixel(self.data["max_y"])
         self.end_rect = pygame.Rect(
@@ -46,18 +132,9 @@ class Level_loader:
         self.id += 1
         self.load_level(f"world/levels/level{self.id}.json")
 
-    def validate_level(self):
-        required_fields = ["type",
-                            "id",
-                            "map",
-                            "spawn",
-                            "max_y",
-                            "enemies"
-                            "checkpoints",
-                            "end_coordinates",
-                            "texts"]
-        for field in self.data:
-            pass
+    
+
+
 
 
 def update_level(player: Player, level: Level_loader, enemies: Enemies, texts: Texts, win_screen) -> None:
