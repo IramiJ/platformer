@@ -137,29 +137,33 @@ class Level_loader:
 
 
 
-def update_level(player: Player, level: Level_loader, enemies: Enemies, texts: Texts, win_screen) -> None:
-    if player.rect.colliderect(level.end_rect):
-        try:
-            level.next_level()
-        except FileNotFoundError as error:
-            print(f"No next level found: {error}")
-            win_screen.displaying = True
-            return
-        except json.JSONDecodeError as error:
-            print(f"Invalid JSON: {error}")
-            return
-        except PermissionError as error:
-            print(f"Permission error: {error}")
-            return
-        except UnicodeDecodeError as error:
-            print(f"Level file has invalid encoding: {error}")
-            return
-        except OSError as error:
-            print(f"Error while readinf the level files: {error}")
-        
-        enemies.load_enemies(level)
-        texts.load_texts(level.data["texts"])
-        initialize_player(player, level)
+def update_level(player: Player, level: Level_loader, enemies: Enemies, texts: Texts, win_screen) -> bool:
+    if not player.rect.colliderect(level.end_rect):
+        return False
+    try:
+        level.next_level()
+    except FileNotFoundError as error:
+        print(f"No next level found: {error}")
+        win_screen.displaying = True
+        return False
+    except json.JSONDecodeError as error:
+        print(f"Invalid JSON: {error}")
+        return False
+    except PermissionError as error:
+        print(f"Permission error: {error}")
+        return False
+    except UnicodeDecodeError as error:
+        print(f"Level file has invalid encoding: {error}")
+        return False
+    except OSError as error:
+        print(f"Error while readinf the level files: {error}")
+        return False
+    
+    enemies.load_enemies(level)
+    texts.load_texts(level.data["texts"])
+    initialize_player(player, level)
+
+    return True
 
 
 def reload_level(enemies: Enemies, level: Level_loader, player: Player, texts: Texts) -> None:

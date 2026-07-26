@@ -12,8 +12,8 @@
 - [x] Make all level files use the same fields and data types.
 - [x] Replace the bare `except` in the level transition logic with specific exception handling.
 - [x] Clamp minimap reads to the map boundaries and render out-of-bounds cells as empty tiles.
-- [ ] Reset bullets, arrows, sparks, movement, momentum, cooldowns, and temporary state on level reload and transition.
-- [ ] Load and render torches and chandeliers correctly on the first level and after transitions, or remove the unused system.
+- [x] Reset bullets, arrows, sparks, movement, momentum, cooldowns, and temporary state on level reload and transition.
+- [x] Load and render torches and chandeliers correctly on the first level and after transitions, or remove the unused system.
 - [ ] Fix the double-coin buff and reward multiple enemy deaths correctly.
 - [ ] Manually complete all levels from start to finish without errors.
 

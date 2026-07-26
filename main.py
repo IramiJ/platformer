@@ -149,6 +149,7 @@ class Game:
                 reload_level(
                     self.enemies, self.level, self.player, self.texts
                 )
+                self.reset_transient_state()
 
     def move_bullets(self):
         for bullet in self.bullets:
@@ -230,15 +231,49 @@ class Game:
             )
         else:
             self.logic_variables.hitstop_timer -= self.dt
-        update_level(
+        if update_level(
             self.player,
             self.level,
             self.enemies,
             self.texts,
             self.win_screen,
-        )
+        ):
+            self.reset_transient_state()
         reach_checkpoint(self.player, self.level)
 
+    def reset_transient_state(self) -> None:
+        # Clearing projectiles
+        self.bullets.clear()
+        self.player.bow.arrows.clear()
+        self.sparks.clear()
+        self.player.sword.particles.clear()
+        self.leafSystem.leaves.clear()
+
+        # Clearing player movements:
+        self.player.movement = [0, 0]
+        self.player.y_momentum = 0
+        self.player.air_timer = 0
+        self.player.moving_left = False
+        self.player.moving_right = False
+
+        # Clearing Dashes
+        self.player.dashing = False
+        self.player.dash_timer = 0
+        self.player.dash_cooldown = 0
+        self.player.dmg_cd = 0
+
+        # Bow
+        self.player.bow.shoot_cd = 0
+        self.player.bow.reload_cd = 0
+        self.player.bow.reloading = False
+        self.player.bow.add_ammo = False
+
+        # Global effects
+        self.logic_variables.hitstop_timer = 0
+        self.scroll.shake_timer = 0
+        self.scroll.shake_strength = 0
+        self.scroll.shake_offset = [0, 0]
+        
     def present(self):
         self.draw_render_surf()
         pygame.display.update()
