@@ -141,8 +141,22 @@ def update_level(player: Player, level: Level_loader, enemies: Enemies, texts: T
     if player.rect.colliderect(level.end_rect):
         try:
             level.next_level()
-        except:
+        except FileNotFoundError as error:
+            print(f"No next level found: {error}")
             win_screen.displaying = True
+            return
+        except json.JSONDecodeError as error:
+            print(f"Invalid JSON: {error}")
+            return
+        except PermissionError as error:
+            print(f"Permission error: {error}")
+            return
+        except UnicodeDecodeError as error:
+            print(f"Level file has invalid encoding: {error}")
+            return
+        except OSError as error:
+            print(f"Error while readinf the level files: {error}")
+        
         enemies.load_enemies(level)
         texts.load_texts(level.data["texts"])
         initialize_player(player, level)
