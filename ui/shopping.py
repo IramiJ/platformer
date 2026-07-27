@@ -4,8 +4,6 @@ import json
 from ui.Font_renderer import Font
 from entities.animations import draw_constants
 
-pygame.init()
-
 
 class Shop:
     def __init__(self):
