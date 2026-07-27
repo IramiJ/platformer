@@ -16,6 +16,6 @@ class Coins:
             if coin.collision_test(player.rect):
                 self.objects.remove(coin)
                 if player.double_coin_buff:
-                    self.amount += 2
+                    player.cion_amount += 2
                 else:
-                    self.amount += 1
+                    player.coin_amount += 1

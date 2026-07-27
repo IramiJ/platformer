@@ -14,7 +14,7 @@
 - [x] Clamp minimap reads to the map boundaries and render out-of-bounds cells as empty tiles.
 - [x] Reset bullets, arrows, sparks, movement, momentum, cooldowns, and temporary state on level reload and transition.
 - [x] Load and render torches and chandeliers correctly on the first level and after transitions, or remove the unused system.
-- [ ] Fix the double-coin buff and reward multiple enemy deaths correctly.
+- [x] Fix the double-coin buff and reward multiple enemy deaths correctly.
 - [ ] Manually complete all levels from start to finish without errors.
 
 ## 2. Make the game loop deterministic and testable

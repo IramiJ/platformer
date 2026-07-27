@@ -44,8 +44,12 @@ class Enemies:
             player.attack(enemy, logic_variables, sparks, dt)
         length = int(len(self.enemies))
         self.enemies = [e for e in self.enemies if e.alive]
-        if len(self.enemies) < length:
-            player.coin_amount += 2
+        killed_enemy_count = length - len(self.enemies)
+        if killed_enemy_count >= 1:
+            if player.double_coin_buff:
+                player.coin_amount += 4 * killed_enemy_count
+            else:
+                player.coin_amount += 2 * killed_enemy_count
         self.current_enemy_amount = len(self.enemies)
 
     def render_enemies(self, display, scroll, dt):
