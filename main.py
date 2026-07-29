@@ -2,7 +2,7 @@ import pygame
 import time
 from ui.death_screen import Death_screen
 
-pygame.init()
+
 from ui.Font_renderer import Font
 from ui.shopping import Shop
 from world.tilemap import load_tiles, display_map, update_tile_rects
@@ -283,4 +283,5 @@ def main():
     game.run()
 
 if __name__ == "__main__":
+    pygame.init()
     main()
