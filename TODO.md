@@ -8,14 +8,14 @@
 - [x] Migrate all level JSON files to the unified coordinate convention.
 - [x] Replace single-point level exits with rectangular trigger zones.
 - [x] Add a validated level schema with required fields and useful error messages.
-- [ ] Add the missing `texts` field to level 3.
+- [x] Add the missing `texts` field to level 3.
 - [x] Make all level files use the same fields and data types.
 - [x] Replace the bare `except` in the level transition logic with specific exception handling.
 - [x] Clamp minimap reads to the map boundaries and render out-of-bounds cells as empty tiles.
 - [x] Reset bullets, arrows, sparks, movement, momentum, cooldowns, and temporary state on level reload and transition.
 - [x] Load and render torches and chandeliers correctly on the first level and after transitions, or remove the unused system.
 - [x] Fix the double-coin buff and reward multiple enemy deaths correctly.
-- [ ] Manually complete all levels from start to finish without errors.
+- [x] Manually complete all levels from start to finish without errors.
 
 ## 2. Make the game loop deterministic and testable
 
