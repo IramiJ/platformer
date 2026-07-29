@@ -73,7 +73,6 @@ class Player(entity):
         self.manage_attack_cd(dt)
 
     def run_render_logic(self, display: pygame.Surface, scroll: Scroll, dt: float) -> None:
-        self.update_frames(dt)
         self.draw(display, scroll, dt)
         self.draw_dash_cd(display, scroll)
         # self.draw_tail_points(display, scroll)

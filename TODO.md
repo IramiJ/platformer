@@ -20,7 +20,7 @@
 ## 2. Make the game loop deterministic and testable
 
 - [x] Add an `if __name__ == __main__:` entry-point guard.
-- [ ] Make every production module importable without starting the game or opening a window.
+- [x] Make every production module importable without starting the game or opening a window.
 - [ ] Separate state updates from rendering.
 - [ ] Move animation, cooldown, damage-flash, particle, and cleanup updates out of render methods.
 - [ ] Use seconds consistently for delta time, cooldowns, stun durations, buffs, and animations.

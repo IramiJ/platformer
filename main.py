@@ -212,6 +212,7 @@ class Game:
             self.player.update_movements(
                 self.tile_rects, self.enemies.enemies, self.level.max_y_px, self.dt
             )
+            self.player.update_frames(self.dt)
             self.enemies.update_enemies(
                 self.player,
                 self.bullets,
