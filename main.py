@@ -144,12 +144,6 @@ class Game:
             self.win_screen.render(self.display)
         elif self.dead:
             self.death_screen.render(self.display)
-            if self.player.respawn:
-                self.player.revive(self.level)
-                reload_level(
-                    self.enemies, self.level, self.player, self.texts
-                )
-                self.reset_transient_state()
 
     def move_bullets(self):
         for bullet in self.bullets:
@@ -202,6 +196,14 @@ class Game:
             self.player, self.shop, self.pause_screen
         )
 
+    def reload_on_respawn(self):
+        if self.player.respawn:
+            self.player.revive(self.level)
+            reload_level(
+                self.enemies, self.level, self.player, self.texts
+            )
+            self.reset_transient_state()
+
     def evaluate_game_state(self):
         self.evaluate_overlay_state()
         self.update_logic_variables()
@@ -209,10 +211,7 @@ class Game:
     def update(self):
         if self.logic_variables.MOVEMENTS and self.logic_variables.hitstop_timer <= 0:
             self.update_tile_rects()
-            self.player.update_movements(
-                self.tile_rects, self.enemies.enemies, self.level.max_y_px, self.dt
-            )
-            self.player.update_frames(self.dt)
+            self.player.update(self.tile_rects, self.enemies.enemies, self.level.max_y_px, self.dt)
             self.enemies.update_enemies(
                 self.player,
                 self.bullets,
@@ -240,6 +239,7 @@ class Game:
             self.win_screen,
         ):
             self.reset_transient_state()
+        self.reload_on_respawn()
         reach_checkpoint(self.player, self.level)
 
     def reset_transient_state(self) -> None:

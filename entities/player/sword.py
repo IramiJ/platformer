@@ -105,7 +105,7 @@ class Sword(entity):
                     self.loc[1] - scroll.render_scroll[1] - 16,
                 ],
             )
-        self.update_slice_frame(dt)
+        
 
     def update_slice_frame(self, dt):
         self.slice_frame += dt
@@ -123,8 +123,6 @@ class Sword(entity):
         player_action,
         dt,
     ):
-        self.set_flip(player_flip)
-        self.update_location(player_flip, player_rect, player_frame, player_action)
         frame = self.get_animation_frame(player_frame, player_action)
         angle = self.angles[player_action][frame]
 
@@ -136,6 +134,13 @@ class Sword(entity):
         self.draw_particles(display, scroll)
         """
         self.draw_rotated(display, scroll, angle)
+
+    def update(self, player, dt):
+        self.update_location(player.flip, player.rect, player.frame, player.action)
+        self.set_flip(player.flip)
+        self.update_slice_frame(dt)
+        if player.mode == "meele" and player.dashing:
+            self.update_slice_frame(dt)
 
     def set_flip(self, flip):
         self.flip = flip

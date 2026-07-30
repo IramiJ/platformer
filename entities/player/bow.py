@@ -41,11 +41,12 @@ class Bow:
         self.ammo_img.set_colorkey((0, 0, 0))
         self.reload_cd = 0
 
-    def draw(self, player, display, scroll):
+    def update(self, player):
         self.update_cds()
-
         self.set_flip(player)
         self.update_location(player.flip, player.rect, player.frame, player.action)
+
+    def draw(self, player, display, scroll):
         frame = self.get_animation_frame(player.frame, player.action)
         angle = self.angles[player.action][frame]
         self.draw_rotated(display, scroll, angle)

@@ -63,6 +63,15 @@ class Player(entity):
         self.respawn = False
         self.histstop_timer = 0
 
+    def update(self, tile_rects: list[pygame.Rect], enemy_list, max_y: int, dt: float):
+        self.update_movements(tile_rects, enemy_list, max_y, dt)
+        self.update_frames(dt)
+        self.bow.update(self)
+        self.sword.update(self, dt)
+
+        self.sword.particles = [p for p in self.sword.particles if p.duration > 0]
+        
+    
     def update_movements(self, tile_rects: list[pygame.Rect], enemy_list, max_y: int, dt: float) -> None:
         self.handle_movements(tile_rects, dt)
         self.bow.move_arrows(enemy_list, dt)
@@ -141,7 +150,7 @@ class Player(entity):
             self.bow.draw(self, display, scroll)
         for arrow in self.bow.arrows:
             arrow.render(display, scroll.render_scroll)
-        self.sword.particles = [p for p in self.sword.particles if p.duration > 0]
+        
 
     def dash(self) -> None:
         if not self.dashing and self.dash_cooldown <= 0:
@@ -321,21 +330,28 @@ class Player(entity):
         if collisions["top"]:
             self.y_momentum = 0
 
-    def draw_dash_cd(self, display: pygame.Surface, scroll: Scroll) -> None:
-        if self.dash_cooldown > 0:
-            self.cd_obj.frame = self.max_dash_cd - (self.dash_cooldown)
-            self.cd_obj.img_id = self.cd_obj.animation_database[self.cd_obj.action][
-                math.floor(self.cd_obj.frame)
-            ]
-            self.cd_obj.img = self.cd_obj.animation_frames[self.cd_obj.img_id]
-            display.blit(
-                pygame.transform.flip(self.cd_obj.img, self.cd_obj.flip, False),
-                [
-                    self.rect.x - scroll.render_scroll[0],
-                    self.rect.y - 30 - scroll.render_scroll[1],
-                ],
-            )
-            if self.cd_obj.frame >= len(
-                self.cd_obj.animation_database[self.cd_obj.action]
-            ):
-                self.cd_obj.frame = 0
+    def draw_dash_cd(self, display, scroll):
+        if self.dash_cooldown <= 0:
+            return
+
+        animation = self.cd_obj.animation_database[self.cd_obj.action]
+
+        frame = math.floor(
+            self.max_dash_cd - self.dash_cooldown
+        )
+        frame = max(0, min(frame, len(animation) - 1))
+
+        img_id = animation[frame]
+        img = self.cd_obj.animation_frames[img_id]
+
+        display.blit(
+            pygame.transform.flip(
+                img,
+                self.cd_obj.flip,
+                False,
+            ),
+            [
+                self.rect.x - scroll.render_scroll[0],
+                self.rect.y - 30 - scroll.render_scroll[1],
+            ],
+        )
