@@ -15,8 +15,7 @@ class LeafSystem:
     def render_leaves(self, display: pygame.Surface, scroll):
         for leaf in self.leaves[:]:
             leaf.render(display, scroll)
-            if leaf.duration <= 0:
-                self.leaves.remove(leaf)
+            
 
     def update_leaves(self, dt):
         dt_seconds = dt / 60
@@ -24,3 +23,5 @@ class LeafSystem:
         for leaf in self.leaves[:]:
             leaf.update(self.wind, dt_seconds)
             leaf.duration -= dt_seconds
+            if leaf.duration <= 0:
+                self.leaves.remove(leaf)
