@@ -31,30 +31,35 @@ class Enemies:
         self, player, bullet_list, scroll, tiles, logic_variables, sparks, dt
     ):
         for enemy in self.enemies:
-            if not self.enemy_is_active(enemy, player):
-                continue
-            if isinstance(enemy, Chaser):
-                enemy.move(player, tiles, dt)
-            else:
-                enemy.move(dt, tiles)
-            if isinstance(enemy, Shooter):
-                enemy.attack(player, bullet_list, scroll)
-            else:
-                enemy.attack(player, scroll)
-            player.attack(enemy, logic_variables, sparks, dt)
-        length = int(len(self.enemies))
-        self.enemies = [e for e in self.enemies if e.alive]
+            if self.enemy_is_active(enemy, player):
+                if isinstance(enemy, Chaser):
+                    enemy.move(player, tiles, dt)
+                else:
+                    enemy.move(dt, tiles)
+
+                if isinstance(enemy, Shooter):
+                    enemy.attack(player, bullet_list, scroll)
+                else:
+                    enemy.attack(player, scroll)
+
+                player.attack(enemy, logic_variables, sparks, dt)
+
+            enemy.update_frames(dt)
+
+        length = len(self.enemies)
+        self.enemies = [enemy for enemy in self.enemies if enemy.alive]
+
         killed_enemy_count = length - len(self.enemies)
         if killed_enemy_count >= 1:
             if player.double_coin_buff:
                 player.coin_amount += 4 * killed_enemy_count
             else:
                 player.coin_amount += 2 * killed_enemy_count
+
         self.current_enemy_amount = len(self.enemies)
 
     def render_enemies(self, display, scroll, dt):
         for enemy in self.enemies:
-            enemy.update_frames(dt)
             enemy.render(display, scroll.render_scroll)
 
     """
@@ -64,8 +69,14 @@ class Enemies:
     def load_enemies(self, level):
         self.enemies = []
         enemies = level.data["enemies"]
+
         for enemy_name, spawns in enemies.items():
+
             enemy_class = self.enemy_types.get(enemy_name)
+
             for x, y in spawns:
-                self.enemies.append(enemy_class(tile_to_pixel(x), tile_to_pixel(y), 16, 16))
+                enemy = enemy_class(tile_to_pixel(x), tile_to_pixel(y), 16, 16)
+                enemy.update_frames(0)
+                self.enemies.append(enemy)
+                
         self.max_enemy_amount = len(self.enemies)
