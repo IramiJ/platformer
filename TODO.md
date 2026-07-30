@@ -21,8 +21,8 @@
 
 - [x] Add an `if __name__ == __main__:` entry-point guard.
 - [x] Make every production module importable without starting the game or opening a window.
-- [ ] Separate state updates from rendering.
-- [ ] Move animation, cooldown, damage-flash, particle, and cleanup updates out of render methods.
+- [x] Separate state updates from rendering.
+- [x] Move animation, cooldown, damage-flash, particle, and cleanup updates out of render methods.
 - [ ] Use seconds consistently for delta time, cooldowns, stun durations, buffs, and animations.
 - [ ] Stop removing bullets, arrows, coins, and particles while iterating over their lists.
 - [ ] Introduce an explicit alive/dead lifecycle and filter collections after updates.

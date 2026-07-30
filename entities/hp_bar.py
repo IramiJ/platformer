@@ -12,8 +12,14 @@ class Hp_bar:
         self.width = self.frame.get_width()
         self.height = self.frame.get_height()
 
-    def draw(self, display, max_hp, current_hp):
-        display.blit(self.frame, (self.x, self.y))
+    def draw(self, display, max_hp, current_hp, position=None):
+
+        if position is None:
+            x, y = self.x, self.y
+        else:
+            x, y = position
+
+        display.blit(self.frame, (x, y))
         fill_width = int(self.width * (current_hp / max_hp))
         fill_rect = pygame.Rect(0, 0, fill_width, self.height)
-        display.blit(self.bg, (self.x, self.y), fill_rect)
+        display.blit(self.bg, (x, y), fill_rect)

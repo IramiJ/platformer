@@ -21,13 +21,20 @@ class Torch:
                     random.randint(14, 24) / 10,
                 )
             )
-
-    def draw_particles(self, display, scroll):
+    def update(self):
+        self.add_particles()
         for particle in self.particles:
             particle.loc[0] += particle.velocities[0]
             particle.loc[1] += particle.velocities[1]
             particle.velocities[1] += 0.02
             particle.radius -= 0.01
+            self.particles = [
+                particle
+                for particle in self.particles
+                if particle.radius > 0
+            ]
+    def draw_particles(self, display, scroll):
+        for particle in self.particles:
             pygame.draw.circle(
                 display,
                 (255, 255, 255),
@@ -37,9 +44,7 @@ class Torch:
                 ],
                 particle.radius,
             )
-            if particle.radius <= 0:
-                self.particles.remove(particle)
-        self.add_particles()
+        
 
     def draw(self, display: pygame.Surface, scroll):
         display.blit(

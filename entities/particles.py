@@ -16,9 +16,11 @@ class Particle:
         self.x_velocity = 0
         self.y_velocity = 0.2
 
-    def render(self, display, scroll):
+    def update(self):
         self.increase_velocity()
         self.update_location()
+
+    def render(self, display, scroll):
         display.blit(
             self.img,
             [

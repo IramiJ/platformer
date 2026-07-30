@@ -37,8 +37,8 @@ class Shooter(Enemy):
         if not self.alive:
             return
         self.draw(display, scroll)
-        self.update_hp_bar(scroll)
-        self.hp_bar.draw(display, self.max_hp, self.current_hp)
+        hp_bar_position = (self.rect.x - scroll[0], self.rect.y - scroll[1] - 20)
+        self.hp_bar.draw(display, self.max_hp, self.current_hp, hp_bar_position)
     
     def move(self, dt:float, tiles: list[list[str]]) -> None:
         self.movement = [0, 0]
@@ -46,9 +46,6 @@ class Shooter(Enemy):
         self.movement[1] += self.y_momentum
         self.move_with_tile_collisions(dt, tiles)
 
-    def update_hp_bar(self, scroll):
-        self.hp_bar.x = self.rect.x - scroll[0]
-        self.hp_bar.y = self.rect.y - scroll[1] - 20
 
     def attack(self, player, bullet_list, scroll):
         self.handle_stun_state()

@@ -35,12 +35,8 @@ class Chaser(Enemy):
         if not self.alive:
             return
         self.draw(display, scroll)
-        self.update_hp_bar(scroll)
-        self.hp_bar.draw(display, self.max_hp, self.current_hp)
-
-    def update_hp_bar(self, scroll):
-        self.hp_bar.x = self.rect.x - scroll[0]
-        self.hp_bar.y = self.rect.y - scroll[1] - 20
+        hp_bar_position = (self.rect.x - scroll[0], self.rect.y - scroll[1] - 20)
+        self.hp_bar.draw(display, self.max_hp, self.current_hp, hp_bar_position)
 
     def move_to_player(self, player):
         if player.rect.x < self.rect.x:

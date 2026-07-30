@@ -33,7 +33,7 @@ class Chandelier:
 
     def draw_particles(self, display, scroll):
         for particle in self.particles:
-            self.move_particle(particle)
+            
             pygame.draw.circle(
                 display,
                 (255, 255, 255),
@@ -43,8 +43,8 @@ class Chandelier:
                 ],
                 particle.radius,
             )
-            self.remove_particle_on_check(particle)
-        self.add_particles()
+            
+        
 
     def move_particle(self, particle):
         particle.loc[0] += particle.velocities[0]
@@ -65,3 +65,13 @@ class Chandelier:
             ],
         )
         self.draw_particles(display, scroll)
+
+    def update(self):
+        self.add_particles()
+        for particle in self.particles:
+            self.move_particle(particle)
+        self.particles = [
+            particle
+            for particle in self.particles 
+            if particle.radius > 0
+        ]

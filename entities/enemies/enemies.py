@@ -44,7 +44,6 @@ class Enemies:
                     enemy.attack(player, scroll)
 
                 player.attack(enemy, logic_variables, sparks, dt)
-
             enemy.update_frames(dt)
 
         length = len(self.enemies)
