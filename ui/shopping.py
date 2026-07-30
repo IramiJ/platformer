@@ -78,6 +78,11 @@ class Shop:
     def show(self, display, player):
         if self.displaying:
             self.render(display, player.coin_amount)
-            player.moving_right = False
-            player.moving_left = False
-            self.buy(player, player.buffs)
+
+    def update(self, player):
+        if not self.displaying:
+            return
+
+        player.moving_right = False
+        player.moving_left = False
+        self.buy(player, player.buffs)

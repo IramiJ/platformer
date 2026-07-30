@@ -31,6 +31,7 @@ class Enemies:
         self, player, bullet_list, scroll, tiles, logic_variables, sparks, dt
     ):
         for enemy in self.enemies:
+            enemy.update_dmg_timer()
             if self.enemy_is_active(enemy, player):
                 if isinstance(enemy, Chaser):
                     enemy.move(player, tiles, dt)
@@ -58,7 +59,7 @@ class Enemies:
 
         self.current_enemy_amount = len(self.enemies)
 
-    def render_enemies(self, display, scroll, dt):
+    def render_enemies(self, display, scroll):
         for enemy in self.enemies:
             enemy.render(display, scroll.render_scroll)
 

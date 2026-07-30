@@ -95,7 +95,7 @@ class Game:
         if self.logic_variables.RENDER:
             self.fill_display()
             self.render_map()
-            self.enemies.render_enemies(self.display, self.scroll, self.dt)
+            self.enemies.render_enemies(self.display, self.scroll)
             self.render_bullets()
             self.show_remaining_enemies()
             self.tree.render(self.display, self.scroll)
@@ -209,6 +209,8 @@ class Game:
         self.update_logic_variables()
 
     def update(self):
+        if self.shop.displaying:
+            self.shop.update(self.player)
         if self.logic_variables.MOVEMENTS and self.logic_variables.hitstop_timer <= 0:
             self.update_tile_rects()
             self.player.update(self.tile_rects, self.enemies.enemies, self.level.max_y_px, self.dt)
@@ -226,6 +228,8 @@ class Game:
             self.move_sparks()
             self.tree.generate_leaves(self.leafSystem.leaf_imgs, self.leafSystem.leaves)
             self.leafSystem.update_leaves(self.dt)
+            if self.player.bow.reloading:
+                self.ammo.update_dash_img()
             self.minimap.update_map(
                 [self.player.rect.x, self.player.rect.y], self.level.map
             )

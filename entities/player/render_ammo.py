@@ -20,17 +20,19 @@ class Ammo:
         if not player.bow.reloading:
             self.render_ammo_amount(display, player)
         else:
-            self.update_dash_img(display)
+            self.draw_dash_img(display)
 
-    def update_dash_img(self, display):
+    def update_dash_img(self):
         self.cd_obj.img_id = self.cd_obj.animation_database[self.cd_obj.action][
             self.cd_obj.frame
         ]
         self.cd_obj.img = self.cd_obj.animation_frames[self.cd_obj.img_id]
-        display.blit(self.cd_obj.img, (self.cd_obj.x, self.cd_obj.y))
         self.cd_obj.frame += 1
         if self.cd_obj.frame >= len(self.cd_obj.animation_database[self.cd_obj.action]):
             self.cd_obj.frame = 0
+
+    def draw_dash_img(self, display):
+        display.blit(self.cd_obj.img, (self.cd_obj.x, self.cd_obj.y))
 
     def render_ammo_amount(self, display, player):
         self.small_font.render(display, str(player.bow.ammo), (self.amount_padding, 15))

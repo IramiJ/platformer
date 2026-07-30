@@ -137,14 +137,11 @@ class Player(entity):
         )
         if self.mode == "melee":
             self.sword.draw(
-                self.flip,
                 self.dashing,
-                self.rect,
                 display,
                 scroll,
                 self.frame,
                 self.action,
-                dt,
             )
         elif self.mode == "ranged":
             self.bow.draw(self, display, scroll)

@@ -20,16 +20,19 @@ class Enemy(entity):
         self.img_id = self.animation_database[self.action][math.floor(self.frame)]
         self.img = self.animation_frames[self.img_id]
 
+    def update_dmg_timer(self):
+       if self.dmg_timer <= 0:
+           return
+       else:
+           self.dmg_timer -= 1 
+
     def draw_dmg_timer(self, to_blit):
         if self.dmg_timer > 0:
             if self.dmg_timer == 5:
                 to_blit.fill((255, 255, 255), special_flags=pygame.BLEND_RGB_ADD)
             else:
                 to_blit.fill((255, 0, 0), special_flags=pygame.BLEND_RGB_ADD)
-            self.dmg_timer -= 1
-        else:
-            self.dmg_timer = 0
-
+                
     def draw(self, display, scroll):
         to_blit = self.img.copy()
         self.draw_dmg_timer(to_blit)

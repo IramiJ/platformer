@@ -82,7 +82,7 @@ class Sword(entity):
                 self.slice_animation.append(animation_image)
             n += 1
 
-    def draw_slice(self, display: pygame.Surface, scroll, dt):
+    def draw_slice(self, display: pygame.Surface, scroll):
         if not self.flip:
             display.blit(
                 pygame.transform.flip(
@@ -114,20 +114,17 @@ class Sword(entity):
 
     def draw(
         self,
-        player_flip,
         player_dash_state,
-        player_rect,
         display,
         scroll,
         player_frame,
         player_action,
-        dt,
     ):
         frame = self.get_animation_frame(player_frame, player_action)
         angle = self.angles[player_action][frame]
 
         if player_dash_state:
-            self.draw_slice(display, scroll, dt)
+            self.draw_slice(display, scroll)
         """
         Sword particle code
         self.add_particles()
@@ -138,8 +135,8 @@ class Sword(entity):
     def update(self, player, dt):
         self.update_location(player.flip, player.rect, player.frame, player.action)
         self.set_flip(player.flip)
-        self.update_slice_frame(dt)
-        if player.mode == "meele" and player.dashing:
+
+        if player.mode == "melee" and player.dashing:
             self.update_slice_frame(dt)
 
     def set_flip(self, flip):
