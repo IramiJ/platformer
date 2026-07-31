@@ -222,13 +222,6 @@ class Player(entity):
         self.rect.x = self.spawn_point[0]
         self.rect.y = self.spawn_point[1]
 
-    def revive(self, level: Level_loader) -> None:
-        if self.respawn:
-            self.hp = self.max_hp
-            level.id = 1
-            self.set_respawn_location()
-            self.respawn = False
-
     def activate_hitstop(self, logic_variables) -> None:
         logic_variables.hitstop_timer = 1/20
 

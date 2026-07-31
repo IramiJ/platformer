@@ -158,19 +158,8 @@ def update_level(player: Player, level: Level_loader, enemies: Enemies, texts: T
     except OSError as error:
         print(f"Error while readinf the level files: {error}")
         return False
-    
-    enemies.load_enemies(level)
-    texts.load_texts(level.data["texts"])
-    initialize_player(player, level)
 
     return True
-
-
-def reload_level(enemies: Enemies, level: Level_loader, player: Player, texts: Texts) -> None:
-    level.reload_level()
-    enemies.load_enemies(level)
-    texts.load_texts(level.data["texts"])
-    initialize_player(player, level)
 
 
 def initialize_player(player: Player, level: Level_loader) -> None:

@@ -15,9 +15,9 @@ from core.kb_event_handling import Keyboard_event_handler
 from entities.enemies.enemies import Enemies
 from world.level_loader import (
     Level_loader,
+    initialize_player,
     update_level,
     reach_checkpoint,
-    reload_level,
 )
 from core.logic_variables import Logic_variables
 from ui.pause_screen import Pause_screen
@@ -200,11 +200,7 @@ class Game:
 
     def reload_on_respawn(self):
         if self.player.respawn:
-            self.player.revive(self.level)
-            reload_level(
-                self.enemies, self.level, self.player, self.texts
-            )
-            self.reset_transient_state()
+            self.reset_session()
 
     def evaluate_game_state(self):
         self.evaluate_overlay_state()
@@ -243,7 +239,7 @@ class Game:
             self.texts,
             self.win_screen,
         ):
-            self.reset_transient_state()
+            self.initialize_loaded_level()
         self.reload_on_respawn()
         reach_checkpoint(self.player, self.level)
 
@@ -280,7 +276,23 @@ class Game:
         self.scroll.shake_strength = 0
         self.scroll.shake_offset = [0, 0]
         self.scroll.shake_sample_timer = 0
-        
+
+    def initialize_loaded_level(self):
+        self.enemies.load_enemies(self.level)
+        self.texts.load_texts(self.level.data["texts"])
+        initialize_player(self.player, self.level)
+        self.reset_transient_state()
+        self.update_tile_rects()
+
+    def reset_session(self):
+        self.level.id = 1
+        self.player.hp = self.player.max_hp
+        self.player.buffs.clear()
+        self.player.respawn = False
+
+        self.level.reload_level()
+        self.initialize_loaded_level()
+    
     def present(self):
         self.draw_render_surf()
         pygame.display.update()

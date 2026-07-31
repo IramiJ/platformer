@@ -26,7 +26,7 @@
 - [x] Use seconds consistently for delta time, cooldowns, stun durations, buffs, and animations.
 - [x] Stop removing bullets, arrows, coins, and particles while iterating over their lists.
 - [x] Introduce an explicit alive/dead lifecycle and filter collections after updates.
-- [ ] Add a central level/session reset method.
+- [x] Add a central level/session reset method.
 - [ ] Ensure pause, shop, death, and win overlays stop only the intended systems.
 
 ## 3. Fix broken and fragile modules
