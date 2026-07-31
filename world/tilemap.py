@@ -48,7 +48,7 @@ def load_tiles(path: str) -> dict[str, pygame.Surface]:
 
 
 SKIP_TILES = {"-1"}
-NON_COLLISION_TILES = {"-1", "8", "19", "29", "39", "47", "48"}
+NON_COLLISION_TILES = {"-1", "9", "19", "29", "39", "47", "48"}
 
 
 def display_map(display: pygame.Surface, scroll: Scroll, tilemap: list[list[str]], tile_dict: dict[str, pygame.Surface]) -> None:
