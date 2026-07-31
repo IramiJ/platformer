@@ -163,8 +163,11 @@ class Game:
     def move_sparks(self):
         for i, spark in sorted(enumerate(self.sparks), reverse=True):
             spark.move(self.dt)
-            if not spark.alive:
-                self.sparks.pop(i)
+        self.sparks = [
+            spark
+            for spark in self.sparks
+            if spark.alive
+        ]
 
     def render_fps_count(self):
         self.large_font.render(self.display, f"fps: {self.current_fps}", [120, 0])

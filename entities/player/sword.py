@@ -66,7 +66,7 @@ class Sword(entity):
         for particle in self.particles:
             particle.update(dt)
         self.particles = [
-            particle for particle in self.particles if particle.duration > 0
+            particle for particle in self.particles if particle.alive
         ]
 
     def load_slice_animation(self):

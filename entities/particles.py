@@ -15,6 +15,7 @@ class Particle:
         self.loc = loc
         self.max_duration = duration
         self.duration = float(self.max_duration)
+        self.alive = True
         self.rect = pygame.FRect(
             self.loc[0], self.loc[1], self.img.get_width(), self.img.get_height()
         )
@@ -26,6 +27,8 @@ class Particle:
         self.increase_velocity(dt)
         self.update_location(dt)
         self.duration = max(0.0, self.duration - dt)
+        if self.duration <= 0:
+            self.alive = False
 
     def render(self, display, scroll):
         display.blit(

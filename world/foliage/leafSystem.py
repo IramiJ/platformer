@@ -28,7 +28,12 @@ class LeafSystem:
             leaf.update(self.wind, dt)
             leaf.duration -= dt
             if leaf.duration <= 0:
-                self.leaves.remove(leaf)
+                leaf.alive = False
+        self.leaves = [
+            leaf
+            for leaf in self.leaves
+            if leaf.alive
+        ]
 
     def update(self, tree, dt):
         self.update_accumulator += dt

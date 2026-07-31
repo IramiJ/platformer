@@ -15,6 +15,7 @@ class Leaf:
         self.loc = [float(loc[0]), float(loc[1])]
         self.max_duration = duration
         self.duration = float(self.max_duration)
+        self.alive = True
 
         w, h = self.img.get_width(), self.img.get_height()
         self.rect = pygame.FRect(self.loc[0], self.loc[1], w, h)
