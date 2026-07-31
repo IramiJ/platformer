@@ -24,7 +24,7 @@
 - [x] Separate state updates from rendering.
 - [x] Move animation, cooldown, damage-flash, particle, and cleanup updates out of render methods.
 - [x] Use seconds consistently for delta time, cooldowns, stun durations, buffs, and animations.
-- [ ] Stop removing bullets, arrows, coins, and particles while iterating over their lists.
+- [x] Stop removing bullets, arrows, coins, and particles while iterating over their lists.
 - [ ] Introduce an explicit alive/dead lifecycle and filter collections after updates.
 - [ ] Add a central level/session reset method.
 - [ ] Ensure pause, shop, death, and win overlays stop only the intended systems.

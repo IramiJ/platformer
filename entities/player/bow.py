@@ -85,7 +85,12 @@ class Bow:
 
     def move_arrows(self, enemy_list, dt):
         for arrow in self.arrows:
-            arrow.move(enemy_list, self.arrows, dt)
+            arrow.move(enemy_list, dt)
+        self.arrows = [
+            arrow
+            for arrow in self.arrows
+            if arrow.alive
+        ]
 
     def update_cds(self, dt):
         if self.shoot_cd > 0:
@@ -153,23 +158,24 @@ class Arrow(simple_entity):
         self.range = 200
         self.dmg_cd = 0
         self.flip = flip
+        self.alive = True
 
-    def move(self, enemy_list, arrow_list, dt):
+    def move(self, enemy_list, dt):
         self.dmg_entity(enemy_list)
         if not self.flip:
             self.loc[0] += self.velocity * dt
         else:
             self.loc[0] -= self.velocity * dt
-        self.remove(arrow_list)
+        self.check_alive()
 
-    def remove(self, arrow_list):
+    def check_alive(self):
         if (
             math.sqrt(
                 (self.loc[0] - self.start[0]) ** 2 + (self.loc[1] - self.start[1]) ** 2
             )
             >= self.range
         ):
-            arrow_list.remove(self)
+            self.alive = False
 
     def dmg_entity(self, enemies):
 

@@ -5,7 +5,6 @@ from entities.player.player import Player
 class Coins:
     def __init__(self):
         self.objects = []
-        self.objects.append(simple_entity("assets/collectables/coin.png", [160, 308]))
 
     def draw_coins(self, display, scroll):
         for coin in self.objects:
@@ -14,8 +13,18 @@ class Coins:
     def coin_collisions(self, player: Player):
         for coin in self.objects:
             if coin.collision_test(player.rect):
-                self.objects.remove(coin)
+                coin.alive = False
                 if player.double_coin_buff:
-                    player.cion_amount += 2
+                    player.coin_amount += 2
                 else:
                     player.coin_amount += 1
+        self.objects = [
+            coin
+            for coin in self.objects
+            if coin.alive
+        ]
+
+class Coin(simple_entity):
+    def __init__(self, loc):
+        super().__init__("assets/collectables/coin.png", loc)
+        self.alive = True

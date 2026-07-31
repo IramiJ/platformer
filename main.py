@@ -145,7 +145,12 @@ class Game:
 
     def move_bullets(self):
         for bullet in self.bullets:
-            bullet.move(self.player, self.bullets, self.scroll, self.dt)
+            bullet.move(self.player, self.scroll, self.dt)
+        self.bullets = [
+            bullet
+            for bullet in self.bullets
+            if bullet.alive
+        ]
 
     def render_bullets(self):
         for bullet in self.bullets:
