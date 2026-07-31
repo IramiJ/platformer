@@ -30,6 +30,7 @@ from world.foliage.leafSystem import LeafSystem
 from world.foliage.tree import Tree
 from world.coordinates import tile_position_to_pixel, tile_to_pixel
 from world.tilemap import last_x
+from core.paths import assets_path, PROJECT_ROOT
 
 class Game:
     def __init__(self):
@@ -41,17 +42,17 @@ class Game:
         )
         pygame.display.set_caption(Settings.caption)
 
-        self.tiles = load_tiles("assets/tiles")
+        self.tiles = load_tiles(assets_path("tiles"))
         self.level = Level_loader()
-        self.level.load_level("world/levels/level1.json")
+        self.level.load_level(PROJECT_ROOT / "world/levels/level1.json")
         self.player = Player(
             tile_to_pixel(self.level.data["spawn"][0]), tile_to_pixel(self.level.data["spawn"][1]), 24, 24
         )
         self.hp_bar = Hp_bar(
-            "assets/hp_bar/hp_bar_bg.png", "assets/hp_bar/hp_bar_frame.png", 0, 0
+            assets_path("hp_bar/hp_bar_bg.png"), assets_path("hp_bar/hp_bar_frame.png"), 0, 0
         )
-        self.small_font = Font("assets/fonts/small_font.png")
-        self.large_font = Font("assets/fonts/large_font.png")
+        self.small_font = Font(assets_path("fonts/small_font.png"))
+        self.large_font = Font(assets_path("fonts/large_font.png"))
         self.logic_variables = Logic_variables()
         self.shop = Shop()
         self.pause_screen = Pause_screen()

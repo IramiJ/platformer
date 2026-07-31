@@ -1,7 +1,7 @@
 from entities.enemies.enemy import Enemy
 from entities.animations import load_animation
 from entities.hp_bar import Hp_bar
-
+from core.paths import assets_path
 
 class Chaser(Enemy):
     def __init__(self, x, y, width, height):
@@ -12,14 +12,14 @@ class Chaser(Enemy):
         self.max_hp = 4
         self.current_hp = 4
         self.animation_database["idle"] = load_animation(
-            "assets/enemies/chaser/idle", [20, 20, 20, 20, 20, 20], self
+            assets_path("enemies/chaser/idle"), [20, 20, 20, 20, 20, 20], self
         )
         self.animation_database["run"] = load_animation(
-            "assets/enemies/chaser/run", [5, 5, 5, 5, 5, 5], self
+            assets_path("enemies/chaser/run"), [5, 5, 5, 5, 5, 5], self
         )
         self.hp_bar = Hp_bar(
-            "assets/hp_bar/enemy_hp_bar_bg.png",
-            "assets/hp_bar/enemy_hp_bar_frame.png",
+            assets_path("hp_bar/enemy_hp_bar_bg.png"),
+            assets_path("hp_bar/enemy_hp_bar_frame.png"),
             self.x,
             self.y - 20,
         )

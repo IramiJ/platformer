@@ -2,17 +2,17 @@ import pygame
 from entities.entity import entity
 from entities.animations import load_animation
 from ui.Font_renderer import Font
-
+from core.paths import assets_path
 
 class Ammo:
     def __init__(self):
-        self.small_font = Font("assets/fonts/small_font.png")
-        self.pistol_img = pygame.image.load("assets/weapons/cd_pistol.png").convert()
+        self.small_font = Font(assets_path("fonts/small_font.png"))
+        self.pistol_img = pygame.image.load(assets_path("weapons/cd_pistol.png")).convert()
         self.pistol_img.set_colorkey((0, 0, 0))
         self.amount_padding = self.pistol_img.get_width() + 5
         self.cd_obj = entity(self.amount_padding, 9, 16, 16)
         self.cd_obj.animation_database["idle"] = load_animation(
-            "assets/cooldown/idle", [8 for x in range(15)], self.cd_obj
+            assets_path("cooldown/idle"), [8 for x in range(15)], self.cd_obj
         )
 
     def render_ammo(self, display, player):

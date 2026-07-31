@@ -1,11 +1,11 @@
 import pygame
 import math
 from entities.entity import simple_entity
-
+from core.paths import assets_path
 
 class Shooter_Bullet(simple_entity):
     def __init__(self, loc, player):
-        super().__init__("assets/enemies/shooter/bullet.png", loc)
+        super().__init__(assets_path("enemies/shooter/bullet.png"), loc)
         self.start = self.loc.copy()
         self.base_img = self.img.copy()
         self.velocity = 120

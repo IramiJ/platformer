@@ -4,14 +4,15 @@ from core.settings import REFERENCE_TICKS_PER_SECOND
 import random
 import pygame
 import math
+from core.paths import assets_path
 from entities.particles import Particle
-
+from pathlib import Path
 
 class Sword(entity):
     def __init__(self, x, y):
         super().__init__(x, y, 21, 7)
         self.loc = [x, y]
-        self.img = pygame.image.load("assets/weapons/broken_sword.png").convert()
+        self.img = pygame.image.load(assets_path("weapons/broken_sword.png")).convert()
         self.img.set_colorkey((0, 0, 0))
         self.particles = []
         self.flip = False
@@ -50,7 +51,7 @@ class Sword(entity):
     def spawn_particles(self):
         for i in range(0, 4):
             p = Particle(
-                "assets/particles/sword_particle.png",
+                assets_path("particles/sword_particle.png"),
                 [self.loc[0] + i, self.loc[1]],
                 2.0,
             )
@@ -70,19 +71,17 @@ class Sword(entity):
         ]
 
     def load_slice_animation(self):
-        path = "assets/weapons/sword/slice"
+        path = assets_path("weapons/sword/slice")
         dur = [1 for x in range(11)]
-        animation_name = path.split("/")[-1]
+        animation_name = path.name
         self.slice_animation = []
-        n = 0
-        for frame in dur:
-            animation_frame_id = animation_name + str(n)
-            img_loc = path + "/" + animation_frame_id + ".png"
+        for number, duration in enumerate(dur):
+            animation_frame_id = f"{animation_name}{number}"
+            img_loc = path / f"{animation_frame_id}.png"
             animation_image = pygame.image.load(img_loc).convert_alpha()
             animation_image.set_colorkey((0, 0, 0))
-            for i in range(frame):
+            for i in range(duration):
                 self.slice_animation.append(animation_image)
-            n += 1
 
     def draw_slice(self, display: pygame.Surface, scroll):
         if not self.flip:

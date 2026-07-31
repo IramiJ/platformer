@@ -1,4 +1,5 @@
 from __future__ import annotations
+from pathlib import Path
 
 import csv
 import math
@@ -36,12 +37,12 @@ def last_x(tilemap: list[list[str]]) -> int:
     return len(tilemap[0]) * TILE_SIZE
 
 
-def load_tiles(path: str) -> dict[str, pygame.Surface]:
+def load_tiles(path: str | Path) -> dict[str, pygame.Surface]:
     tiles_by_id = {}
     files = os.listdir(path)
     for file in files:
         name = str(int(file.split(".")[0]))
-        tiles_by_id[name] = pygame.image.load(path + "/" + file).convert()
+        tiles_by_id[name] = pygame.image.load(path / file).convert()
         tiles_by_id[name].set_colorkey((0, 0, 0))
     return tiles_by_id
 

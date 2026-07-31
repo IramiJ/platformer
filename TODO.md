@@ -36,7 +36,7 @@
 - [x] Remove or convert `ui/test.py` into an automated test.
 - [x] Move the interactive tree prototype from `tests/` to `experiments/` or remove it.
 - [x] Move foliage images from `tests/tree_test/` to `assets/foliage/`.
-- [ ] Resolve asset and configuration paths relative to the project instead of the current working directory.
+- [x] Resolve asset and configuration paths relative to the project instead of the current working directory.
 - [ ] Validate enemy names, keybinds, shop entries, maps, and referenced asset paths when loading data.
 
 ## 4. Add automated quality checks

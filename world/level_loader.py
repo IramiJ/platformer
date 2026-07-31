@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING
 from world.tilemap import read_csv
 from core.settings import TILE_SIZE
 from .coordinates import tile_position_to_pixel, tile_to_pixel
+from core.paths import PROJECT_ROOT
 
 if TYPE_CHECKING:
     from entities.enemies.enemies import Enemies
@@ -117,7 +118,7 @@ class Level_loader:
         with open(json_file, "r") as file:
             self.data = json.load(file)
         validate_level(self.data, json_file)
-        self.map = read_csv(self.data["map"])
+        self.map = read_csv(PROJECT_ROOT / self.data["map"])
         self.max_y_px = tile_to_pixel(self.data["max_y"])
         self.end_rect = pygame.Rect(
             *tile_position_to_pixel(self.data["end_coordinates"]),
@@ -126,11 +127,11 @@ class Level_loader:
         )
 
     def reload_level(self) -> None:
-        self.load_level(f"world/levels/level{self.id}.json")
+        self.load_level(PROJECT_ROOT / f"world/levels/level{self.id}.json")
 
     def next_level(self) -> None:
         self.id += 1
-        self.load_level(f"world/levels/level{self.id}.json")
+        self.load_level(PROJECT_ROOT / f"world/levels/level{self.id}.json")
 
     
 

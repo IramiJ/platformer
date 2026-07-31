@@ -1,10 +1,10 @@
 from ui.Font_renderer import Font
-
+from core.paths import assets_path
 
 class Win_screen:
     def __init__(self):
-        self.small_font = Font("assets/fonts/small_font.png")
-        self.large_font = Font("assets/fonts/large_font.png")
+        self.small_font = Font(assets_path("fonts/small_font.png"))
+        self.large_font = Font(assets_path("fonts/large_font.png"))
         self.displaying = False
 
     def render(self, surf):

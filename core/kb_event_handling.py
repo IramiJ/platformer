@@ -5,9 +5,9 @@ from entities.player.player import Player
 from ui.shopping import Shop
 from ui.pause_screen import Pause_screen
 from ui.win_screen import Win_screen
+from core.paths import PROJECT_ROOT
 
-
-def load_keybinds(path="core/keybinds.json"):
+def load_keybinds(path=PROJECT_ROOT / "core/keybinds.json"):
     with open(path, "r") as f:
         raw = json.load(f)
 

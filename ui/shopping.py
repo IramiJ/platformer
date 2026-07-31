@@ -3,13 +3,13 @@ import os
 import json
 from ui.Font_renderer import Font
 from entities.animations import draw_constants
-
+from core.paths import assets_path, PROJECT_ROOT
 
 class Shop:
     def __init__(self):
-        self.small_font = Font("assets/fonts/small_font.png")
-        self.large_font = Font("assets/fonts/large_font.png")
-        with open("ui/shop.json", "r") as file:
+        self.small_font = Font(assets_path("fonts/small_font.png"))
+        self.large_font = Font(assets_path("fonts/large_font.png"))
+        with open(PROJECT_ROOT / "ui/shop.json", "r") as file:
             self.data = json.load(file)
         self.buy_cooldown = 0
         counter = 1
@@ -20,7 +20,7 @@ class Shop:
         for entry in self.data:
             self.prices[entry] = str(self.data[entry]["price"])
             self.imgs[entry] = pygame.image.load(
-                self.data[entry]["asset_path"]
+                PROJECT_ROOT / self.data[entry]["asset_path"]
             ).convert(), [0, 32 * counter]
             self.item_boxes[entry] = pygame.Rect(
                 self.imgs[entry][1][0],

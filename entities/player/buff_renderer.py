@@ -1,3 +1,4 @@
+from core.paths import PROJECT_ROOT
 from ui.Font_renderer import Font
 import pygame
 import math
@@ -9,7 +10,7 @@ class Buff_renderer:
         self.buff_list = buff_list
         self.imgs = {}
         for buff in buff_list:
-            self.imgs[buff] = pygame.image.load(buff_list[buff]["asset_path"]).convert()
+            self.imgs[buff] = pygame.image.load(PROJECT_ROOT / buff_list[buff]["asset_path"]).convert()
             self.imgs[buff].set_colorkey((0, 0, 0))
 
     def render_buffs(self, display: pygame.Surface, player):

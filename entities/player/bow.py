@@ -2,7 +2,7 @@ import pygame
 import math
 from entities.entity import simple_entity, entity
 from entities.animations import load_animation
-
+from core.paths import assets_path
 
 class Bow:  
     def __init__(self, x, y):
@@ -28,7 +28,7 @@ class Bow:
             "idle": [0, 0, 0],
         }
         self.loc = [x, y]
-        self.img = pygame.image.load("assets/weapons/bow.png").convert()
+        self.img = pygame.image.load(assets_path("weapons/bow.png")).convert()
         self.img.set_colorkey((0, 0, 0))
         self.arrows = []
         self.flip = False
@@ -37,7 +37,7 @@ class Bow:
         self.max_shoot_cd = 0.5
         self.shoot_cd = 1/60
         self.ammo = 5
-        self.ammo_img = pygame.image.load("assets/weapons/cd_pistol.png").convert()
+        self.ammo_img = pygame.image.load(assets_path("weapons/cd_pistol.png")).convert()
         self.ammo_img.set_colorkey((0, 0, 0))
         self.max_reload_cd = 2.0
         self.reload_cd = 0
@@ -151,7 +151,7 @@ class Bow:
 
 class Arrow(simple_entity):
     def __init__(self, loc, flip):
-        super().__init__("assets/weapons/arrow.png", loc)
+        super().__init__(assets_path("weapons/arrow.png"), loc)
         self.start = self.loc.copy()
         self.base_img = self.img.copy()
         self.velocity = 300

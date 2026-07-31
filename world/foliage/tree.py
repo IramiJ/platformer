@@ -2,14 +2,14 @@ import pygame
 import random
 from .leaf import Leaf
 from core.settings import REFERENCE_TICKS_PER_SECOND
-
+from core.paths import assets_path
 
 LEAF_SPAWNS_PER_SECOND = REFERENCE_TICKS_PER_SECOND / 11.0
 
 
 class Tree:
     def __init__(self, loc):
-        self.img = pygame.image.load("assets/foliage/tree.png").convert()
+        self.img = pygame.image.load(assets_path("foliage/tree.png")).convert()
         self.img.set_colorkey((0, 0, 0))
         self.loc = loc
         self.leaf_spawn_timer = self.next_leaf_spawn_delay()

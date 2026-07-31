@@ -1,7 +1,7 @@
 from entities.entity import simple_entity
 import math
 import random
-
+from core.paths import assets_path
 
 TAIL_WAVE_INTERVAL = 0.1
 TAIL_POINT_DURATION = 2.0
@@ -17,7 +17,7 @@ class Tail:
         self.wave_timer = TAIL_WAVE_INTERVAL
         for i in range(10):
             self.points.append(
-                self.Point(self.loc[0] - i, self.loc[1], "assets/tail/grey.png")
+                self.Point(self.loc[0] - i, self.loc[1], assets_path("tail/grey.png"))
             )
 
     def update_points(self, dt):

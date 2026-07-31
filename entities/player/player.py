@@ -14,6 +14,7 @@ from entities.animations import load_animation, ANIMATION_TICKS_PER_SECOND
 from core.settings import REFERENCE_TICKS_PER_SECOND
 from entities.spark import Spark
 from world.collisions import move_collisions
+from core.paths import assets_path
 import math
 import pygame
 import random
@@ -46,17 +47,17 @@ class Player(entity):
         self.hp = 5
         self.dmg = 1
         self.animation_database["idle"] = load_animation(
-            "assets/char/idle", [20, 20, 20], self
+            assets_path("char/idle"), [20, 20, 20], self
         )
         self.animation_database["run"] = load_animation(
-            "assets/char/run", [4 for _ in range(12)], self
+            assets_path("char/run"), [4 for _ in range(12)], self
         )
         self.dmg_cd = 0
         self.cd_obj = entity(self.x, self.y + 15, 16, 16)
         self.cd_obj.animation_database["idle"] = load_animation(
-            "assets/cooldown/idle", [4 for x in range(15)], self.cd_obj
+            assets_path("cooldown/idle"), [4 for x in range(15)], self.cd_obj
         )
-        self.tail = Tail("assets/tail/grey.png", [self.rect.x - 2, self.rect.y + 8])
+        self.tail = Tail(assets_path("tail/grey.png"), [self.rect.x - 2, self.rect.y + 8])
         self.sword = Sword(self.rect.x, self.rect.y)
         self.bow = Bow(self.rect.x, self.rect.y)
         self.action = "idle"

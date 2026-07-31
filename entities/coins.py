@@ -1,6 +1,6 @@
 from entities.entity import simple_entity
 from entities.player.player import Player
-
+from core.paths import assets_path
 
 class Coins:
     def __init__(self):
@@ -26,5 +26,5 @@ class Coins:
 
 class Coin(simple_entity):
     def __init__(self, loc):
-        super().__init__("assets/collectables/coin.png", loc)
+        super().__init__(assets_path("collectables/coin.png"), loc)
         self.alive = True
