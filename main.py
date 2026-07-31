@@ -61,7 +61,6 @@ class Game:
         self.ammo = Ammo()
         self.enemies.load_enemies(self.level)
         self.bullets = []
-        self.torches = []
         self.sparks = []
         self.tile_rects = []
         self.minimap = Minimap()
@@ -100,7 +99,7 @@ class Game:
             self.show_remaining_enemies()
             self.tree.render(self.display, self.scroll)
             self.leafSystem.render_leaves(self.display, self.scroll)
-            self.player.run_render_logic(self.display, self.scroll, self.dt)
+            self.player.run_render_logic(self.display, self.scroll)
             self.texts.render_texts(self.display, self.scroll)
             self.hp_bar.draw(self.display, self.player.max_hp, self.player.hp)
             self.buff_renderer.render_buffs(self.display, self.player)
@@ -112,7 +111,6 @@ class Game:
 
     def update_dt(self):
         self.dt = self.clock.tick(Settings.fps) / 1000
-        self.dt *= 60
 
     def update_fps_counter(self):
         self.frames += 1
@@ -153,17 +151,13 @@ class Game:
         for bullet in self.bullets:
             bullet.render(self.display, self.scroll.render_scroll)
 
-    def draw_torches(self):
-        for torch in self.torches:
-            torch.draw(self.display, self.scroll)
-
     def draw_sparks(self):
         for i, spark in sorted(enumerate(self.sparks), reverse=True):
             spark.draw(self.display, self.scroll)
 
     def move_sparks(self):
         for i, spark in sorted(enumerate(self.sparks), reverse=True):
-            spark.move(1)
+            spark.move(self.dt)
             if not spark.alive:
                 self.sparks.pop(i)
 
@@ -223,18 +217,17 @@ class Game:
                 self.sparks,
                 self.dt,
             )
-            self.scroll.player_scrolling(self.player, self.level)
+            self.scroll.player_scrolling(self.player, self.level, self.dt)
             self.move_bullets()
             self.move_sparks()
-            self.tree.generate_leaves(self.leafSystem.leaf_imgs, self.leafSystem.leaves)
-            self.leafSystem.update_leaves(self.dt)
-            if self.player.bow.reloading:
-                self.ammo.update_dash_img()
+            self.leafSystem.update(self.tree, self.dt)
             self.minimap.update_map(
                 [self.player.rect.x, self.player.rect.y], self.level.map
             )
         else:
-            self.logic_variables.hitstop_timer -= self.dt
+            self.logic_variables.hitstop_timer = max(
+                0.0, self.logic_variables.hitstop_timer - self.dt
+            )
         if update_level(
             self.player,
             self.level,
@@ -278,6 +271,7 @@ class Game:
         self.scroll.shake_timer = 0
         self.scroll.shake_strength = 0
         self.scroll.shake_offset = [0, 0]
+        self.scroll.shake_sample_timer = 0
         
     def present(self):
         self.draw_render_surf()

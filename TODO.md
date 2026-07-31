@@ -23,7 +23,7 @@
 - [x] Make every production module importable without starting the game or opening a window.
 - [x] Separate state updates from rendering.
 - [x] Move animation, cooldown, damage-flash, particle, and cleanup updates out of render methods.
-- [ ] Use seconds consistently for delta time, cooldowns, stun durations, buffs, and animations.
+- [x] Use seconds consistently for delta time, cooldowns, stun durations, buffs, and animations.
 - [ ] Stop removing bullets, arrows, coins, and particles while iterating over their lists.
 - [ ] Introduce an explicit alive/dead lifecycle and filter collections after updates.
 - [ ] Add a central level/session reset method.

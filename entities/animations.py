@@ -1,5 +1,7 @@
 import pygame
+from core.settings import REFERENCE_TICKS_PER_SECOND
 
+ANIMATION_TICKS_PER_SECOND = REFERENCE_TICKS_PER_SECOND
 
 def load_animation(path: str, dur: int, entity):
     animation_name = path.split("/")[-1]

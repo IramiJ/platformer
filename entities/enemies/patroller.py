@@ -19,8 +19,8 @@ class Patroller(Enemy):
             self.y - 20,
         )
         self.direction = "r"
-        self.velocity = 1.2
-        self.burst_velocity = 0.6
+        self.velocity = 72
+        self.burst_velocity = 36
         self.true_velocity = self.velocity + self.burst_velocity
         self.attack_cd = 0
         self.stunned = False
@@ -38,12 +38,12 @@ class Patroller(Enemy):
 
     def move(self, dt: float, tiles: list):
         if self.stunned:
-            self.stun_cd -= 1
-            if self.stun_cd == 0:
+            self.stun_cd = max(0.0, self.stun_cd - dt)
+            if self.stun_cd <= 0:
                 self.stunned = False
         else:
             self.movement = [0, 0]
-            self.handle_burst()
+            self.handle_burst(dt)
             if self.direction == "r":
                 self.move_right()
             if self.direction == "l":
@@ -69,27 +69,27 @@ class Patroller(Enemy):
         else:
             self.movement[0] -= self.true_velocity
 
-    def attack(self, player, scroll):
+    def attack(self, player, scroll, dt):
         if self.attack_cd > 0:
-            self.attack_cd -= 1
+            self.attack_cd = max(0.0, self.attack_cd - dt)
         else:
             if self.rect.colliderect(player.rect) and not player.dashing:
                 player.take_dmg(scroll)
-                self.attack_cd = 30
+                self.attack_cd = 0.5
 
     def stun(self):
-        self.stun_cd = 20
+        self.stun_cd = 1/3
         self.stunned = True
 
     def activate_burst(self):
         self.bursting = True
-        self.burst_cd = 30
+        self.burst_cd = 0.5
 
-    def handle_burst(self):
+    def handle_burst(self, dt):
         if self.bursting:
             self.true_velocity = self.velocity + self.burst_velocity
-            self.burst_cd -= 1
-            if self.burst_cd == 0:
+            self.burst_cd = max(0.0, self.burst_cd - dt)
+            if self.burst_cd <= 0:
                 self.bursting = False
         else:
             self.true_velocity = self.velocity

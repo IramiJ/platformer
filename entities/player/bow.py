@@ -34,15 +34,16 @@ class Bow:
         self.flip = False
         self.reloading = False
         self.add_ammo = False
-        self.max_shoot_cd = 30
-        self.shoot_cd = 1
+        self.max_shoot_cd = 0.5
+        self.shoot_cd = 1/60
         self.ammo = 5
         self.ammo_img = pygame.image.load("assets/weapons/cd_pistol.png").convert()
         self.ammo_img.set_colorkey((0, 0, 0))
+        self.max_reload_cd = 2.0
         self.reload_cd = 0
 
-    def update(self, player):
-        self.update_cds()
+    def update(self, player, dt):
+        self.update_cds(dt)
         self.set_flip(player)
         self.update_location(player.flip, player.rect, player.frame, player.action)
 
@@ -86,12 +87,12 @@ class Bow:
         for arrow in self.arrows:
             arrow.move(enemy_list, self.arrows, dt)
 
-    def update_cds(self):
+    def update_cds(self, dt):
         if self.shoot_cd > 0:
-            self.shoot_cd -= 1
+            self.shoot_cd = max(0, self.shoot_cd - dt)
         if self.reload_cd > 0:
-            self.reload_cd -= 1
-            if self.reload_cd == 0:
+            self.reload_cd = max(0, self.reload_cd - dt)
+            if self.reload_cd <= 0:
                 self.reloading = False
                 self.add_ammo = True
         if self.add_ammo:
@@ -101,7 +102,7 @@ class Bow:
             self.reload()
 
     def add_arrow(self):
-        if self.reload_cd == 0:
+        if self.reload_cd <= 0:
             if self.shoot_cd <= 0:
                 arrow_loc = self.loc.copy()
                 flip = bool(self.flip)
@@ -111,7 +112,7 @@ class Bow:
 
     def reload(self):
         if not self.reloading:
-            self.reload_cd = 120
+            self.reload_cd = self.max_reload_cd
             self.reloading = True
 
     def draw_rotated(self, display, scroll, angle):
@@ -148,7 +149,7 @@ class Arrow(simple_entity):
         super().__init__("assets/weapons/arrow.png", loc)
         self.start = self.loc.copy()
         self.base_img = self.img.copy()
-        self.velocity = 5
+        self.velocity = 300
         self.range = 200
         self.dmg_cd = 0
         self.flip = flip

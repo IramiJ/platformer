@@ -6,16 +6,16 @@ class Heavy_Patroller(Patroller):
         super().__init__(x, y, width, height)
         self.max_hp = 6
         self.current_hp = 6
-        self.true_velocity = 1
+        self.true_velocity = 60
 
-    def move(self, dt, tiles=None):
+    def move(self, dt, tiles):
         self.movement = [0, 0]
         if self.direction == "r":
             self.move_right()
         if self.direction == "l":
             self.move_left()
         """ actual movement of the enemy """
-        self.rect.x += self.movement[0] * dt  
+        self.move_with_tile_collisions(dt, tiles)
         
     def move_right(self):
         if self.rect.x >= self.spawn_point[0] + self.distance:

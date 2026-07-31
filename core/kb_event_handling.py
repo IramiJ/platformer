@@ -41,7 +41,7 @@ class Keyboard_event_handler:
                     elif event.key == self.keybinds["left"]:
                         player.moving_left = True
                     elif event.key == self.keybinds["jump"]:
-                        if player.air_timer < 6:
+                        if player.air_timer < 0.1:
                             player.y_momentum = player.jump_momentum
                     elif event.key == self.keybinds["shop"]:
                         shop.change_displaying()

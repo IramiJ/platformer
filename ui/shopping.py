@@ -69,7 +69,7 @@ class Shop:
             ):
                 player.coin_amount -= int(self.prices[item])
                 self.buy_cooldown = 0
-                buff_list[item] = int(self.data[item]["duration"]) * 60
+                buff_list[item] = int(self.data[item]["duration"])
 
     def change_displaying(self):
         self.displaying = not self.displaying

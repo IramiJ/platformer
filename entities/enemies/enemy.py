@@ -1,6 +1,12 @@
 from entities.entity import entity
 from world.collisions import collision_test, move_collisions
 import pygame, math
+from entities.animations import ANIMATION_TICKS_PER_SECOND
+from core.settings import REFERENCE_TICKS_PER_SECOND
+
+
+DAMAGE_FLASH_DURATION = 5.0 / REFERENCE_TICKS_PER_SECOND
+WHITE_FLASH_DURATION = 1.0 / REFERENCE_TICKS_PER_SECOND
 
 
 class Enemy(entity):
@@ -8,27 +14,28 @@ class Enemy(entity):
         super().__init__(x, y, width, height)
         self.max_hp = 3
         self.current_hp = 3
-        self.velocity = 1
+        self.velocity = 60
         self.alive = True
         self.dmg_timer = 0
         self.y_momentum = 0
 
     def update_frames(self, dt):
-        self.frame += dt
-        if self.frame >= len(self.animation_database[self.action]):
-            self.frame = 0
-        self.img_id = self.animation_database[self.action][math.floor(self.frame)]
+        animation = self.animation_database[self.action]
+        self.frame = (
+            self.frame + ANIMATION_TICKS_PER_SECOND * dt
+        ) % len(animation)
+        self.img_id = animation[math.floor(self.frame)]
         self.img = self.animation_frames[self.img_id]
 
-    def update_dmg_timer(self):
+    def update_dmg_timer(self, dt):
        if self.dmg_timer <= 0:
            return
        else:
-           self.dmg_timer -= 1 
+           self.dmg_timer = max(0.0, self.dmg_timer - dt)
 
     def draw_dmg_timer(self, to_blit):
         if self.dmg_timer > 0:
-            if self.dmg_timer == 5:
+            if self.dmg_timer > DAMAGE_FLASH_DURATION - WHITE_FLASH_DURATION:
                 to_blit.fill((255, 255, 255), special_flags=pygame.BLEND_RGB_ADD)
             else:
                 to_blit.fill((255, 0, 0), special_flags=pygame.BLEND_RGB_ADD)
@@ -48,7 +55,7 @@ class Enemy(entity):
     def take_dmg(self, dmg):
         if not self.alive:
             return
-        self.dmg_timer = 5
+        self.dmg_timer = DAMAGE_FLASH_DURATION
         self.current_hp -= dmg
         self.taking_dmg = True
         if self.current_hp <= 0:
@@ -74,6 +81,6 @@ class Enemy(entity):
             self.y_momentum = 0
     
     def set_y_momentum(self, dt: float) -> None:
-        self.y_momentum += 0.4 * dt
-        if self.y_momentum > 7:
-            self.y_momentum = 7
+        self.y_momentum += 1440 * dt
+        if self.y_momentum > 420.0:
+            self.y_momentum = 420.0

@@ -8,7 +8,7 @@ class Shooter_Bullet(simple_entity):
         super().__init__("assets/enemies/shooter/bullet.png", loc)
         self.start = self.loc.copy()
         self.base_img = self.img.copy()
-        self.velocity = 2
+        self.velocity = 120
         self.range = 200
         self.calc_angle(player)
         self.dmg_cd = 0
@@ -24,7 +24,7 @@ class Shooter_Bullet(simple_entity):
     def move(self, entity, bullet_list, scroll, dt):
         self.loc[0] += math.cos(self.angle) * self.velocity * dt
         self.loc[1] += math.sin(self.angle) * self.velocity * dt
-        if self.dmg_cd == 0:
+        if self.dmg_cd <= 0:
             self.dmg_entity(entity, scroll)
         self.remove(bullet_list)
 
@@ -40,4 +40,4 @@ class Shooter_Bullet(simple_entity):
     def dmg_entity(self, entity, scroll):
         if self.collision_test(entity.rect):
             entity.take_dmg(scroll)
-            self.dmg_cd = 1
+            self.dmg_cd = 1/60

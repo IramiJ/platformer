@@ -31,7 +31,7 @@ class Enemies:
         self, player, bullet_list, scroll, tiles, logic_variables, sparks, dt
     ):
         for enemy in self.enemies:
-            enemy.update_dmg_timer()
+            enemy.update_dmg_timer(dt)
             if self.enemy_is_active(enemy, player):
                 if isinstance(enemy, Chaser):
                     enemy.move(player, tiles, dt)
@@ -39,9 +39,9 @@ class Enemies:
                     enemy.move(dt, tiles)
 
                 if isinstance(enemy, Shooter):
-                    enemy.attack(player, bullet_list, scroll)
+                    enemy.attack(player, bullet_list, scroll, dt)
                 else:
-                    enemy.attack(player, scroll)
+                    enemy.attack(player, scroll, dt)
 
                 player.attack(enemy, logic_variables, sparks, dt)
             enemy.update_frames(dt)

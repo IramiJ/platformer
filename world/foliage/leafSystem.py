@@ -1,11 +1,16 @@
 import pygame
 import os
 from .wind import Wind
+from core.settings import REFERENCE_TICKS_PER_SECOND
+
+
+FOLIAGE_SIMULATION_STEP = 1.0 / REFERENCE_TICKS_PER_SECOND
 
 
 class LeafSystem:
     def __init__(self):
         self.wind = Wind()
+        self.update_accumulator = 0.0
         self.leaf_imgs = []
         self.leaves = []
         for leaf in os.listdir(path := "assets/foliage/leaves"):
@@ -18,10 +23,18 @@ class LeafSystem:
             
 
     def update_leaves(self, dt):
-        dt_seconds = dt / 60
-        self.wind.update(dt_seconds)
+        self.wind.update(dt)
         for leaf in self.leaves[:]:
-            leaf.update(self.wind, dt_seconds)
-            leaf.duration -= dt_seconds
+            leaf.update(self.wind, dt)
+            leaf.duration -= dt
             if leaf.duration <= 0:
                 self.leaves.remove(leaf)
+
+    def update(self, tree, dt):
+        self.update_accumulator += dt
+        while self.update_accumulator + 1e-12 >= FOLIAGE_SIMULATION_STEP:
+            tree.generate_leaves(
+                self.leaf_imgs, self.leaves, FOLIAGE_SIMULATION_STEP
+            )
+            self.update_leaves(FOLIAGE_SIMULATION_STEP)
+            self.update_accumulator -= FOLIAGE_SIMULATION_STEP

@@ -5,8 +5,6 @@ import math
 import os
 import pygame
 
-from .torch import Torch
-from .chandelier import Chandelier
 from core.settings import TILE_SIZE
 
 from typing import TYPE_CHECKING
@@ -47,19 +45,6 @@ def load_tiles(path: str) -> dict[str, pygame.Surface]:
         tiles_by_id[name].set_colorkey((0, 0, 0))
     return tiles_by_id
 
-
-def load_torches(tilemap: list[list[str]], torch_list) -> None:
-    torch_types = {"10": Torch, "12": Chandelier}
-    y = 0
-    torch_list.clear()
-    for row in tilemap:
-        x = 0
-        for tile in row:
-            if tile == "10" or tile == "12":
-                position = [x * TILE_SIZE, y * TILE_SIZE]
-                torch_list.append(torch_types[tile](position))
-            x += 1
-        y += 1
 
 
 SKIP_TILES = {"-1"}

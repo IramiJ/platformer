@@ -2,19 +2,23 @@ from entities.player.player import Player
 from world.level_loader import Level_loader
 from world.tilemap import last_x
 from random import randint
-from core.settings import TILE_SIZE, Settings
+from core.settings import TILE_SIZE, Settings, REFERENCE_TICKS_PER_SECOND
+
+
+SHAKE_SAMPLE_INTERVAL = 1.0 / REFERENCE_TICKS_PER_SECOND
 
 class Scroll:
     def __init__(self):
         self.true_scroll = [0, 0]
         self.shake_offset = [0, 0]
         self.shake_timer = 0
+        self.shake_sample_timer = 0
         self.shake_strength = 0
         self.render_scroll = [
             a + b for a, b in zip(self.true_scroll, self.shake_offset)
         ]
 
-    def player_scrolling(self, player: Player, level: Level_loader) -> None:
+    def player_scrolling(self, player: Player, level: Level_loader, dt: float) -> None:
         if player.rect.x < (Settings.window_size[0]/2 - TILE_SIZE)/2:
             self.true_scroll[0] = 0
         elif player.rect.x - Settings.window_size[0]/4 + TILE_SIZE > last_x(level.map) - Settings.window_size[0]/2:
@@ -25,17 +29,21 @@ class Scroll:
             self.true_scroll[1] = 0
         else:
             self.true_scroll[1] = player.rect.y - Settings.window_size[1]/5
+        self.shake(dt)
         self.render_scroll = [
             a + b for a, b in zip(self.true_scroll, self.shake_offset)
         ]
-        self.shake()
 
-    def shake(self) -> None:
+    def shake(self, dt) -> None:
         if self.shake_timer > 0:
-            self.shake_offset = [
-                randint(-self.shake_strength, self.shake_strength),
-                randint(-self.shake_strength, self.shake_strength),
-            ]
-            self.shake_timer -= 1
+            self.shake_sample_timer -= dt
+            while self.shake_sample_timer < 0:
+                self.shake_offset = [
+                    randint(-self.shake_strength, self.shake_strength),
+                    randint(-self.shake_strength, self.shake_strength),
+                ]
+                self.shake_sample_timer += SHAKE_SAMPLE_INTERVAL
+            self.shake_timer = max(0.0, self.shake_timer - dt)
         else:
             self.shake_offset = [0, 0]
+            self.shake_sample_timer = 0

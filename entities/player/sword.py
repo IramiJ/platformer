@@ -1,5 +1,6 @@
 from entities.entity import entity
-from entities.animations import load_animation
+from entities.animations import ANIMATION_TICKS_PER_SECOND
+from core.settings import REFERENCE_TICKS_PER_SECOND
 import random
 import pygame
 import math
@@ -9,11 +10,12 @@ from entities.particles import Particle
 class Sword(entity):
     def __init__(self, x, y):
         super().__init__(x, y, 21, 7)
+        self.loc = [x, y]
         self.img = pygame.image.load("assets/weapons/broken_sword.png").convert()
         self.img.set_colorkey((0, 0, 0))
         self.particles = []
         self.flip = False
-        self.particle_cd = 1
+        self.particle_cd = 1/60
         self.load_slice_animation()
         self.slice_frame = 0
         self.animation_database["idle"] = [self.img]
@@ -40,32 +42,32 @@ class Sword(entity):
             "idle": [0, 0, 0],
         }
 
-    def add_particles(self):
-        if self.particle_cd == 0:
+    def add_particles(self, dt):
+        self.particle_cd = max(0.0, self.particle_cd - dt)
+        if self.particle_cd <= 0:
             self.spawn_particles()
-        else:
-            self.particle_cd -= 1
-
-        self.decrease_particles_duration()
 
     def spawn_particles(self):
         for i in range(0, 4):
             p = Particle(
                 "assets/particles/sword_particle.png",
                 [self.loc[0] + i, self.loc[1]],
-                120,
+                2.0,
             )
-            p.y_velocity += i / 100
+            p.y_velocity += i / 100 * REFERENCE_TICKS_PER_SECOND
             if self.flip:
                 self.particles.append(p)
             else:
                 p.loc[0] = self.loc[0] + 20 - i
                 self.particles.append(p)
-        self.particle_cd = 60
+        self.particle_cd = 1.0
 
-    def decrease_particles_duration(self):
+    def update_particles(self, dt):
         for particle in self.particles:
-            particle.duration -= 1
+            particle.update(dt)
+        self.particles = [
+            particle for particle in self.particles if particle.duration > 0
+        ]
 
     def load_slice_animation(self):
         path = "assets/weapons/sword/slice"
@@ -108,9 +110,9 @@ class Sword(entity):
         
 
     def update_slice_frame(self, dt):
-        self.slice_frame += dt
-        if self.slice_frame >= len(self.slice_animation):
-            self.slice_frame = 0
+        self.slice_frame = (
+            self.slice_frame + ANIMATION_TICKS_PER_SECOND * dt
+        ) % len(self.slice_animation)
 
     def draw(
         self,
@@ -126,15 +128,15 @@ class Sword(entity):
         if player_dash_state:
             self.draw_slice(display, scroll)
         """
-        Sword particle code
-        self.add_particles()
-        self.draw_particles(display, scroll)
+        Particle spawning belongs in update logic.
         """
+        self.draw_particles(display, scroll)
         self.draw_rotated(display, scroll, angle)
 
     def update(self, player, dt):
         self.update_location(player.flip, player.rect, player.frame, player.action)
         self.set_flip(player.flip)
+        self.update_particles(dt)
 
         if player.mode == "melee" and player.dashing:
             self.update_slice_frame(dt)

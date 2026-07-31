@@ -1,6 +1,10 @@
 import pygame
 import random
 import math
+from core.settings import REFERENCE_TICKS_PER_SECOND
+
+
+WIND_ACCELERATION = 0.02 * REFERENCE_TICKS_PER_SECOND ** 2
 
 
 class Leaf:
@@ -15,12 +19,18 @@ class Leaf:
         w, h = self.img.get_width(), self.img.get_height()
         self.rect = pygame.FRect(self.loc[0], self.loc[1], w, h)
 
-        self.vx = random.uniform(-0.2, 0.2)
-        self.vy = random.uniform(0.1, 0.6)
+        self.vx = random.uniform(-0.2, 0.2) * REFERENCE_TICKS_PER_SECOND
+        self.vy = random.uniform(0.1, 0.6) * REFERENCE_TICKS_PER_SECOND
 
-        self.gravity = random.uniform(0.015, 0.03)
-        self.drag = random.uniform(0.985, 0.995)
-        self.terminal_vy = random.uniform(1.2, 2.2)
+        self.gravity = (
+            random.uniform(0.015, 0.03) * REFERENCE_TICKS_PER_SECOND ** 2
+        )
+        self.drag_per_second = (
+            random.uniform(0.985, 0.995) ** REFERENCE_TICKS_PER_SECOND
+        )
+        self.terminal_vy = (
+            random.uniform(1.2, 2.2) * REFERENCE_TICKS_PER_SECOND
+        )
 
         self.phase = random.uniform(0, math.tau)
         self.flutter_amp = random.uniform(0.15, 0.5)
@@ -39,17 +49,17 @@ class Leaf:
         self.phase += self.flutter_speed * dt
         flutter = math.sin(self.phase) * self.flutter_amp
 
-        self.vy += self.gravity * (dt * 60)
-        self.vx += (wind.current + flutter) * 0.02 * (dt * 60)
+        self.vy += self.gravity * dt
+        self.vx += (wind.current + flutter) * WIND_ACCELERATION * dt
 
-        drag = self.drag ** (dt * 60)
+        drag = self.drag_per_second ** dt
         self.vx *= drag
         self.vy *= drag
 
         if self.vy > self.terminal_vy:
             self.vy = self.terminal_vy
 
-        self.loc[0] += self.vx * (dt * 60)
-        self.loc[1] += self.vy * (dt * 60)
+        self.loc[0] += self.vx * dt
+        self.loc[1] += self.vy * dt
 
         self.rect.x, self.rect.y = self.loc[0], self.loc[1]
