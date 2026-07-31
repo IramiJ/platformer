@@ -94,7 +94,8 @@ class Chaser(Enemy):
             self.move_burst_increase = 0
             self.true_velocity = self.velocity
             self.return_to_spawnpoint()
-
+        self.set_y_momentum(dt)
+        self.movement[1] += self.y_momentum
         self.move_with_tile_collisions(dt, tiles)
 
     def attack(self, player, scroll, dt):
