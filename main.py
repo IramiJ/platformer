@@ -207,40 +207,52 @@ class Game:
         self.update_logic_variables()
 
     def update(self):
+        if self.dead:
+            self.reload_on_respawn()
+            return
+        if self.win_screen.displaying:
+            return
+        if self.pause_screen.displaying:
+            return
         if self.shop.displaying:
             self.shop.update(self.player)
-        if self.logic_variables.MOVEMENTS and self.logic_variables.hitstop_timer <= 0:
-            self.update_tile_rects()
-            self.player.update(self.tile_rects, self.enemies.enemies, self.level.max_y_px, self.dt)
-            self.enemies.update_enemies(
-                self.player,
-                self.bullets,
-                self.scroll,
-                self.tile_rects,
-                self.logic_variables,
-                self.sparks,
-                self.dt,
-            )
-            self.scroll.player_scrolling(self.player, self.level, self.dt)
-            self.move_bullets()
-            self.move_sparks()
-            self.leafSystem.update(self.tree, self.dt)
-            self.minimap.update_map(
-                [self.player.rect.x, self.player.rect.y], self.level.map
-            )
-        else:
+            return
+        if self.logic_variables.MOVEMENTS and self.logic_variables.hitstop_timer > 0:
             self.logic_variables.hitstop_timer = max(
                 0.0, self.logic_variables.hitstop_timer - self.dt
             )
+            return
+        
+        self.update_gameplay()
+        
+
+    def update_gameplay(self):
+        self.update_tile_rects()
+        self.player.update(self.tile_rects, self.enemies.enemies, self.level.max_y_px, self.dt)
+        self.enemies.update_enemies(
+            self.player,
+            self.bullets,
+            self.scroll,
+            self.tile_rects,
+            self.logic_variables,
+            self.sparks,
+            self.dt,
+        )
+        self.scroll.player_scrolling(self.player, self.level, self.dt)
+        self.move_bullets()
+        self.move_sparks()
+        self.leafSystem.update(self.tree, self.dt)
+        self.minimap.update_map(
+            [self.player.rect.x, self.player.rect.y], self.level.map
+        )
         if update_level(
             self.player,
             self.level,
             self.enemies,
             self.texts,
             self.win_screen,
-        ):
+                ):
             self.initialize_loaded_level()
-        self.reload_on_respawn()
         reach_checkpoint(self.player, self.level)
 
     def reset_transient_state(self) -> None:
@@ -289,6 +301,10 @@ class Game:
         self.player.hp = self.player.max_hp
         self.player.buffs.clear()
         self.player.respawn = False
+
+        self.shop.displaying = False
+        self.pause_screen.displaying = False
+        self.win_screen.displaying = False
 
         self.level.reload_level()
         self.initialize_loaded_level()

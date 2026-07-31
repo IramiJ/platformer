@@ -31,10 +31,19 @@ class Keyboard_event_handler:
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
+            
             if event.type == pygame.KEYDOWN:
                 if player.hp <= 0:
                     player.respawn = True
+                if pause_screen.displaying:
+                    if event.key == self.keybinds["pause"]:
+                        pause_screen.change_displaying()
+                    continue
+    
+                if shop.displaying:
+                    if event.key == self.keybinds["shop"]:
+                        shop.change_displaying()
+                    continue
                 else:
                     if event.key == self.keybinds["right"]:
                         player.moving_right = True
