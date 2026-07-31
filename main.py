@@ -195,7 +195,7 @@ class Game:
 
     def handle_input(self):
         self.keyboard_event_handler.handle_keyboard_events(
-            self.player, self.shop, self.pause_screen
+            self.player, self.shop, self.pause_screen, self.win_screen
         )
 
     def reload_on_respawn(self):

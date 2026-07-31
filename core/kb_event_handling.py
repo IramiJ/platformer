@@ -4,6 +4,7 @@ import json
 from entities.player.player import Player
 from ui.shopping import Shop
 from ui.pause_screen import Pause_screen
+from ui.win_screen import Win_screen
 
 
 def load_keybinds(path="core/keybinds.json"):
@@ -25,7 +26,7 @@ class Keyboard_event_handler:
         self.keybinds = load_keybinds()
 
     def handle_keyboard_events(
-        self, player: Player, shop: Shop, pause_screen: Pause_screen
+        self, player: Player, shop: Shop, pause_screen: Pause_screen, win_screen: Win_screen
     ):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -35,6 +36,9 @@ class Keyboard_event_handler:
             if event.type == pygame.KEYDOWN:
                 if player.hp <= 0:
                     player.respawn = True
+                    continue
+                if win_screen.displaying:
+                    continue
                 if pause_screen.displaying:
                     if event.key == self.keybinds["pause"]:
                         pause_screen.change_displaying()
