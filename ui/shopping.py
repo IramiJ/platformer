@@ -11,6 +11,7 @@ class Shop:
         self.large_font = Font(assets_path("fonts/large_font.png"))
         with open(PROJECT_ROOT / "ui/shop.json", "r") as file:
             self.data = json.load(file)
+        validate_shop_file(self.data)
         self.buy_cooldown = 0
         counter = 1
         self.item_boxes = {}
@@ -86,3 +87,27 @@ class Shop:
         player.moving_right = False
         player.moving_left = False
         self.buy(player, player.buffs)
+
+def validate_shop_file(data):
+    errors = []
+
+    required_fields = {
+        "price": str,
+        "duration": str,
+        "description": str,
+        "asset_path": str
+    }
+    if not isinstance(data, dict):
+        raise ValueError("shop file must contain a JSON object")
+    for item, item_data in data.items():
+        if not isinstance(item_data, dict):
+            errors.append(f"{item} must be a JSON object")
+            continue
+        for field, expected_type in required_fields.items():
+            if field not in data[item]:
+                errors.append(f"{item} is missing field: {field}")
+                continue
+            if not isinstance(item_data[field], expected_type):
+                errors.append(f"the field {field} of item {item} is not of type {expected_type.__name__}")
+    if errors:
+        raise ValueError("\n".join(errors))

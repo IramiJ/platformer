@@ -10,7 +10,7 @@ from core.paths import PROJECT_ROOT
 def load_keybinds(path=PROJECT_ROOT / "core/keybinds.json"):
     with open(path, "r") as f:
         raw = json.load(f)
-
+    validate_keybinds(raw)
     binds = {}
     for action, key_name in raw.items():
         try:
@@ -19,6 +19,30 @@ def load_keybinds(path=PROJECT_ROOT / "core/keybinds.json"):
             raise ValueError(f"Invalid key name in JSON: {key_name} (action: {action})")
 
     return binds
+
+def validate_keybinds(data: dict) -> None:
+    errors = []
+
+    required_keys = [
+        "right",
+        "left",
+        "jump",
+        "shop",
+        "dash",
+        "pause",
+        "switch_mode",
+        "shoot",
+        "reload"
+    ]
+    for key in required_keys:
+        if key not in data:
+            errors.append(f"required key {key} is missing")
+    for action, key_name in data.items():
+        if not (isinstance(key_name, str) and key_name.startswith("K_") and hasattr(pygame, key_name)):
+            errors.append(f"invalid pygame key for {action}: {key_name}")
+
+    if errors:
+        raise ValueError("\n".join(errors))
 
 
 class Keyboard_event_handler:
