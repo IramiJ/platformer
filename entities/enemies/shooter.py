@@ -5,7 +5,7 @@ from entities.hp_bar import Hp_bar
 from core.settings import Settings
 import math
 import pygame
-from core.paths import assets_path
+from core.paths import require_asset_file, require_asset_dir
 
 class Shooter(Enemy):
     def __init__(self, x, y, width, height):
@@ -16,14 +16,14 @@ class Shooter(Enemy):
         self.max_hp = 2
         self.current_hp = 2
         self.animation_database["idle"] = load_animation(
-            assets_path("enemies/shooter/idle"), [20, 20, 20, 20, 20, 20], self
+            require_asset_dir("enemies/shooter/idle"), [20, 20, 20, 20, 20, 20], self
         )
         self.animation_database["shoot"] = load_animation(
-            assets_path("enemies/shooter/shoot"), [20, 20], self
+            require_asset_dir("enemies/shooter/shoot"), [20, 20], self
         )
         self.hp_bar = Hp_bar(
-            assets_path("hp_bar/enemy_hp_bar_bg.png"),
-            assets_path("hp_bar/enemy_hp_bar_frame.png"),
+            require_asset_file("hp_bar/enemy_hp_bar_bg.png"),
+            require_asset_file("hp_bar/enemy_hp_bar_frame.png"),
             self.x,
             self.y - 20,
         )

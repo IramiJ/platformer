@@ -2,7 +2,7 @@ import pygame
 import os
 from .wind import Wind
 from core.settings import REFERENCE_TICKS_PER_SECOND
-from core.paths import assets_path
+from core.paths import require_asset_dir
 
 FOLIAGE_SIMULATION_STEP = 1.0 / REFERENCE_TICKS_PER_SECOND
 
@@ -13,7 +13,7 @@ class LeafSystem:
         self.update_accumulator = 0.0
         self.leaf_imgs = []
         self.leaves = []
-        for leaf in os.listdir(path := assets_path("foliage/leaves")):
+        for leaf in os.listdir(path := require_asset_dir("foliage/leaves")):
             img_path = path / leaf
             self.leaf_imgs.append(img_path)
 

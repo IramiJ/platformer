@@ -92,7 +92,7 @@ def validate_enemies(enemies, errors):
 
 def validate_texts(texts, errors):
     if not isinstance(texts, dict):
-        pass
+        errors.append("field 'texts' is not a dictionary")
     for text, position in texts.items():
         if not isinstance(text, str):
             errors.append("Every text key must be a string")

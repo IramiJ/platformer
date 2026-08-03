@@ -4,7 +4,7 @@ from core.settings import REFERENCE_TICKS_PER_SECOND
 import random
 import pygame
 import math
-from core.paths import assets_path
+from core.paths import require_asset_file, require_asset_dir
 from entities.particles import Particle
 from pathlib import Path
 
@@ -12,7 +12,7 @@ class Sword(entity):
     def __init__(self, x, y):
         super().__init__(x, y, 21, 7)
         self.loc = [x, y]
-        self.img = pygame.image.load(assets_path("weapons/broken_sword.png")).convert()
+        self.img = pygame.image.load(require_asset_file("weapons/broken_sword.png")).convert()
         self.img.set_colorkey((0, 0, 0))
         self.particles = []
         self.flip = False
@@ -51,7 +51,7 @@ class Sword(entity):
     def spawn_particles(self):
         for i in range(0, 4):
             p = Particle(
-                assets_path("particles/sword_particle.png"),
+                require_asset_file("particles/sword_particle.png"),
                 [self.loc[0] + i, self.loc[1]],
                 2.0,
             )
@@ -71,13 +71,15 @@ class Sword(entity):
         ]
 
     def load_slice_animation(self):
-        path = assets_path("weapons/sword/slice")
+        path = require_asset_dir("weapons/sword/slice")
         dur = [1 for x in range(11)]
         animation_name = path.name
         self.slice_animation = []
         for number, duration in enumerate(dur):
             animation_frame_id = f"{animation_name}{number}"
             img_loc = path / f"{animation_frame_id}.png"
+            if not img_loc.is_file():
+                raise FileNotFoundError(f"Missing sword slice frame: {img_loc}")
             animation_image = pygame.image.load(img_loc).convert_alpha()
             animation_image.set_colorkey((0, 0, 0))
             for i in range(duration):

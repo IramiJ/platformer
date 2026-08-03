@@ -1,14 +1,13 @@
 import pygame
-import os
 import json
 from ui.Font_renderer import Font
 from entities.animations import draw_constants
-from core.paths import assets_path, PROJECT_ROOT
+from core.paths import PROJECT_ROOT, require_asset_file, validate_asset_path
 
 class Shop:
     def __init__(self):
-        self.small_font = Font(assets_path("fonts/small_font.png"))
-        self.large_font = Font(assets_path("fonts/large_font.png"))
+        self.small_font = Font(require_asset_file("fonts/small_font.png"))
+        self.large_font = Font(require_asset_file("fonts/large_font.png"))
         with open(PROJECT_ROOT / "ui/shop.json", "r") as file:
             self.data = json.load(file)
         validate_shop_file(self.data)
@@ -21,7 +20,7 @@ class Shop:
         for entry in self.data:
             self.prices[entry] = str(self.data[entry]["price"])
             self.imgs[entry] = pygame.image.load(
-                PROJECT_ROOT / self.data[entry]["asset_path"]
+                require_asset_file(self.data[entry]["asset_path"])
             ).convert(), [0, 32 * counter]
             self.item_boxes[entry] = pygame.Rect(
                 self.imgs[entry][1][0],
@@ -97,9 +96,15 @@ def validate_shop_file(data):
         "description": str,
         "asset_path": str
     }
+
+    supported_buffs = ["double coin", "speed boost", "jump boost"]
+
     if not isinstance(data, dict):
         raise ValueError("shop file must contain a JSON object")
     for item, item_data in data.items():
+        if item not in supported_buffs:
+            errors.append(f"{item} is not a valid buff")
+            continue
         if not isinstance(item_data, dict):
             errors.append(f"{item} must be a JSON object")
             continue
@@ -109,5 +114,22 @@ def validate_shop_file(data):
                 continue
             if not isinstance(item_data[field], expected_type):
                 errors.append(f"the field {field} of item {item} is not of type {expected_type.__name__}")
+
+        if isinstance(item_data.get("price"), str) and not is_positive_int(item_data["price"]):
+            errors.append(f"in field {item}, 'price' is not a positive integer")
+        if isinstance(item_data.get("duration"), str) and not is_positive_int(item_data["duration"]):
+            errors.append(f"in field {item}, 'duration' is not a positive integer")
+        if isinstance(item_data.get("asset_path"), str):
+            asset_path = item_data["asset_path"]
+            if not validate_asset_path(asset_path):
+                errors.append(f"in field {item}, asset does not exist: {item_data['asset_path']}")
     if errors:
         raise ValueError("\n".join(errors))
+
+
+def is_positive_int(value: str) -> bool:
+    try:
+        number = int(value)
+    except ValueError:
+        return False
+    return number > 0

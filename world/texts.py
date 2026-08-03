@@ -1,12 +1,12 @@
 from ui.Font_renderer import Font
 from core.settings import TILE_SIZE
 from world.coordinates import tile_to_pixel
-from core.paths import assets_path
+from core.paths import require_asset_file
 
 class Texts:
     def __init__(self):
         self.strings = {}
-        self.large_font = Font(assets_path("fonts/large_font.png"))
+        self.large_font = Font(require_asset_file("fonts/large_font.png"))
 
     def load_texts(self, data):
         self.strings = data

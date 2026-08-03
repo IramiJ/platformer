@@ -1,7 +1,7 @@
 import pygame
 from pathlib import Path
 from core.settings import REFERENCE_TICKS_PER_SECOND
-from core.paths import assets_path
+from core.paths import require_asset_file
 ANIMATION_TICKS_PER_SECOND = REFERENCE_TICKS_PER_SECOND
 
 def load_animation(path: str, dur: int, entity):
@@ -11,6 +11,8 @@ def load_animation(path: str, dur: int, entity):
     for number, duration in enumerate(dur):
         animation_frame_id = f"{animation_name}{number}"
         img_loc = path / f"{animation_frame_id}.png"
+        if not img_loc.is_file():
+            raise FileNotFoundError(f"Missing animation frame: {img_loc}")
         animation_image = pygame.image.load(str(img_loc)).convert_alpha()
         animation_image.set_colorkey((0, 0, 0))
         entity.animation_frames[animation_frame_id] = animation_image.copy()
@@ -20,6 +22,6 @@ def load_animation(path: str, dur: int, entity):
 
 
 def draw_constants(display):
-    coin_count = pygame.image.load(assets_path("constants/coins.png")).convert()
+    coin_count = pygame.image.load(require_asset_file("constants/coins.png")).convert()
     coin_count.set_colorkey((0, 0, 0))
     display.blit(coin_count, (0, 0))
