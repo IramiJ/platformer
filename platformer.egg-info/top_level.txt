@@ -1,4 +1,0 @@
-core
-entities
-ui
-world
