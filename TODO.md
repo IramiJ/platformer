@@ -41,7 +41,7 @@
 
 ## 4. Add automated quality checks
 
-- [ ] Create a `pyproject.toml` with runtime and development dependencies.
+- [x] Create a `pyproject.toml` with runtime and development dependencies.
 - [ ] Configure pytest.
 - [ ] Configure Ruff for linting and formatting.
 - [ ] Add tests for tile-coordinate conversion.
