@@ -5,7 +5,7 @@ import json
 import pygame
 from typing import TYPE_CHECKING
 
-from world.tilemap import read_csv
+from world.tilemap import read_csv, validate_tilemap
 from core.settings import TILE_SIZE
 from .coordinates import tile_position_to_pixel, tile_to_pixel
 from core.paths import PROJECT_ROOT
@@ -93,6 +93,7 @@ def validate_enemies(enemies, errors):
 def validate_texts(texts, errors):
     if not isinstance(texts, dict):
         errors.append("field 'texts' is not a dictionary")
+        return
     for text, position in texts.items():
         if not isinstance(text, str):
             errors.append("Every text key must be a string")
@@ -119,6 +120,7 @@ class Level_loader:
             self.data = json.load(file)
         validate_level(self.data, json_file)
         self.map = read_csv(PROJECT_ROOT / self.data["map"])
+        validate_tilemap(self.map)
         self.max_y_px = tile_to_pixel(self.data["max_y"])
         self.end_rect = pygame.Rect(
             *tile_position_to_pixel(self.data["end_coordinates"]),

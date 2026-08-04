@@ -7,6 +7,7 @@ import os
 import pygame
 
 from core.settings import TILE_SIZE
+from core.paths import require_asset_dir
 
 from typing import TYPE_CHECKING
 
@@ -50,7 +51,7 @@ def load_tiles(path: str | Path) -> dict[str, pygame.Surface]:
 
 SKIP_TILES = {"-1"}
 NON_COLLISION_TILES = {"-1", "9", "19", "29", "39", "47", "48"}
-
+VALID_TILE_IDS = {tile_file.stem for tile_file in require_asset_dir("tiles").glob("*.png")}
 
 def display_map(display: pygame.Surface, scroll: Scroll, tilemap: list[list[str]], tile_dict: dict[str, pygame.Surface]) -> None:
 
@@ -88,3 +89,25 @@ def update_tile_rects(display: pygame.Surface, scroll: Scroll, tile_rects: list[
             world_x = x * TILE_SIZE
             world_y = y * TILE_SIZE
             tile_rects.append(pygame.Rect(world_x, world_y, TILE_SIZE, TILE_SIZE))
+
+def validate_tilemap(tilemap: list[list[str]]):
+    if not tilemap:
+        raise ValueError("Tilemap must be non empty")
+    length = len(tilemap[0])
+    for row in tilemap:
+        if not row:
+            raise ValueError("All rows must be non emtpy")
+        if len(row) != length:
+            raise ValueError("All rows in tile map must be equally wide")
+        for tile in row:
+            if not is_int(tile):
+                raise ValueError("All tiles must be integers written as strings")
+            if tile != "-1" and tile not in VALID_TILE_IDS:
+                raise ValueError(f"Invalid Tile: {tile}")
+
+def is_int(value: str) -> bool:
+    try:
+        number = int(value)
+    except ValueError:
+        return False
+    return number.is_integer()
