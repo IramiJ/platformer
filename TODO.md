@@ -47,7 +47,7 @@
 - [x] Add tests for tile-coordinate conversion.
 - [x] Add tests for level schema validation and loading.
 - [x] Add tests for all level transitions and the final win state.
-- [ ] Add tests for collision resolution.
+- [x] Add tests for collision resolution.
 - [ ] Add minimap boundary tests.
 - [ ] Add tests for projectile and particle cleanup.
 - [ ] Add tests for shop purchases, buff duration, and double-coin rewards.
