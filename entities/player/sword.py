@@ -1,22 +1,25 @@
-from entities.entity import entity
-from entities.animations import ANIMATION_TICKS_PER_SECOND
-from core.settings import REFERENCE_TICKS_PER_SECOND
-import random
-import pygame
 import math
-from core.paths import require_asset_file, require_asset_dir
+
+import pygame
+
+from core.paths import require_asset_dir, require_asset_file
+from core.settings import REFERENCE_TICKS_PER_SECOND
+from entities.animations import ANIMATION_TICKS_PER_SECOND
+from entities.entity import entity
 from entities.particles import Particle
-from pathlib import Path
+
 
 class Sword(entity):
     def __init__(self, x, y):
         super().__init__(x, y, 21, 7)
         self.loc = [x, y]
-        self.img = pygame.image.load(require_asset_file("weapons/broken_sword.png")).convert()
+        self.img = pygame.image.load(
+            require_asset_file("weapons/broken_sword.png")
+        ).convert()
         self.img.set_colorkey((0, 0, 0))
         self.particles = []
         self.flip = False
-        self.particle_cd = 1/60
+        self.particle_cd = 1 / 60
         self.load_slice_animation()
         self.slice_frame = 0
         self.animation_database["idle"] = [self.img]
@@ -49,7 +52,7 @@ class Sword(entity):
             self.spawn_particles()
 
     def spawn_particles(self):
-        for i in range(0, 4):
+        for i in range(4):
             p = Particle(
                 require_asset_file("particles/sword_particle.png"),
                 [self.loc[0] + i, self.loc[1]],
@@ -66,9 +69,7 @@ class Sword(entity):
     def update_particles(self, dt):
         for particle in self.particles:
             particle.update(dt)
-        self.particles = [
-            particle for particle in self.particles if particle.alive
-        ]
+        self.particles = [particle for particle in self.particles if particle.alive]
 
     def load_slice_animation(self):
         path = require_asset_dir("weapons/sword/slice")
@@ -108,12 +109,11 @@ class Sword(entity):
                     self.loc[1] - scroll.render_scroll[1] - 16,
                 ],
             )
-        
 
     def update_slice_frame(self, dt):
-        self.slice_frame = (
-            self.slice_frame + ANIMATION_TICKS_PER_SECOND * dt
-        ) % len(self.slice_animation)
+        self.slice_frame = (self.slice_frame + ANIMATION_TICKS_PER_SECOND * dt) % len(
+            self.slice_animation
+        )
 
     def draw(
         self,

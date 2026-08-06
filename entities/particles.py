@@ -1,10 +1,10 @@
-import pygame
 import random
-import math
+
+import pygame
+
 from core.settings import REFERENCE_TICKS_PER_SECOND
 
-
-PARTICLE_GRAVITY = 0.01 * REFERENCE_TICKS_PER_SECOND ** 2
+PARTICLE_GRAVITY = 0.01 * REFERENCE_TICKS_PER_SECOND**2
 PARTICLE_JITTER_INTERVAL = 1.0 / REFERENCE_TICKS_PER_SECOND
 
 
@@ -48,9 +48,7 @@ class Particle:
         self.y_velocity += PARTICLE_GRAVITY * dt
         self.jitter_timer -= dt
         while self.jitter_timer < 0:
-            self.x_velocity = (
-                random.randint(-10, 10) / 30 * REFERENCE_TICKS_PER_SECOND
-            )
+            self.x_velocity = random.randint(-10, 10) / 30 * REFERENCE_TICKS_PER_SECOND
             self.jitter_timer += PARTICLE_JITTER_INTERVAL
 
 

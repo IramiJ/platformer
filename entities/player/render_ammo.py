@@ -1,13 +1,17 @@
 import pygame
-from entities.entity import entity
+
+from core.paths import require_asset_dir, require_asset_file
 from entities.animations import load_animation
+from entities.entity import entity
 from ui.Font_renderer import Font
-from core.paths import require_asset_file, require_asset_dir
+
 
 class Ammo:
     def __init__(self):
         self.small_font = Font(require_asset_file("fonts/small_font.png"))
-        self.pistol_img = pygame.image.load(require_asset_file("weapons/cd_pistol.png")).convert()
+        self.pistol_img = pygame.image.load(
+            require_asset_file("weapons/cd_pistol.png")
+        ).convert()
         self.pistol_img.set_colorkey((0, 0, 0))
         self.amount_padding = self.pistol_img.get_width() + 5
         self.cd_obj = entity(self.amount_padding, 9, 16, 16)

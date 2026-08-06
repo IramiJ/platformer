@@ -1,7 +1,7 @@
 import pygame
-import math
-from core.settings import TILE_SIZE
+
 from world.coordinates import pixel_to_tile
+
 
 class Minimap:
     def __init__(self):
@@ -16,9 +16,9 @@ class Minimap:
 
     def update_map(self, player_pos: list[int], tilemap: list[list[str]]) -> None:
         self.center = [
-        pixel_to_tile(player_pos[0]),
-        pixel_to_tile(player_pos[1]),
-    ]
+            pixel_to_tile(player_pos[0]),
+            pixel_to_tile(player_pos[1]),
+        ]
 
         minimap_x = self.center[0] - self.size[0] // 2
         minimap_y = self.center[1] - self.size[1] // 2
@@ -29,16 +29,12 @@ class Minimap:
             for local_x in range(self.size[0]):
                 map_x = minimap_x + local_x
 
-                if (
-                    0 <= map_y < len(tilemap)
-                    and 0 <= map_x < len(tilemap[map_y])
-                ):
+                if 0 <= map_y < len(tilemap) and 0 <= map_x < len(tilemap[map_y]):
                     tile = tilemap[map_y][map_x]
                 else:
                     tile = "-1"
 
                 self.map_array[local_y][local_x] = tile
-
 
     def to_show(self):
         for i, row in enumerate(self.map_array):

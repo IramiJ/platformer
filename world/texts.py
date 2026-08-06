@@ -1,7 +1,7 @@
-from ui.Font_renderer import Font
-from core.settings import TILE_SIZE
-from world.coordinates import tile_to_pixel
 from core.paths import require_asset_file
+from ui.Font_renderer import Font
+from world.coordinates import tile_to_pixel
+
 
 class Texts:
     def __init__(self):

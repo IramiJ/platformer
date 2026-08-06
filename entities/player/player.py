@@ -3,21 +3,22 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from world.level_loader import Level_loader
     from world.scrolling import Scroll
 
-from entities.entity import entity
-from entities.player.tail import Tail
-from entities.player.sword import Sword
-from entities.player.bow import Bow
-from entities.animations import load_animation, ANIMATION_TICKS_PER_SECOND
+import math
+import random
+
+import pygame
+
+from core.paths import require_asset_dir, require_asset_file
 from core.settings import REFERENCE_TICKS_PER_SECOND
+from entities.animations import ANIMATION_TICKS_PER_SECOND, load_animation
+from entities.entity import entity
+from entities.player.bow import Bow
+from entities.player.sword import Sword
+from entities.player.tail import Tail
 from entities.spark import Spark
 from world.collisions import move_collisions
-from core.paths import require_asset_file, require_asset_dir
-import math
-import pygame
-import random
 
 
 class Player(entity):
@@ -39,7 +40,7 @@ class Player(entity):
         self.animation_frames = {}
         self.dashing = False
         self.dash_timer = 0
-        self.dash_duration = 1/3
+        self.dash_duration = 1 / 3
         self.dash_speed = 360
         self.max_dash_cd = 1.0
         self.dash_cooldown = 0
@@ -57,7 +58,9 @@ class Player(entity):
         self.cd_obj.animation_database["idle"] = load_animation(
             require_asset_dir("cooldown/idle"), [4 for x in range(15)], self.cd_obj
         )
-        self.tail = Tail(require_asset_file("tail/grey.png"), [self.rect.x - 2, self.rect.y + 8])
+        self.tail = Tail(
+            require_asset_file("tail/grey.png"), [self.rect.x - 2, self.rect.y + 8]
+        )
         self.sword = Sword(self.rect.x, self.rect.y)
         self.bow = Bow(self.rect.x, self.rect.y)
         self.action = "idle"
@@ -71,7 +74,9 @@ class Player(entity):
         self.bow.update(self, dt)
         self.sword.update(self, dt)
 
-    def update_movements(self, tile_rects: list[pygame.Rect], enemy_list, max_y: int, dt: float) -> None:
+    def update_movements(
+        self, tile_rects: list[pygame.Rect], enemy_list, max_y: int, dt: float
+    ) -> None:
         self.update_mode_properties()
         self.apply_buffs(dt)
         self.handle_movements(tile_rects, dt)
@@ -117,9 +122,7 @@ class Player(entity):
 
     def update_frames(self, dt: float):
         animation = self.animation_database[self.action]
-        self.frame = (
-            self.frame + ANIMATION_TICKS_PER_SECOND * dt
-        ) % len(animation)
+        self.frame = (self.frame + ANIMATION_TICKS_PER_SECOND * dt) % len(animation)
         self.img_id = animation[math.floor(self.frame)]
         self.img = self.animation_frames[self.img_id]
 
@@ -147,7 +150,6 @@ class Player(entity):
             self.bow.draw(self, display, scroll)
         for arrow in self.bow.arrows:
             arrow.render(display, scroll.render_scroll)
-        
 
     def dash(self) -> None:
         if not self.dashing and self.dash_cooldown <= 0:
@@ -164,11 +166,11 @@ class Player(entity):
     def update_mode_properties(self) -> None:
         if self.mode == "melee":
             self.velocity = 180
-            self.dash_duration = 1/3
+            self.dash_duration = 1 / 3
             self.dmg = 2
         elif self.mode == "ranged":
             self.velocity = 240
-            self.dash_duration = 1/6
+            self.dash_duration = 1 / 6
             self.dmg = 1
 
     def attack(self, enemy, logic_variables, sparks: list[Spark], dt: float) -> None:
@@ -216,7 +218,7 @@ class Player(entity):
 
     def take_dmg(self, scroll) -> None:
         self.hp -= 1
-        scroll.shake_timer = 1/6
+        scroll.shake_timer = 1 / 6
         scroll.shake_strength = 3
 
     def set_respawn_location(self) -> None:
@@ -224,7 +226,7 @@ class Player(entity):
         self.rect.y = self.spawn_point[1]
 
     def activate_hitstop(self, logic_variables) -> None:
-        logic_variables.hitstop_timer = 1/20
+        logic_variables.hitstop_timer = 1 / 20
 
     def heal(self, amount: int) -> None:
         if self.hp + amount < self.max_hp:
@@ -258,6 +260,7 @@ class Player(entity):
         self.tail.update_points(dt)
         self.update_tail_points(dt)
         """
+
     def update_tail_points(self, dt: float) -> None:
         for i in range(len(self.tail.points)):
             if self.tail.points[i].show:
@@ -277,8 +280,7 @@ class Player(entity):
 
     def set_y_momentum(self, dt: float) -> None:
         self.y_momentum += 1440 * dt
-        if self.y_momentum > 420.0:
-            self.y_momentum = 420.0
+        self.y_momentum = min(self.y_momentum, 420.0)
 
     def determine_action(self) -> None:
         if self.movement[0] > 0:

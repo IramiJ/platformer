@@ -1,8 +1,11 @@
-import pygame
 import random
-from .leaf import Leaf
-from core.settings import REFERENCE_TICKS_PER_SECOND
+
+import pygame
+
 from core.paths import require_asset_file
+from core.settings import REFERENCE_TICKS_PER_SECOND
+
+from .leaf import Leaf
 
 LEAF_SPAWNS_PER_SECOND = REFERENCE_TICKS_PER_SECOND / 11.0
 

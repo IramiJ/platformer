@@ -1,6 +1,6 @@
 import random
-from core.settings import REFERENCE_TICKS_PER_SECOND
 
+from core.settings import REFERENCE_TICKS_PER_SECOND
 
 WIND_SIMULATION_STEP = 1.0 / REFERENCE_TICKS_PER_SECOND
 WIND_BLEND_PER_REFERENCE_TICK = 0.05
@@ -36,9 +36,7 @@ class Wind:
         else:
             self.target = random.uniform(-0.5, 0.2)
 
-        self.current += (
-            self.target - self.current
-        ) * WIND_BLEND_PER_REFERENCE_TICK
+        self.current += (self.target - self.current) * WIND_BLEND_PER_REFERENCE_TICK
 
     def wind_up(self):
         self.gust_strength = random.uniform(-6.0, -3.0)

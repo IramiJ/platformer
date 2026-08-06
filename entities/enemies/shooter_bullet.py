@@ -1,7 +1,10 @@
-import pygame
 import math
-from entities.entity import simple_entity
+
+import pygame
+
 from core.paths import require_asset_file
+from entities.entity import simple_entity
+
 
 class Shooter_Bullet(simple_entity):
     def __init__(self, loc, player):
@@ -41,4 +44,4 @@ class Shooter_Bullet(simple_entity):
     def dmg_entity(self, entity, scroll):
         if self.collision_test(entity.rect):
             entity.take_dmg(scroll)
-            self.dmg_cd = 1/60
+            self.dmg_cd = 1 / 60

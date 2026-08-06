@@ -1,5 +1,6 @@
-from ui.Font_renderer import Font
 from core.paths import require_asset_file
+from ui.Font_renderer import Font
+
 
 class Pause_screen:
     def __init__(self):

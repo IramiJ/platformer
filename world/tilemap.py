@@ -1,18 +1,19 @@
 from __future__ import annotations
-from pathlib import Path
 
 import csv
 import math
 import os
-import pygame
-
-from core.settings import TILE_SIZE
-from core.paths import require_asset_dir
-
+from pathlib import Path
 from typing import TYPE_CHECKING
 
-if TYPE_CHECKING: 
+import pygame
+
+from core.paths import require_asset_dir
+from core.settings import TILE_SIZE
+
+if TYPE_CHECKING:
     from world.scrolling import Scroll
+
 
 def load_map(path: str) -> list[list[str]]:
     f = open(path + ".txt", "r")
@@ -48,12 +49,19 @@ def load_tiles(path: str | Path) -> dict[str, pygame.Surface]:
     return tiles_by_id
 
 
-
 SKIP_TILES = {"-1"}
 NON_COLLISION_TILES = {"-1", "9", "19", "29", "39", "47", "48"}
-VALID_TILE_IDS = {tile_file.stem for tile_file in require_asset_dir("tiles").glob("*.png")}
+VALID_TILE_IDS = {
+    tile_file.stem for tile_file in require_asset_dir("tiles").glob("*.png")
+}
 
-def display_map(display: pygame.Surface, scroll: Scroll, tilemap: list[list[str]], tile_dict: dict[str, pygame.Surface]) -> None:
+
+def display_map(
+    display: pygame.Surface,
+    scroll: Scroll,
+    tilemap: list[list[str]],
+    tile_dict: dict[str, pygame.Surface],
+) -> None:
 
     scroll_x, scroll_y = scroll.render_scroll
     screen_w, screen_h = display.get_size()
@@ -77,11 +85,16 @@ def display_map(display: pygame.Surface, scroll: Scroll, tilemap: list[list[str]
             display.blit(tile_dict[tile], (world_x - scroll_x, world_y - scroll_y))
 
 
-def update_tile_rects(display: pygame.Surface, scroll: Scroll, tile_rects: list[pygame.Rect], tilemap: list[list[str]]) -> None:
+def update_tile_rects(
+    display: pygame.Surface,
+    scroll: Scroll,
+    tile_rects: list[pygame.Rect],
+    tilemap: list[list[str]],
+) -> None:
 
-    for y in range(0, len(tilemap)):
+    for y in range(len(tilemap)):
         row = tilemap[y]
-        for x in range(0, len(row)):
+        for x in range(len(row)):
             tile = row[x]
             if tile in NON_COLLISION_TILES:
                 continue
@@ -89,6 +102,7 @@ def update_tile_rects(display: pygame.Surface, scroll: Scroll, tile_rects: list[
             world_x = x * TILE_SIZE
             world_y = y * TILE_SIZE
             tile_rects.append(pygame.Rect(world_x, world_y, TILE_SIZE, TILE_SIZE))
+
 
 def validate_tilemap(tilemap: list[list[str]]):
     if not tilemap:
@@ -104,6 +118,7 @@ def validate_tilemap(tilemap: list[list[str]]):
                 raise ValueError("All tiles must be integers written as strings")
             if tile != "-1" and tile not in VALID_TILE_IDS:
                 raise ValueError(f"Invalid Tile: {tile}")
+
 
 def is_int(value: str) -> bool:
     try:

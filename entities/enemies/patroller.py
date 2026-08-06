@@ -1,7 +1,8 @@
-from entities.enemies.enemy import Enemy
-from entities.animations import load_animation
-from entities.hp_bar import Hp_bar
 from core.paths import require_asset_dir, require_asset_file
+from entities.animations import load_animation
+from entities.enemies.enemy import Enemy
+from entities.hp_bar import Hp_bar
+
 
 class Patroller(Enemy):
     def __init__(self, x, y, width, height):
@@ -34,7 +35,6 @@ class Patroller(Enemy):
         self.draw(display, scroll)
         hp_bar_position = (self.rect.x - scroll[0], self.rect.y - scroll[1] - 20)
         self.hp_bar.draw(display, self.max_hp, self.current_hp, hp_bar_position)
-        
 
     def move(self, dt: float, tiles: list):
         if self.stunned:
@@ -51,7 +51,6 @@ class Patroller(Enemy):
             self.set_y_momentum(dt)
             self.movement[1] += self.y_momentum
             self.move_with_tile_collisions(dt, tiles)
-            
 
     def move_right(self):
         if self.rect.x >= self.spawn_point[0] + self.distance:
@@ -78,7 +77,7 @@ class Patroller(Enemy):
                 self.attack_cd = 0.5
 
     def stun(self):
-        self.stun_cd = 1/3
+        self.stun_cd = 1 / 3
         self.stunned = True
 
     def activate_burst(self):

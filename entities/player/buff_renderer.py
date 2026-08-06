@@ -1,7 +1,9 @@
+import math
+
+import pygame
+
 from core.paths import require_asset_file
 from ui.Font_renderer import Font
-import pygame
-import math
 
 
 class Buff_renderer:
@@ -21,7 +23,9 @@ class Buff_renderer:
             if buff in player.buffs:
                 location = [320 - self.imgs[buff].get_width() - 20, 20 + y_offset]
                 self.font.render(
-                    display, str(math.ceil(player.buffs[buff])), [320 - 10, 40 + y_offset]
+                    display,
+                    str(math.ceil(player.buffs[buff])),
+                    [320 - 10, 40 + y_offset],
                 )
                 display.blit(self.imgs[buff], location)
                 y_offset += self.imgs[buff].get_height()

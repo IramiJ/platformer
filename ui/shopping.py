@@ -1,8 +1,11 @@
-import pygame
 import json
-from ui.Font_renderer import Font
-from entities.animations import draw_constants
+
+import pygame
+
 from core.paths import PROJECT_ROOT, require_asset_file, validate_asset_path
+from entities.animations import draw_constants
+from ui.Font_renderer import Font
+
 
 class Shop:
     def __init__(self):
@@ -19,9 +22,12 @@ class Shop:
         self.prices = {}
         for entry in self.data:
             self.prices[entry] = str(self.data[entry]["price"])
-            self.imgs[entry] = pygame.image.load(
-                require_asset_file(self.data[entry]["asset_path"])
-            ).convert(), [0, 32 * counter]
+            self.imgs[entry] = (
+                pygame.image.load(
+                    require_asset_file(self.data[entry]["asset_path"])
+                ).convert(),
+                [0, 32 * counter],
+            )
             self.item_boxes[entry] = pygame.Rect(
                 self.imgs[entry][1][0],
                 self.imgs[entry][1][1],
@@ -43,11 +49,13 @@ class Shop:
             self.large_font.render(
                 surf, self.prices[item], [36, self.imgs[item][1][1] + 2]
             )
-            self.small_font.render(
-                surf,
-                "duration: " + str(self.data[item]["duration"]),
-                [60, self.imgs[item][1][1] + 2],
-            ),
+            (
+                self.small_font.render(
+                    surf,
+                    "duration: " + str(self.data[item]["duration"]),
+                    [60, self.imgs[item][1][1] + 2],
+                ),
+            )
             surf.blit(
                 self.imgs[item][0], (self.item_boxes[item].x, self.item_boxes[item].y)
             )
@@ -87,6 +95,7 @@ class Shop:
         player.moving_left = False
         self.buy(player, player.buffs)
 
+
 def validate_shop_file(data):
     errors = []
 
@@ -94,7 +103,7 @@ def validate_shop_file(data):
         "price": str,
         "duration": str,
         "description": str,
-        "asset_path": str
+        "asset_path": str,
     }
 
     supported_buffs = ["double coin", "speed boost", "jump boost"]
@@ -109,20 +118,28 @@ def validate_shop_file(data):
             errors.append(f"{item} must be a JSON object")
             continue
         for field, expected_type in required_fields.items():
-            if field not in data[item]:
+            if field not in item_data:
                 errors.append(f"{item} is missing field: {field}")
                 continue
             if not isinstance(item_data[field], expected_type):
-                errors.append(f"the field {field} of item {item} is not of type {expected_type.__name__}")
+                errors.append(
+                    f"the field {field} of item {item} is not of type {expected_type.__name__}"
+                )
 
-        if isinstance(item_data.get("price"), str) and not is_positive_int(item_data["price"]):
+        if isinstance(item_data.get("price"), str) and not is_positive_int(
+            item_data["price"]
+        ):
             errors.append(f"in field {item}, 'price' is not a positive integer")
-        if isinstance(item_data.get("duration"), str) and not is_positive_int(item_data["duration"]):
+        if isinstance(item_data.get("duration"), str) and not is_positive_int(
+            item_data["duration"]
+        ):
             errors.append(f"in field {item}, 'duration' is not a positive integer")
         if isinstance(item_data.get("asset_path"), str):
             asset_path = item_data["asset_path"]
             if not validate_asset_path(asset_path):
-                errors.append(f"in field {item}, asset does not exist: {item_data['asset_path']}")
+                errors.append(
+                    f"in field {item}, asset does not exist: {item_data['asset_path']}"
+                )
     if errors:
         raise ValueError("\n".join(errors))
 

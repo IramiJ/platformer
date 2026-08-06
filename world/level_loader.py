@@ -1,22 +1,26 @@
 from __future__ import annotations
-from pathlib import Path
 
 import json
-import pygame
+from pathlib import Path
 from typing import TYPE_CHECKING
 
-from world.tilemap import read_csv, validate_tilemap
-from core.settings import TILE_SIZE
-from .coordinates import tile_position_to_pixel, tile_to_pixel
+import pygame
+
 from core.paths import PROJECT_ROOT
+from core.settings import TILE_SIZE
+from world.tilemap import read_csv, validate_tilemap
+
+from .coordinates import tile_position_to_pixel, tile_to_pixel
 
 if TYPE_CHECKING:
     from entities.enemies.enemies import Enemies
     from entities.player.player import Player
     from world.texts import Texts
 
+
 class LevelValidationError(ValueError):
     pass
+
 
 def is_position(value) -> bool:
     return (
@@ -25,51 +29,53 @@ def is_position(value) -> bool:
         and all(type(number) is int for number in value)
     )
 
+
 def validate_level(data: dict, filename: str) -> None:
-        errors = []
-        
-        required_fields = {
-            "id": int,
-            "map": str,
-            "spawn": list,
-            "max_y": int,
-            "enemies": dict,
-            "checkpoints": list,
-            "end_coordinates": list,
-            "texts": dict
-        }
+    errors = []
 
-        for field, expected_type in required_fields.items():
-            if field not in data:
-                errors.append(f"Required field '{field} is missing")
-            elif not isinstance(data[field], expected_type):
-                errors.append(
-                    f"'{field}' must be {expected_type.__name__}, but type ist {type(data[field]).__name__}"
-                )
-        if "spawn" in data and not is_position(data["spawn"]):
-            errors.append("'spawn' must be a position like [1, 1]")
+    required_fields = {
+        "id": int,
+        "map": str,
+        "spawn": list,
+        "max_y": int,
+        "enemies": dict,
+        "checkpoints": list,
+        "end_coordinates": list,
+        "texts": dict,
+    }
 
-        if "end_coordinates" in data and not is_position(data["end_coordinates"]):
-            errors.append("'end_coordinates' must be a position like [1, 1]")
+    for field, expected_type in required_fields.items():
+        if field not in data:
+            errors.append(f"Required field '{field} is missing")
+        elif not isinstance(data[field], expected_type):
+            errors.append(
+                f"'{field}' must be {expected_type.__name__}, but type ist {type(data[field]).__name__}"
+            )
+    if "spawn" in data and not is_position(data["spawn"]):
+        errors.append("'spawn' must be a position like [1, 1]")
 
-        if "checkpoints" in data and isinstance(data["checkpoints"], list):
-            for index, checkpoint in enumerate(data["checkpoints"]):
-                if not is_position(checkpoint):
-                    errors.append(f"'checkpoints[{index}] must be a position like [1, 1]")
+    if "end_coordinates" in data and not is_position(data["end_coordinates"]):
+        errors.append("'end_coordinates' must be a position like [1, 1]")
 
-        validate_enemies(data.get("enemies"), errors)
-        validate_texts(data.get("texts"), errors)
+    if "checkpoints" in data and isinstance(data["checkpoints"], list):
+        for index, checkpoint in enumerate(data["checkpoints"]):
+            if not is_position(checkpoint):
+                errors.append(f"'checkpoints[{index}] must be a position like [1, 1]")
 
-        if isinstance(data.get("map"), str):
-            project_root = Path(__file__).resolve().parents[1]
-            map_path = project_root / data["map"]
+    validate_enemies(data.get("enemies"), errors)
+    validate_texts(data.get("texts"), errors)
 
-            if not map_path.is_file():
-                errors.append(f"Map-file doesn't exist: {data["map"]}")
+    if isinstance(data.get("map"), str):
+        project_root = Path(__file__).resolve().parents[1]
+        map_path = project_root / data["map"]
 
-        if errors:
-            details = "\n".join(f"- {error}" for error in errors)
-            raise LevelValidationError(f"Invalid Leveldata: {filename}\n{details}")
+        if not map_path.is_file():
+            errors.append(f"Map-file doesn't exist: {data['map']}")
+
+    if errors:
+        details = "\n".join(f"- {error}" for error in errors)
+        raise LevelValidationError(f"Invalid Leveldata: {filename}\n{details}")
+
 
 def validate_enemies(enemies, errors):
     if not isinstance(enemies, dict):
@@ -90,6 +96,7 @@ def validate_enemies(enemies, errors):
             if not is_position(position):
                 errors.append(f"'enemies.{enemy_name}[{index}] musst be [x, y]")
 
+
 def validate_texts(texts, errors):
     if not isinstance(texts, dict):
         errors.append("field 'texts' is not a dictionary")
@@ -101,13 +108,13 @@ def validate_texts(texts, errors):
         if not is_position(position):
             errors.append(f"Position of text '{text}' must be [x, y]")
 
-class Level_loader:
 
+class Level_loader:
     """Load Level configuartion and tilemap data from disk.
-    
-    Coordinates in level JSON files are stored in tile-space. 
+
+    Coordinates in level JSON files are stored in tile-space.
     Derived runtime values such as 'max_y_px' are converted to pixel space when the level is loaded
-    
+
     """
 
     def __init__(self):
@@ -135,12 +142,10 @@ class Level_loader:
         self.id += 1
         self.load_level(PROJECT_ROOT / f"world/levels/level{self.id}.json")
 
-    
 
-
-
-
-def update_level(player: Player, level: Level_loader, enemies: Enemies, texts: Texts, win_screen) -> bool:
+def update_level(
+    player: Player, level: Level_loader, enemies: Enemies, texts: Texts, win_screen
+) -> bool:
     if not player.rect.colliderect(level.end_rect):
         return False
     try:
@@ -173,6 +178,8 @@ def initialize_player(player: Player, level: Level_loader) -> None:
 
 def reach_checkpoint(player: Player, level: Level_loader) -> None:
     for checkpoint in level.data["checkpoints"]:
-        if player.rect.collidepoint((checkpoint[0] * TILE_SIZE, checkpoint[1] * TILE_SIZE)):
+        if player.rect.collidepoint(
+            (checkpoint[0] * TILE_SIZE, checkpoint[1] * TILE_SIZE)
+        ):
             player.spawn_point = [checkpoint[0] * TILE_SIZE, checkpoint[1] * TILE_SIZE]
             return

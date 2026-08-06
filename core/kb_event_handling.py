@@ -1,11 +1,14 @@
-import pygame
-import sys
 import json
-from entities.player.player import Player
-from ui.shopping import Shop
-from ui.pause_screen import Pause_screen
-from ui.win_screen import Win_screen
+import sys
+
+import pygame
+
 from core.paths import PROJECT_ROOT
+from entities.player.player import Player
+from ui.pause_screen import Pause_screen
+from ui.shopping import Shop
+from ui.win_screen import Win_screen
+
 
 def load_keybinds(path=PROJECT_ROOT / "core/keybinds.json"):
     with open(path, "r") as f:
@@ -20,6 +23,7 @@ def load_keybinds(path=PROJECT_ROOT / "core/keybinds.json"):
 
     return binds
 
+
 def validate_keybinds(data: dict) -> None:
     errors = []
 
@@ -32,13 +36,17 @@ def validate_keybinds(data: dict) -> None:
         "pause",
         "switch_mode",
         "shoot",
-        "reload"
+        "reload",
     ]
     for key in required_keys:
         if key not in data:
             errors.append(f"required key {key} is missing")
     for action, key_name in data.items():
-        if not (isinstance(key_name, str) and key_name.startswith("K_") and hasattr(pygame, key_name)):
+        if not (
+            isinstance(key_name, str)
+            and key_name.startswith("K_")
+            and hasattr(pygame, key_name)
+        ):
             errors.append(f"invalid pygame key for {action}: {key_name}")
 
     if errors:
@@ -50,13 +58,17 @@ class Keyboard_event_handler:
         self.keybinds = load_keybinds()
 
     def handle_keyboard_events(
-        self, player: Player, shop: Shop, pause_screen: Pause_screen, win_screen: Win_screen
+        self,
+        player: Player,
+        shop: Shop,
+        pause_screen: Pause_screen,
+        win_screen: Win_screen,
     ):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            
+
             if event.type == pygame.KEYDOWN:
                 if player.hp <= 0:
                     player.respawn = True
@@ -67,7 +79,7 @@ class Keyboard_event_handler:
                     if event.key == self.keybinds["pause"]:
                         pause_screen.change_displaying()
                     continue
-    
+
                 if shop.displaying:
                     if event.key == self.keybinds["shop"]:
                         shop.change_displaying()

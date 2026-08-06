@@ -1,10 +1,12 @@
-import pygame
 import math
-from entities.entity import simple_entity, entity
-from entities.animations import load_animation
-from core.paths import require_asset_file
 
-class Bow:  
+import pygame
+
+from core.paths import require_asset_file
+from entities.entity import simple_entity
+
+
+class Bow:
     def __init__(self, x, y):
         self.offsets = {
             "run": [
@@ -35,9 +37,11 @@ class Bow:
         self.reloading = False
         self.add_ammo = False
         self.max_shoot_cd = 0.5
-        self.shoot_cd = 1/60
+        self.shoot_cd = 1 / 60
         self.ammo = 5
-        self.ammo_img = pygame.image.load(require_asset_file("weapons/cd_pistol.png")).convert()
+        self.ammo_img = pygame.image.load(
+            require_asset_file("weapons/cd_pistol.png")
+        ).convert()
         self.ammo_img.set_colorkey((0, 0, 0))
         self.max_reload_cd = 2.0
         self.reload_cd = 0
@@ -86,11 +90,7 @@ class Bow:
     def move_arrows(self, enemy_list, dt):
         for arrow in self.arrows:
             arrow.move(enemy_list, dt)
-        self.arrows = [
-            arrow
-            for arrow in self.arrows
-            if arrow.alive
-        ]
+        self.arrows = [arrow for arrow in self.arrows if arrow.alive]
 
     def update_cds(self, dt):
         if self.shoot_cd > 0:

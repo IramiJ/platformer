@@ -1,8 +1,12 @@
-import pygame
 from pathlib import Path
-from core.settings import REFERENCE_TICKS_PER_SECOND
+
+import pygame
+
 from core.paths import require_asset_file
+from core.settings import REFERENCE_TICKS_PER_SECOND
+
 ANIMATION_TICKS_PER_SECOND = REFERENCE_TICKS_PER_SECOND
+
 
 def load_animation(path: str, dur: int, entity):
     path = Path(path)

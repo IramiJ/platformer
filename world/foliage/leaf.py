@@ -1,10 +1,11 @@
-import pygame
-import random
 import math
+import random
+
+import pygame
+
 from core.settings import REFERENCE_TICKS_PER_SECOND
 
-
-WIND_ACCELERATION = 0.02 * REFERENCE_TICKS_PER_SECOND ** 2
+WIND_ACCELERATION = 0.02 * REFERENCE_TICKS_PER_SECOND**2
 
 
 class Leaf:
@@ -23,15 +24,11 @@ class Leaf:
         self.vx = random.uniform(-0.2, 0.2) * REFERENCE_TICKS_PER_SECOND
         self.vy = random.uniform(0.1, 0.6) * REFERENCE_TICKS_PER_SECOND
 
-        self.gravity = (
-            random.uniform(0.015, 0.03) * REFERENCE_TICKS_PER_SECOND ** 2
-        )
+        self.gravity = random.uniform(0.015, 0.03) * REFERENCE_TICKS_PER_SECOND**2
         self.drag_per_second = (
             random.uniform(0.985, 0.995) ** REFERENCE_TICKS_PER_SECOND
         )
-        self.terminal_vy = (
-            random.uniform(1.2, 2.2) * REFERENCE_TICKS_PER_SECOND
-        )
+        self.terminal_vy = random.uniform(1.2, 2.2) * REFERENCE_TICKS_PER_SECOND
 
         self.phase = random.uniform(0, math.tau)
         self.flutter_amp = random.uniform(0.15, 0.5)
@@ -53,12 +50,11 @@ class Leaf:
         self.vy += self.gravity * dt
         self.vx += (wind.current + flutter) * WIND_ACCELERATION * dt
 
-        drag = self.drag_per_second ** dt
+        drag = self.drag_per_second**dt
         self.vx *= drag
         self.vy *= drag
 
-        if self.vy > self.terminal_vy:
-            self.vy = self.terminal_vy
+        self.vy = min(self.vy, self.terminal_vy)
 
         self.loc[0] += self.vx * dt
         self.loc[1] += self.vy * dt

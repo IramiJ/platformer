@@ -1,6 +1,7 @@
+from core.paths import require_asset_file
 from entities.entity import simple_entity
 from entities.player.player import Player
-from core.paths import require_asset_file
+
 
 class Coins:
     def __init__(self):
@@ -18,11 +19,8 @@ class Coins:
                     player.coin_amount += 2
                 else:
                     player.coin_amount += 1
-        self.objects = [
-            coin
-            for coin in self.objects
-            if coin.alive
-        ]
+        self.objects = [coin for coin in self.objects if coin.alive]
+
 
 class Coin(simple_entity):
     def __init__(self, loc):

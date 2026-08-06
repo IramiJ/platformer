@@ -1,7 +1,8 @@
-from entities.enemies.enemy import Enemy
-from entities.animations import load_animation
-from entities.hp_bar import Hp_bar
 from core.paths import require_asset_dir, require_asset_file
+from entities.animations import load_animation
+from entities.enemies.enemy import Enemy
+from entities.hp_bar import Hp_bar
+
 
 class Chaser(Enemy):
     def __init__(self, x, y, width, height):
@@ -110,12 +111,10 @@ class Chaser(Enemy):
 
     def stun(self):
         self.stunned = True
-        self.stun_cd = 1/3
+        self.stun_cd = 1 / 3
 
     def move_burst(self, dt):
         if self.move_burst_increase <= 0:
             self.move_burst_increase = 120
         else:
-            self.move_burst_increase = max(
-                0.0, self.move_burst_increase - 180 * dt
-            )
+            self.move_burst_increase = max(0.0, self.move_burst_increase - 180 * dt)

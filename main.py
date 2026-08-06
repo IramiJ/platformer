@@ -1,36 +1,35 @@
-import pygame
 import time
-from ui.death_screen import Death_screen
 
+import pygame
 
-from ui.Font_renderer import Font
-from ui.shopping import Shop
-from world.tilemap import load_tiles, display_map, update_tile_rects
-from entities.entity import entity, simple_entity
-from entities.player.player import Player
-from entities.hp_bar import Hp_bar
-from core.settings import Settings, TILE_SIZE
-from world.scrolling import Scroll
 from core.kb_event_handling import Keyboard_event_handler
+from core.logic_variables import Logic_variables
+from core.paths import PROJECT_ROOT, require_asset_dir, require_asset_file
+from core.settings import Settings
 from entities.enemies.enemies import Enemies
+from entities.hp_bar import Hp_bar
+from entities.player.buff_renderer import Buff_renderer
+from entities.player.player import Player
+from entities.player.render_ammo import Ammo
+from ui.death_screen import Death_screen
+from ui.Font_renderer import Font
+from ui.minimap import Minimap
+from ui.pause_screen import Pause_screen
+from ui.shopping import Shop
+from ui.win_screen import Win_screen
+from world.coordinates import tile_to_pixel
+from world.foliage.leafSystem import LeafSystem
+from world.foliage.tree import Tree
 from world.level_loader import (
     Level_loader,
     initialize_player,
-    update_level,
     reach_checkpoint,
+    update_level,
 )
-from core.logic_variables import Logic_variables
-from ui.pause_screen import Pause_screen
-from ui.win_screen import Win_screen
-from entities.player.buff_renderer import Buff_renderer
-from entities.player.render_ammo import Ammo
+from world.scrolling import Scroll
 from world.texts import Texts
-from ui.minimap import Minimap
-from world.foliage.leafSystem import LeafSystem
-from world.foliage.tree import Tree
-from world.coordinates import tile_position_to_pixel, tile_to_pixel
-from world.tilemap import last_x
-from core.paths import PROJECT_ROOT, require_asset_dir, require_asset_file
+from world.tilemap import display_map, load_tiles, update_tile_rects
+
 
 class Game:
     def __init__(self):
@@ -46,7 +45,10 @@ class Game:
         self.level = Level_loader()
         self.level.load_level(PROJECT_ROOT / "world/levels/level1.json")
         self.player = Player(
-            tile_to_pixel(self.level.data["spawn"][0]), tile_to_pixel(self.level.data["spawn"][1]), 24, 24
+            tile_to_pixel(self.level.data["spawn"][0]),
+            tile_to_pixel(self.level.data["spawn"][1]),
+            24,
+            24,
         )
         self.hp_bar = Hp_bar(
             require_asset_file("hp_bar/hp_bar_bg.png"),
@@ -150,11 +152,7 @@ class Game:
     def move_bullets(self):
         for bullet in self.bullets:
             bullet.move(self.player, self.scroll, self.dt)
-        self.bullets = [
-            bullet
-            for bullet in self.bullets
-            if bullet.alive
-        ]
+        self.bullets = [bullet for bullet in self.bullets if bullet.alive]
 
     def render_bullets(self):
         for bullet in self.bullets:
@@ -167,11 +165,7 @@ class Game:
     def move_sparks(self):
         for i, spark in sorted(enumerate(self.sparks), reverse=True):
             spark.move(self.dt)
-        self.sparks = [
-            spark
-            for spark in self.sparks
-            if spark.alive
-        ]
+        self.sparks = [spark for spark in self.sparks if spark.alive]
 
     def render_fps_count(self):
         self.large_font.render(self.display, f"fps: {self.current_fps}", [120, 0])
@@ -226,13 +220,14 @@ class Game:
                 0.0, self.logic_variables.hitstop_timer - self.dt
             )
             return
-        
+
         self.update_gameplay()
-        
 
     def update_gameplay(self):
         self.update_tile_rects()
-        self.player.update(self.tile_rects, self.enemies.enemies, self.level.max_y_px, self.dt)
+        self.player.update(
+            self.tile_rects, self.enemies.enemies, self.level.max_y_px, self.dt
+        )
         self.enemies.update_enemies(
             self.player,
             self.bullets,
@@ -255,7 +250,7 @@ class Game:
             self.enemies,
             self.texts,
             self.win_screen,
-                ):
+        ):
             self.initialize_loaded_level()
         reach_checkpoint(self.player, self.level)
 
@@ -312,14 +307,16 @@ class Game:
 
         self.level.reload_level()
         self.initialize_loaded_level()
-    
+
     def present(self):
         self.draw_render_surf()
         pygame.display.update()
 
+
 def main():
     game = Game()
     game.run()
+
 
 if __name__ == "__main__":
     pygame.init()

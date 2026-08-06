@@ -52,3 +52,6 @@ dist/
 
 # Optional: ignore exported builds
 .codex
+
+# Tool caches
+**/.ruff_cache/

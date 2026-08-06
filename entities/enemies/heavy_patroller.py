@@ -16,7 +16,7 @@ class Heavy_Patroller(Patroller):
             self.move_left()
         """ actual movement of the enemy """
         self.move_with_tile_collisions(dt, tiles)
-        
+
     def move_right(self):
         if self.rect.x >= self.spawn_point[0] + self.distance:
             self.direction = "l"

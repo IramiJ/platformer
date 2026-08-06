@@ -1,9 +1,11 @@
+import math
+
+import pygame
+
+from core.settings import REFERENCE_TICKS_PER_SECOND
+from entities.animations import ANIMATION_TICKS_PER_SECOND
 from entities.entity import entity
 from world.collisions import collision_test, move_collisions
-import pygame, math
-from entities.animations import ANIMATION_TICKS_PER_SECOND
-from core.settings import REFERENCE_TICKS_PER_SECOND
-
 
 DAMAGE_FLASH_DURATION = 5.0 / REFERENCE_TICKS_PER_SECOND
 WHITE_FLASH_DURATION = 1.0 / REFERENCE_TICKS_PER_SECOND
@@ -21,17 +23,15 @@ class Enemy(entity):
 
     def update_frames(self, dt):
         animation = self.animation_database[self.action]
-        self.frame = (
-            self.frame + ANIMATION_TICKS_PER_SECOND * dt
-        ) % len(animation)
+        self.frame = (self.frame + ANIMATION_TICKS_PER_SECOND * dt) % len(animation)
         self.img_id = animation[math.floor(self.frame)]
         self.img = self.animation_frames[self.img_id]
 
     def update_dmg_timer(self, dt):
-       if self.dmg_timer <= 0:
-           return
-       else:
-           self.dmg_timer = max(0.0, self.dmg_timer - dt)
+        if self.dmg_timer <= 0:
+            return
+        else:
+            self.dmg_timer = max(0.0, self.dmg_timer - dt)
 
     def draw_dmg_timer(self, to_blit):
         if self.dmg_timer > 0:
@@ -39,7 +39,7 @@ class Enemy(entity):
                 to_blit.fill((255, 255, 255), special_flags=pygame.BLEND_RGB_ADD)
             else:
                 to_blit.fill((255, 0, 0), special_flags=pygame.BLEND_RGB_ADD)
-                
+
     def draw(self, display, scroll):
         to_blit = self.img.copy()
         self.draw_dmg_timer(to_blit)
@@ -79,8 +79,7 @@ class Enemy(entity):
         self.rect, collisions = move_collisions(self.rect, self.movement, tiles, dt)
         if collisions["bottom"] or collisions["top"]:
             self.y_momentum = 0
-    
+
     def set_y_momentum(self, dt: float) -> None:
         self.y_momentum += 1440 * dt
-        if self.y_momentum > 420.0:
-            self.y_momentum = 420.0
+        self.y_momentum = min(self.y_momentum, 420.0)

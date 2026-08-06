@@ -1,11 +1,11 @@
+import math
+
+from core.paths import require_asset_dir, require_asset_file
+from entities.animations import load_animation
 from entities.enemies.enemy import Enemy
 from entities.enemies.shooter_bullet import Shooter_Bullet
-from entities.animations import load_animation
 from entities.hp_bar import Hp_bar
-from core.settings import Settings
-import math
-import pygame
-from core.paths import require_asset_file, require_asset_dir
+
 
 class Shooter(Enemy):
     def __init__(self, x, y, width, height):
@@ -39,13 +39,12 @@ class Shooter(Enemy):
         self.draw(display, scroll)
         hp_bar_position = (self.rect.x - scroll[0], self.rect.y - scroll[1] - 20)
         self.hp_bar.draw(display, self.max_hp, self.current_hp, hp_bar_position)
-    
-    def move(self, dt:float, tiles: list[list[str]]) -> None:
+
+    def move(self, dt: float, tiles: list[list[str]]) -> None:
         self.movement = [0, 0]
         self.set_y_momentum(dt)
         self.movement[1] += self.y_momentum
         self.move_with_tile_collisions(dt, tiles)
-
 
     def attack(self, player, bullet_list, scroll, dt):
         self.handle_stun_state(dt)
@@ -78,7 +77,7 @@ class Shooter(Enemy):
             self.shoot_count += 1
 
     def stun(self):
-        self.stun_cd = 1/3
+        self.stun_cd = 1 / 3
         self.stunned = True
 
     def handle_stun_state(self, dt):
