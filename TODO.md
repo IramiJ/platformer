@@ -45,7 +45,7 @@
 - [x] Configure pytest.
 - [x] Configure Ruff for linting and formatting.
 - [x] Add tests for tile-coordinate conversion.
-- [ ] Add tests for level schema validation and loading.
+- [x] Add tests for level schema validation and loading.
 - [ ] Add tests for all level transitions and the final win state.
 - [ ] Add tests for collision resolution.
 - [ ] Add minimap boundary tests.
