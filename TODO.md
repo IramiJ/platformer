@@ -50,7 +50,7 @@
 - [x] Add tests for collision resolution.
 - [x] Add minimap boundary tests.
 - [ ] Add tests for projectile and particle cleanup.
-- [ ] Add tests for shop purchases, buff duration, and double-coin rewards.
+- [x] Add tests for shop purchases, buff duration, and double-coin rewards.
 - [ ] Add tests for level/session resets.
 - [ ] Add a headless game-start smoke test.
 - [ ] Add a GitHub Actions workflow that runs formatting checks, linting, and tests.
