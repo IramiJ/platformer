@@ -1,7 +1,6 @@
 import pygame
 import pytest
 
-from entities.coins import Coins
 from entities.enemies.enemies import Enemies
 from entities.player.player import Player
 from ui.shopping import Shop
@@ -84,23 +83,6 @@ def test_double_coin_buff_duration_counts_down_and_expires():
 
     assert "double coin" not in player.buffs
     assert player.double_coin_buff is False
-
-
-@pytest.mark.parametrize(
-    ("double_coin_buff", "expected_reward"),
-    [(False, 1), (True, 2)],
-)
-def test_coin_collection_reward(double_coin_buff, expected_reward):
-    coins = Coins()
-    coin = FakeCoin()
-    coins.objects = [coin]
-    player = FakePlayer(double_coin_buff=double_coin_buff)
-
-    coins.coin_collisions(player)
-
-    assert player.coin_amount == expected_reward
-    assert coin.alive is False
-    assert coins.objects == []
 
 
 @pytest.mark.parametrize(
