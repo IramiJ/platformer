@@ -54,7 +54,7 @@
 - [x] Add tests for level/session resets.
 - [x] Add a headless game-start smoke test.
 - [x] Add a GitHub Actions workflow that runs formatting checks, linting, and tests.
-- [ ] Keep the test suite green on the supported Python versions.
+- [x] Keep the test suite green on the supported Python versions.
 
 ## 5. Clean up the codebase
 
