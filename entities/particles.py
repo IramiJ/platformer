@@ -50,10 +50,3 @@ class Particle:
         while self.jitter_timer < 0:
             self.x_velocity = random.randint(-10, 10) / 30 * REFERENCE_TICKS_PER_SECOND
             self.jitter_timer += PARTICLE_JITTER_INTERVAL
-
-
-class SimpleParticle:
-    def __init__(self, loc, velocities, radius):
-        self.loc = [float(loc[0]), float(loc[1])]
-        self.velocities = velocities
-        self.radius = radius

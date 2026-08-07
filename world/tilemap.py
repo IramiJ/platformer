@@ -15,16 +15,6 @@ if TYPE_CHECKING:
     from world.scrolling import Scroll
 
 
-def load_map(path: str) -> list[list[str]]:
-    with open(path + ".txt", "r") as f:
-        data = f.read()
-    data = data.split("\n")
-    tilemap = []
-    for row in data:
-        tilemap.append(list(row))
-    return tilemap
-
-
 def read_csv(filename: str) -> list[list[str]]:
     tilemap = []
     with open(os.path.join(filename)) as data:
