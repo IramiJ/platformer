@@ -49,7 +49,7 @@
 - [x] Add tests for all level transitions and the final win state.
 - [x] Add tests for collision resolution.
 - [x] Add minimap boundary tests.
-- [ ] Add tests for projectile and particle cleanup.
+- [x] Add tests for projectile and particle cleanup.
 - [x] Add tests for shop purchases, buff duration, and double-coin rewards.
 - [ ] Add tests for level/session resets.
 - [ ] Add a headless game-start smoke test.
