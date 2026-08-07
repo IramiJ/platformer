@@ -2,7 +2,7 @@ import pytest
 
 from core.paths import PROJECT_ROOT
 from core.settings import TILE_SIZE
-from world.level_loader import Level_loader, LevelValidationError, validate_level
+from world.level_loader import LevelLoader, LevelValidationError, validate_level
 
 
 def make_valid_level():
@@ -173,7 +173,7 @@ def test_validate_level_rejects_invalid_text_entries():
 
 @pytest.mark.parametrize("level_id", [1, 2, 3])
 def test_project_level_files_pass_validation(level_id):
-    loader = Level_loader()
+    loader = LevelLoader()
     loader.load_level(PROJECT_ROOT / f"world/levels/level{level_id}.json")
 
     assert loader.data["id"] == level_id

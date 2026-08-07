@@ -2,7 +2,7 @@ from random import randint
 
 from core.settings import REFERENCE_TICKS_PER_SECOND, TILE_SIZE, Settings
 from entities.player.player import Player
-from world.level_loader import Level_loader
+from world.level_loader import LevelLoader
 from world.tilemap import last_x
 
 SHAKE_SAMPLE_INTERVAL = 1.0 / REFERENCE_TICKS_PER_SECOND
@@ -19,7 +19,7 @@ class Scroll:
             a + b for a, b in zip(self.true_scroll, self.shake_offset)
         ]
 
-    def player_scrolling(self, player: Player, level: Level_loader, dt: float) -> None:
+    def player_scrolling(self, player: Player, level: LevelLoader, dt: float) -> None:
         if player.rect.x < (Settings.window_size[0] / 2 - TILE_SIZE) / 2:
             self.true_scroll[0] = 0
         elif (

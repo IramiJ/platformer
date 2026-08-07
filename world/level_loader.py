@@ -108,7 +108,7 @@ def validate_texts(texts, errors):
             errors.append(f"Position of text '{text}' must be [x, y]")
 
 
-class Level_loader:
+class LevelLoader:
     """Load Level configuartion and tilemap data from disk.
 
     Coordinates in level JSON files are stored in tile-space.
@@ -143,7 +143,7 @@ class Level_loader:
 
 
 def update_level(
-    player: Player, level: Level_loader, enemies: Enemies, texts: Texts, win_screen
+    player: Player, level: LevelLoader, enemies: Enemies, texts: Texts, win_screen
 ) -> bool:
     if not player.rect.colliderect(level.end_rect):
         return False
@@ -169,13 +169,13 @@ def update_level(
     return True
 
 
-def initialize_player(player: Player, level: Level_loader) -> None:
+def initialize_player(player: Player, level: LevelLoader) -> None:
     player.spawn_point = tile_position_to_pixel(level.data["spawn"])
     player.rect.x, player.rect.y = tile_position_to_pixel(level.data["spawn"])
     player.movement = [0, 0]
 
 
-def reach_checkpoint(player: Player, level: Level_loader) -> None:
+def reach_checkpoint(player: Player, level: LevelLoader) -> None:
     for checkpoint in level.data["checkpoints"]:
         if player.rect.collidepoint(
             (checkpoint[0] * TILE_SIZE, checkpoint[1] * TILE_SIZE)

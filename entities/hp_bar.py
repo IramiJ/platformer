@@ -1,7 +1,7 @@
 import pygame
 
 
-class Hp_bar:
+class HpBar:
     def __init__(self, bg, frame, x, y):
         self.bg = pygame.image.load(bg).convert()
         self.bg.set_colorkey((0, 0, 0))

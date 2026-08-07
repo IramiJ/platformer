@@ -1,7 +1,7 @@
 from core.paths import require_asset_dir, require_asset_file
 from entities.animations import load_animation
 from entities.enemies.enemy import Enemy
-from entities.hp_bar import Hp_bar
+from entities.hp_bar import HpBar
 
 
 class Patroller(Enemy):
@@ -13,7 +13,7 @@ class Patroller(Enemy):
         self.animation_database["run"] = load_animation(
             require_asset_dir("enemies/patroller/run"), [5, 5, 5, 5, 5, 5], self
         )
-        self.hp_bar = Hp_bar(
+        self.hp_bar = HpBar(
             require_asset_file("hp_bar/enemy_hp_bar_bg.png"),
             require_asset_file("hp_bar/enemy_hp_bar_frame.png"),
             self.x,

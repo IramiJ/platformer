@@ -5,11 +5,11 @@ import pygame
 from core.paths import require_asset_dir, require_asset_file
 from core.settings import REFERENCE_TICKS_PER_SECOND
 from entities.animations import ANIMATION_TICKS_PER_SECOND
-from entities.entity import entity
+from entities.entity import Entity
 from entities.particles import Particle
 
 
-class Sword(entity):
+class Sword(Entity):
     def __init__(self, x, y):
         super().__init__(x, y, 21, 7)
         self.loc = [x, y]

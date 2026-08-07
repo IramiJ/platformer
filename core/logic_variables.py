@@ -1,4 +1,4 @@
-class Logic_variables:
+class LogicVariables:
     def __init__(self):
         self.MOVEMENTS: bool = True
         self.RENDER: bool = True
