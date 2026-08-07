@@ -4,7 +4,7 @@ from entities.enemies.patroller import Patroller
 from entities.enemies.shooter import Shooter
 from world.coordinates import tile_to_pixel
 
-from .heavy_patroller import Heavy_Patroller
+from .heavy_patroller import HeavyPatroller
 
 
 class Enemies:
@@ -13,7 +13,7 @@ class Enemies:
             "Patroller": Patroller,
             "Chaser": Chaser,
             "Shooter": Shooter,
-            "Heavy_Patroller": Heavy_Patroller,
+            "Heavy_Patroller": HeavyPatroller,
         }
         self.max_enemy_amount = 0
         self.current_enemy_amount = 0

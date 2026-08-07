@@ -52,7 +52,7 @@ class Particle:
             self.jitter_timer += PARTICLE_JITTER_INTERVAL
 
 
-class simple_particle:
+class SimpleParticle:
     def __init__(self, loc, velocities, radius):
         self.loc = [float(loc[0]), float(loc[1])]
         self.velocities = velocities

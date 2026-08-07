@@ -2,7 +2,7 @@ import pygame
 
 from core.paths import require_asset_dir, require_asset_file
 from entities.animations import load_animation
-from entities.entity import entity
+from entities.entity import Entity
 from ui.font_renderer import Font
 
 
@@ -14,7 +14,7 @@ class Ammo:
         ).convert()
         self.pistol_img.set_colorkey((0, 0, 0))
         self.amount_padding = self.pistol_img.get_width() + 5
-        self.cd_obj = entity(self.amount_padding, 9, 16, 16)
+        self.cd_obj = Entity(self.amount_padding, 9, 16, 16)
         self.cd_obj.animation_database["idle"] = load_animation(
             require_asset_dir("cooldown/idle"), [8 for x in range(15)], self.cd_obj
         )

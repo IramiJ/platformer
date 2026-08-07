@@ -3,7 +3,7 @@ import math
 import pygame
 
 from core.paths import require_asset_file
-from entities.entity import simple_entity
+from entities.entity import SimpleEntity
 
 
 class Bow:
@@ -148,7 +148,7 @@ class Bow:
         )
 
 
-class Arrow(simple_entity):
+class Arrow(SimpleEntity):
     def __init__(self, loc, flip):
         super().__init__(require_asset_file("weapons/arrow.png"), loc)
         self.start = self.loc.copy()
