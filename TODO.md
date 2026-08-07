@@ -51,8 +51,8 @@
 - [x] Add minimap boundary tests.
 - [x] Add tests for projectile and particle cleanup.
 - [x] Add tests for shop purchases, buff duration, and double-coin rewards.
-- [ ] Add tests for level/session resets.
-- [ ] Add a headless game-start smoke test.
+- [x] Add tests for level/session resets.
+- [x] Add a headless game-start smoke test.
 - [ ] Add a GitHub Actions workflow that runs formatting checks, linting, and tests.
 - [ ] Keep the test suite green on the supported Python versions.
 
