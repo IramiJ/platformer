@@ -1,5 +1,5 @@
 from core.paths import require_asset_file
-from entities.entity import simple_entity
+from entities.entity import SimpleEntity
 from entities.player.player import Player
 
 
@@ -22,7 +22,7 @@ class Coins:
         self.objects = [coin for coin in self.objects if coin.alive]
 
 
-class Coin(simple_entity):
+class Coin(SimpleEntity):
     def __init__(self, loc):
         super().__init__(require_asset_file("collectables/coin.png"), loc)
         self.alive = True

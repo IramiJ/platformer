@@ -1,7 +1,7 @@
 import math
 
 from core.paths import require_asset_file
-from entities.entity import simple_entity
+from entities.entity import SimpleEntity
 
 TAIL_WAVE_INTERVAL = 0.1
 TAIL_POINT_DURATION = 2.0
@@ -47,7 +47,7 @@ class Tail:
             self.shift = 0
         return 2 * math.sin((math.pi * x / 2) + self.shift)
 
-    class Point(simple_entity):
+    class Point(SimpleEntity):
         def __init__(self, x, y, img):
             super().__init__(img, [x, y])
             self.dur = TAIL_POINT_DURATION

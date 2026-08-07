@@ -13,7 +13,7 @@ import pygame
 from core.paths import require_asset_dir, require_asset_file
 from core.settings import REFERENCE_TICKS_PER_SECOND
 from entities.animations import ANIMATION_TICKS_PER_SECOND, load_animation
-from entities.entity import entity
+from entities.entity import Entity
 from entities.player.bow import Bow
 from entities.player.sword import Sword
 from entities.player.tail import Tail
@@ -21,7 +21,7 @@ from entities.spark import Spark
 from world.collisions import move_collisions
 
 
-class Player(entity):
+class Player(Entity):
     def __init__(self, x, y, width, height):
         super().__init__(x, y, width, height)
         self.spawn_point = [self.rect.x, self.rect.y]
@@ -54,7 +54,7 @@ class Player(entity):
             require_asset_dir("char/run"), [4 for _ in range(12)], self
         )
         self.dmg_cd = 0
-        self.cd_obj = entity(self.x, self.y + 15, 16, 16)
+        self.cd_obj = Entity(self.x, self.y + 15, 16, 16)
         self.cd_obj.animation_database["idle"] = load_animation(
             require_asset_dir("cooldown/idle"), [4 for x in range(15)], self.cd_obj
         )

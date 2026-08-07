@@ -4,14 +4,14 @@ import pygame
 
 from core.settings import REFERENCE_TICKS_PER_SECOND
 from entities.animations import ANIMATION_TICKS_PER_SECOND
-from entities.entity import entity
+from entities.entity import Entity
 from world.collisions import collision_test, move_collisions
 
 DAMAGE_FLASH_DURATION = 5.0 / REFERENCE_TICKS_PER_SECOND
 WHITE_FLASH_DURATION = 1.0 / REFERENCE_TICKS_PER_SECOND
 
 
-class Enemy(entity):
+class Enemy(Entity):
     def __init__(self, x, y, width, height):
         super().__init__(x, y, width, height)
         self.max_hp = 3

@@ -1,7 +1,7 @@
 from .patroller import Patroller
 
 
-class Heavy_Patroller(Patroller):
+class HeavyPatroller(Patroller):
     def __init__(self, x, y, width=16, height=16):
         super().__init__(x, y, width, height)
         self.max_hp = 6

@@ -1,7 +1,7 @@
 import pygame
 
 
-class entity:
+class Entity:
     def __init__(self, x, y, width, height):
         self.x = x
         self.y = y
@@ -23,7 +23,7 @@ class entity:
             self.frame = 0
 
 
-class simple_entity:
+class SimpleEntity:
     def __init__(self, img, loc):
         self.loc = loc
         self.img = pygame.image.load(img).convert()

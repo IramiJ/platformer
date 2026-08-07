@@ -5,9 +5,9 @@ import pygame
 
 from core.paths import PROJECT_ROOT
 from entities.player.player import Player
-from ui.pause_screen import Pause_screen
+from ui.pause_screen import PauseScreen
 from ui.shopping import Shop
-from ui.win_screen import Win_screen
+from ui.win_screen import WinScreen
 
 
 def load_keybinds(path=PROJECT_ROOT / "core/keybinds.json"):
@@ -53,7 +53,7 @@ def validate_keybinds(data: dict) -> None:
         raise ValueError("\n".join(errors))
 
 
-class Keyboard_event_handler:
+class KeyboardEventHandler:
     def __init__(self):
         self.keybinds = load_keybinds()
 
@@ -61,8 +61,8 @@ class Keyboard_event_handler:
         self,
         player: Player,
         shop: Shop,
-        pause_screen: Pause_screen,
-        win_screen: Win_screen,
+        pause_screen: PauseScreen,
+        win_screen: WinScreen,
     ):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

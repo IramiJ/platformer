@@ -2,26 +2,26 @@ import time
 
 import pygame
 
-from core.kb_event_handling import Keyboard_event_handler
-from core.logic_variables import Logic_variables
+from core.kb_event_handling import KeyboardEventHandler
+from core.logic_variables import LogicVariables
 from core.paths import PROJECT_ROOT, require_asset_dir, require_asset_file
 from core.settings import Settings
 from entities.enemies.enemies import Enemies
-from entities.hp_bar import Hp_bar
-from entities.player.buff_renderer import Buff_renderer
+from entities.hp_bar import HpBar
+from entities.player.buff_renderer import BuffRenderer
 from entities.player.player import Player
 from entities.player.render_ammo import Ammo
-from ui.death_screen import Death_screen
+from ui.death_screen import DeathScreen
 from ui.font_renderer import Font
 from ui.minimap import Minimap
-from ui.pause_screen import Pause_screen
+from ui.pause_screen import PauseScreen
 from ui.shopping import Shop
-from ui.win_screen import Win_screen
+from ui.win_screen import WinScreen
 from world.coordinates import tile_to_pixel
-from world.foliage.leafSystem import LeafSystem
+from world.foliage.leaf_system import LeafSystem
 from world.foliage.tree import Tree
 from world.level_loader import (
-    Level_loader,
+    LevelLoader,
     initialize_player,
     reach_checkpoint,
     update_level,
@@ -42,7 +42,7 @@ class Game:
         pygame.display.set_caption(Settings.caption)
 
         self.tiles = load_tiles(require_asset_dir("tiles"))
-        self.level = Level_loader()
+        self.level = LevelLoader()
         self.level.load_level(PROJECT_ROOT / "world/levels/level1.json")
         self.player = Player(
             tile_to_pixel(self.level.data["spawn"][0]),
@@ -50,7 +50,7 @@ class Game:
             24,
             24,
         )
-        self.hp_bar = Hp_bar(
+        self.hp_bar = HpBar(
             require_asset_file("hp_bar/hp_bar_bg.png"),
             require_asset_file("hp_bar/hp_bar_frame.png"),
             0,
@@ -58,11 +58,11 @@ class Game:
         )
         self.small_font = Font(require_asset_file("fonts/small_font.png"))
         self.large_font = Font(require_asset_file("fonts/large_font.png"))
-        self.logic_variables = Logic_variables()
+        self.logic_variables = LogicVariables()
         self.shop = Shop()
-        self.pause_screen = Pause_screen()
-        self.death_screen = Death_screen()
-        self.win_screen = Win_screen()
+        self.pause_screen = PauseScreen()
+        self.death_screen = DeathScreen()
+        self.win_screen = WinScreen()
         self.enemies = Enemies()
         self.ammo = Ammo()
         self.enemies.load_enemies(self.level)
@@ -76,8 +76,8 @@ class Game:
         self.frames = 0
         self.current_fps = 0
         self.last_time = time.time()
-        self.keyboard_event_handler = Keyboard_event_handler()
-        self.buff_renderer = Buff_renderer(self.small_font, self.shop.data)
+        self.keyboard_event_handler = KeyboardEventHandler()
+        self.buff_renderer = BuffRenderer(self.small_font, self.shop.data)
         self.leafSystem = LeafSystem()
         self.tree = Tree([240, 320])
 

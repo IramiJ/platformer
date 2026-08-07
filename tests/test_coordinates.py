@@ -5,7 +5,7 @@ from world.coordinates import pixel_to_tile, tile_position_to_pixel, tile_to_pix
 
 @pytest.mark.parametrize(
     ("tile_position", "pixel_position"),
-    [([0, 0], [0, 0]), ([10, 0], [240, 0]), ([5, 5], [120, 120])],
+    [([0, 0], [0, 0]), ([20, 0], [480, 0]), ([5, 5], [120, 120])],
 )
 def test_tile_position_to_pixel(tile_position, pixel_position):
     assert tile_position_to_pixel(tile_position) == pixel_position

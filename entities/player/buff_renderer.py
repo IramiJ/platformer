@@ -6,7 +6,7 @@ from core.paths import require_asset_file
 from ui.font_renderer import Font
 
 
-class Buff_renderer:
+class BuffRenderer:
     def __init__(self, font: Font, buff_list):
         self.font = font
         self.buff_list = buff_list

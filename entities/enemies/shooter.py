@@ -3,8 +3,8 @@ import math
 from core.paths import require_asset_dir, require_asset_file
 from entities.animations import load_animation
 from entities.enemies.enemy import Enemy
-from entities.enemies.shooter_bullet import Shooter_Bullet
-from entities.hp_bar import Hp_bar
+from entities.enemies.shooter_bullet import ShooterBullet
+from entities.hp_bar import HpBar
 
 
 class Shooter(Enemy):
@@ -21,7 +21,7 @@ class Shooter(Enemy):
         self.animation_database["shoot"] = load_animation(
             require_asset_dir("enemies/shooter/shoot"), [20, 20], self
         )
-        self.hp_bar = Hp_bar(
+        self.hp_bar = HpBar(
             require_asset_file("hp_bar/enemy_hp_bar_bg.png"),
             require_asset_file("hp_bar/enemy_hp_bar_frame.png"),
             self.x,
@@ -73,7 +73,7 @@ class Shooter(Enemy):
                 self.shoot_count = 0
             else:
                 self.attack_cd = 0.5
-            bullet_list.append(Shooter_Bullet(self.spawn_point.copy(), player))
+            bullet_list.append(ShooterBullet(self.spawn_point.copy(), player))
             self.shoot_count += 1
 
     def stun(self):

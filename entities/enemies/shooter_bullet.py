@@ -3,10 +3,10 @@ import math
 import pygame
 
 from core.paths import require_asset_file
-from entities.entity import simple_entity
+from entities.entity import SimpleEntity
 
 
-class Shooter_Bullet(simple_entity):
+class ShooterBullet(SimpleEntity):
     def __init__(self, loc, player):
         super().__init__(require_asset_file("enemies/shooter/bullet.png"), loc)
         self.start = self.loc.copy()
