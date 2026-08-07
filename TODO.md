@@ -58,7 +58,7 @@
 
 ## 5. Clean up the codebase
 
-- [ ] Rename classes, files, methods, and constants consistently according to PEP 8.
+- [x] Rename classes, files, methods, and constants consistently according to PEP 8.
 - [x] Replace wildcard imports with explicit imports.
 - [x] Split combined imports into individual lines.
 - [x] Stop shadowing built-ins such as `map` and `dict`.
