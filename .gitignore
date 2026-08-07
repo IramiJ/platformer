@@ -40,6 +40,7 @@ desktop.ini
 # ===============================
 build/
 dist/
+*.egg-info/
 *.spec
 
 # ===============================
@@ -50,4 +51,9 @@ dist/
 *.cache
 
 # Optional: ignore exported builds
-exports/
+.codex
+
+# Tool caches
+**/.ruff_cache/
+**/.pytest_cache/
+**/.agents/

@@ -1,50 +1,85 @@
+import math
+
+import pygame
+
+from core.settings import REFERENCE_TICKS_PER_SECOND
+from entities.animations import ANIMATION_TICKS_PER_SECOND
 from entities.entity import entity
-from world.collisions import collision_test
-import pygame, math
+from world.collisions import collision_test, move_collisions
+
+DAMAGE_FLASH_DURATION = 5.0 / REFERENCE_TICKS_PER_SECOND
+WHITE_FLASH_DURATION = 1.0 / REFERENCE_TICKS_PER_SECOND
+
 
 class Enemy(entity):
-    def __init__(self,x,y,width,height):
-        super().__init__(x,y,width,height)
+    def __init__(self, x, y, width, height):
+        super().__init__(x, y, width, height)
         self.max_hp = 3
         self.current_hp = 3
-        self.velocity = 1
+        self.velocity = 60
         self.alive = True
         self.dmg_timer = 0
-        
+        self.y_momentum = 0
+
     def update_frames(self, dt):
-        self.frame += dt
-        if self.frame >= len(self.animation_database[self.action]):
-            self.frame = 0
-        self.img_id = self.animation_database[self.action][math.floor(self.frame)]
+        animation = self.animation_database[self.action]
+        self.frame = (self.frame + ANIMATION_TICKS_PER_SECOND * dt) % len(animation)
+        self.img_id = animation[math.floor(self.frame)]
         self.img = self.animation_frames[self.img_id]
+
+    def update_dmg_timer(self, dt):
+        if self.dmg_timer <= 0:
+            return
+        else:
+            self.dmg_timer = max(0.0, self.dmg_timer - dt)
+
     def draw_dmg_timer(self, to_blit):
         if self.dmg_timer > 0:
-            if self.dmg_timer == 5:
+            if self.dmg_timer > DAMAGE_FLASH_DURATION - WHITE_FLASH_DURATION:
                 to_blit.fill((255, 255, 255), special_flags=pygame.BLEND_RGB_ADD)
             else:
                 to_blit.fill((255, 0, 0), special_flags=pygame.BLEND_RGB_ADD)
-            self.dmg_timer -= 1
-        else:
-            self.dmg_timer = 0
+
     def draw(self, display, scroll):
         to_blit = self.img.copy()
         self.draw_dmg_timer(to_blit)
-        display.blit(pygame.transform.flip(to_blit,self.flip,False), [self.rect.x-scroll[0], self.rect.y-scroll[1]])
+        display.blit(
+            pygame.transform.flip(to_blit, self.flip, False),
+            [self.rect.x - scroll[0], self.rect.y - scroll[1]],
+        )
+
     def die(self):
         self.current_hp = 0
         self.alive = False
+
     def take_dmg(self, dmg):
         if not self.alive:
             return
-        self.dmg_timer = 5
+        self.dmg_timer = DAMAGE_FLASH_DURATION
         self.current_hp -= dmg
         self.taking_dmg = True
         if self.current_hp <= 0:
             self.die()
-    def collision(self, tiles):
+
+    def handle_tile_collisions(self, tiles):
         hit_list = collision_test(self.rect, tiles)
         for tile in hit_list:
+            if self.movement[1] > 0:
+                self.rect.bottom = tile.top
+                self.y_momentum = 0
             if self.movement[0] > 0:
                 self.rect.right = tile.left
             elif self.movement[0] < 0:
                 self.rect.left = tile.right
+
+    def collision(self, tiles) -> None:
+        self.handle_tile_collisions(tiles)
+
+    def move_with_tile_collisions(self, dt: float, tiles: list[pygame.Rect]) -> None:
+        self.rect, collisions = move_collisions(self.rect, self.movement, tiles, dt)
+        if collisions["bottom"] or collisions["top"]:
+            self.y_momentum = 0
+
+    def set_y_momentum(self, dt: float) -> None:
+        self.y_momentum += 1440 * dt
+        self.y_momentum = min(self.y_momentum, 420.0)

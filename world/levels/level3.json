@@ -1,13 +1,16 @@
 {
     "id": 3,
-    "map": "maps/map2.csv",
-    "spawn": [128, 288],
-    "max_y": 3000,
+    "map": "maps/map3.csv",
+    "spawn": [6, 31],
+    "max_y": 40,
     "enemies": {
-        "Patroller": [[35, 52], [50, 53]],
-        "Chaser": [[43, 61]],
-        "Shooter": [[36, 14], [47, 17], [58, 12], [42, 35]]
+        "Patroller": [[16, 31], [62, 28], [54, 18], [36, 17]],
+        "Chaser": [[36, 31], [45, 31], [21, 15], [15, 21]],
+        "Shooter": [[22, 28], [31, 28], [36, 25], [53, 29], [28, 11], [43, 13]]
     },
-    "checkpoints": [[86, 39], [21, 58]], 
-    "end_coordinates": [1552, 800]
+    "checkpoints": [], 
+    "end_coordinates": [1, 1],
+    "texts": {
+        "Good luck": [5, 29]
+    }
 }

@@ -1,79 +1,99 @@
+import math
+
+from core.paths import require_asset_dir, require_asset_file
+from entities.animations import load_animation
 from entities.enemies.enemy import Enemy
 from entities.enemies.shooter_bullet import Shooter_Bullet
-from entities.animations import load_animation
 from entities.hp_bar import Hp_bar
-from core.settings import Settings
-import math, pygame
+
 
 class Shooter(Enemy):
-    def __init__(self,x,y,width,height):
-        super().__init__(x,y,width,height)
+    def __init__(self, x, y, width, height):
+        super().__init__(x, y, width, height)
         self.spawn_point = [self.x, self.y]
         self.aggro_range = 300
-        self.action = 'idle'
+        self.action = "idle"
         self.max_hp = 2
         self.current_hp = 2
-        self.animation_database['idle'] = load_animation('assets/enemies/shooter/idle', [20,20,20,20,20,20], self)
-        self.animation_database['shoot'] = load_animation('assets/enemies/shooter/shoot', [20, 20], self)
-        self.hp_bar = Hp_bar('assets/hp_bar/enemy_hp_bar_bg.png','assets/hp_bar/enemy_hp_bar_frame.png',self.x,self.y-20)
+        self.animation_database["idle"] = load_animation(
+            require_asset_dir("enemies/shooter/idle"), [20, 20, 20, 20, 20, 20], self
+        )
+        self.animation_database["shoot"] = load_animation(
+            require_asset_dir("enemies/shooter/shoot"), [20, 20], self
+        )
+        self.hp_bar = Hp_bar(
+            require_asset_file("hp_bar/enemy_hp_bar_bg.png"),
+            require_asset_file("hp_bar/enemy_hp_bar_frame.png"),
+            self.x,
+            self.y - 20,
+        )
         self.attack_cd = 0
         self.collision_cd = 0
         self.stunned = False
         self.stun_cd = 0
         self.shoot_count = 0
-        
 
     def render(self, display, scroll):
         if not self.alive:
-            return 
+            return
         self.draw(display, scroll)
-        self.update_hp_bar(scroll)
-        self.hp_bar.draw(display, self.max_hp, self.current_hp)
-    def update_hp_bar(self, scroll):
-        self.hp_bar.x = self.rect.x-scroll[0]
-        self.hp_bar.y = self.rect.y-scroll[1]-20
-    def attack(self, player, bullet_list, scroll):
-        self.handle_stun_state()
+        hp_bar_position = (self.rect.x - scroll[0], self.rect.y - scroll[1] - 20)
+        self.hp_bar.draw(display, self.max_hp, self.current_hp, hp_bar_position)
+
+    def move(self, dt: float, tiles: list[list[str]]) -> None:
+        self.movement = [0, 0]
+        self.set_y_momentum(dt)
+        self.movement[1] += self.y_momentum
+        self.move_with_tile_collisions(dt, tiles)
+
+    def attack(self, player, bullet_list, scroll, dt):
+        self.handle_stun_state(dt)
         if not self.stunned:
-            self.reduce_attack_cd()
+            self.reduce_attack_cd(dt)
             self.check_attack_state(player, bullet_list)
-        self.update_player_phsyical_dmg(player, scroll)
+        self.update_player_phsyical_dmg(player, scroll, dt)
+
     def check_attack_state(self, player, bullet_list):
-        if math.sqrt((self.spawn_point[0] - player.rect.x)**2 + (self.spawn_point[1] - player.rect.y)**2) <= self.aggro_range:
+        if (
+            math.sqrt(
+                (self.spawn_point[0] - player.rect.x) ** 2
+                + (self.spawn_point[1] - player.rect.y) ** 2
+            )
+            <= self.aggro_range
+        ):
             self.shoot(bullet_list, player)
         else:
-            self.change_action('idle')
+            self.change_action("idle")
+
     def shoot(self, bullet_list, player):
-        self.change_action('shoot')
-        if self.attack_cd == 0:
-            if self.shoot_count == 2:                    
-                self.attack_cd = 2 * Settings.fps
+        self.change_action("shoot")
+        if self.attack_cd <= 0:
+            if self.shoot_count == 2:
+                self.attack_cd = 2
                 self.shoot_count = 0
             else:
-                self.attack_cd = 0.5 * Settings.fps
+                self.attack_cd = 0.5
             bullet_list.append(Shooter_Bullet(self.spawn_point.copy(), player))
             self.shoot_count += 1
 
     def stun(self):
-        self.stun_cd = 20
+        self.stun_cd = 1 / 3
         self.stunned = True
-        
-    def handle_stun_state(self):
-        if self.stunned: 
-            self.stun_cd -= 1
-            if self.stun_cd == 0:
+
+    def handle_stun_state(self, dt):
+        if self.stunned:
+            self.stun_cd = max(0.0, self.stun_cd - dt)
+            if self.stun_cd <= 0:
                 self.stunned = False
-    
-    def reduce_attack_cd(self):
-        if self.attack_cd > 0:           
-            self.attack_cd -= 1
-    
-    def update_player_phsyical_dmg(self, player, scroll):
+
+    def reduce_attack_cd(self, dt):
+        if self.attack_cd > 0:
+            self.attack_cd = max(0, self.attack_cd - dt)
+
+    def update_player_phsyical_dmg(self, player, scroll, dt):
         if self.collision_cd > 0:
-            self.collision_cd -= 1
+            self.collision_cd = max(0.0, self.collision_cd - dt)
 
         elif self.rect.colliderect(player.rect) and not player.dashing:
             player.take_dmg(scroll)
-            self.collision_cd  = 30  
-
-             
+            self.collision_cd = 0.5
