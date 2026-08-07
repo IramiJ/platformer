@@ -103,9 +103,10 @@ class Keyboard_event_handler:
                     elif event.key == self.keybinds["shoot"]:
                         if player.mode == "ranged":
                             player.bow.add_arrow()
-                    elif event.key == self.keybinds["reload"]:
-                        if player.mode == "ranged":
-                            player.bow.reload()
+                    elif (
+                        event.key == self.keybinds["reload"] and player.mode == "ranged"
+                    ):
+                        player.bow.reload()
 
             elif event.type == pygame.KEYUP:
                 if event.key == self.keybinds["right"]:

@@ -107,13 +107,12 @@ class Bow:
             self.reload()
 
     def add_arrow(self):
-        if self.reload_cd <= 0:
-            if self.shoot_cd <= 0:
-                arrow_loc = self.loc.copy()
-                flip = bool(self.flip)
-                self.arrows.append(Arrow(arrow_loc, flip))
-                self.shoot_cd = self.max_shoot_cd
-                self.ammo -= 1
+        if self.reload_cd <= 0 and self.shoot_cd <= 0:
+            arrow_loc = self.loc.copy()
+            flip = bool(self.flip)
+            self.arrows.append(Arrow(arrow_loc, flip))
+            self.shoot_cd = self.max_shoot_cd
+            self.ammo -= 1
 
     def reload(self):
         if not self.reloading:

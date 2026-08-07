@@ -3,7 +3,7 @@ import math
 import pygame
 
 from core.paths import require_asset_file
-from ui.Font_renderer import Font
+from ui.font_renderer import Font
 
 
 class Buff_renderer:

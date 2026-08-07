@@ -4,7 +4,7 @@ import pygame
 
 from core.paths import PROJECT_ROOT, require_asset_file, validate_asset_path
 from entities.animations import draw_constants
-from ui.Font_renderer import Font
+from ui.font_renderer import Font
 
 
 class Shop:
@@ -69,15 +69,14 @@ class Shop:
                 self.buy_on_press(mouse_rect, item, player, buff_list)
 
     def buy_on_press(self, mouse_rect, item, player, buff_list):
-        if mouse_rect.colliderect(self.item_boxes[item]):
-            if (
-                player.coin_amount >= int(self.prices[item])
-                and self.buy_cooldown == 0
-                and item not in buff_list
-            ):
-                player.coin_amount -= int(self.prices[item])
-                self.buy_cooldown = 0
-                buff_list[item] = int(self.data[item]["duration"])
+        if mouse_rect.colliderect(self.item_boxes[item]) and (
+            player.coin_amount >= int(self.prices[item])
+            and self.buy_cooldown == 0
+            and item not in buff_list
+        ):
+            player.coin_amount -= int(self.prices[item])
+            self.buy_cooldown = 0
+            buff_list[item] = int(self.data[item]["duration"])
 
     def change_displaying(self):
         self.displaying = not self.displaying
@@ -109,7 +108,7 @@ def validate_shop_file(data):
     supported_buffs = ["double coin", "speed boost", "jump boost"]
 
     if not isinstance(data, dict):
-        raise ValueError("shop file must contain a JSON object")
+        raise TypeError("shop file must contain a JSON object")
     for item, item_data in data.items():
         if item not in supported_buffs:
             errors.append(f"{item} is not a valid buff")

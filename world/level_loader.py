@@ -85,8 +85,7 @@ def validate_enemies(enemies, errors):
 
     for enemy_name, positions in enemies.items():
         if enemy_name not in valid_enemy_names:
-            if enemy_name not in valid_enemy_names:
-                errors.append(f"Unknown enemy type: '{enemy_name}'")
+            errors.append(f"Unknown enemy type: '{enemy_name}'")
 
         if not isinstance(positions, list):
             errors.append(f"'enemies.{enemy_name}' musst be a list")

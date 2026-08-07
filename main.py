@@ -12,7 +12,7 @@ from entities.player.buff_renderer import Buff_renderer
 from entities.player.player import Player
 from entities.player.render_ammo import Ammo
 from ui.death_screen import Death_screen
-from ui.Font_renderer import Font
+from ui.font_renderer import Font
 from ui.minimap import Minimap
 from ui.pause_screen import Pause_screen
 from ui.shopping import Shop

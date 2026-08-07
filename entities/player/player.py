@@ -174,12 +174,16 @@ class Player(entity):
             self.dmg = 1
 
     def attack(self, enemy, logic_variables, sparks: list[Spark], dt: float) -> None:
-        if self.dmg_cd <= 0 and self.dashing and self.mode == "melee":
-            if self.rect.colliderect(enemy.rect):
-                self.attack_on_hit(enemy, logic_variables, sparks)
+        if (
+            self.dmg_cd <= 0
+            and self.dashing
+            and self.mode == "melee"
+            and self.rect.colliderect(enemy.rect)
+        ):
+            self.attack_on_hit(enemy, logic_variables, sparks)
 
-                self.match_damage_cooldown()
-                self.heal_on_stun(enemy, sparks)
+            self.match_damage_cooldown()
+            self.heal_on_stun(enemy, sparks)
 
     def attack_on_hit(self, enemy, logic_variables, sparks):
         enemy.take_dmg(self.dmg)

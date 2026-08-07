@@ -3,7 +3,7 @@ import pygame
 from core.paths import require_asset_dir, require_asset_file
 from entities.animations import load_animation
 from entities.entity import entity
-from ui.Font_renderer import Font
+from ui.font_renderer import Font
 
 
 class Ammo:

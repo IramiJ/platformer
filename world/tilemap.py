@@ -16,9 +16,8 @@ if TYPE_CHECKING:
 
 
 def load_map(path: str) -> list[list[str]]:
-    f = open(path + ".txt", "r")
-    data = f.read()
-    f.close()
+    with open(path + ".txt", "r") as f:
+        data = f.read()
     data = data.split("\n")
     tilemap = []
     for row in data:
@@ -69,8 +68,8 @@ def display_map(
     # visible tile range (add 1 tile padding to avoid pop-in)
     x0 = max(0, int(scroll_x // TILE_SIZE) - 1)
     y0 = max(0, int(scroll_y // TILE_SIZE) - 1)
-    x1 = min(len(tilemap[0]), int(math.ceil((scroll_x + screen_w) / TILE_SIZE)) + 1)
-    y1 = min(len(tilemap), int(math.ceil((scroll_y + screen_h) / TILE_SIZE)) + 1)
+    x1 = min(len(tilemap[0]), math.ceil((scroll_x + screen_w) / TILE_SIZE) + 1)
+    y1 = min(len(tilemap), math.ceil((scroll_y + screen_h) / TILE_SIZE) + 1)
 
     for y in range(y0, y1):
         row = tilemap[y]

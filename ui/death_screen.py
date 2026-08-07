@@ -1,5 +1,5 @@
 from core.paths import require_asset_file
-from ui.Font_renderer import Font
+from ui.font_renderer import Font
 
 
 class Death_screen:
