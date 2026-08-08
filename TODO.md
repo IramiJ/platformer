@@ -67,7 +67,7 @@
 - [x] Remove or archive `*_old` assets, old maps, sketches, and unused editor-session files.
 - [x] Add type hints to core data structures and public methods.
 - [#] Add short docstrings to the main game, level, entity, collision, and rendering systems.
-- [ ] Normalize Git author information and add a `.mailmap` if needed.
+- [x] Normalize Git author information and add a `.mailmap` if needed.
 
 ## 6. Measure and improve performance
 
