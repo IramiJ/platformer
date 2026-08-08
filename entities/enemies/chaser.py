@@ -1,11 +1,21 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from core.paths import require_asset_dir, require_asset_file
 from entities.animations import load_animation
 from entities.enemies.enemy import Enemy
 from entities.hp_bar import HpBar
 
+if TYPE_CHECKING:
+    import pygame
+
+    from entities.player.player import Player
+    from world.scrolling import Scroll
+
 
 class Chaser(Enemy):
-    def __init__(self, x, y, width, height):
+    def __init__(self, x: float, y: float, width: int, height: int) -> None:
         super().__init__(x, y, width, height)
         self.spawn_point = (self.x, self.y)
         self.aggro_range = 100
@@ -32,14 +42,14 @@ class Chaser(Enemy):
         self.stunned = False
         self.stun_cd = 0
 
-    def render(self, display, scroll):
+    def render(self, display: pygame.Surface, scroll: list[float]) -> None:
         if not self.alive:
             return
         self.draw(display, scroll)
         hp_bar_position = (self.rect.x - scroll[0], self.rect.y - scroll[1] - 20)
         self.hp_bar.draw(display, self.max_hp, self.current_hp, hp_bar_position)
 
-    def move_to_player(self, player):
+    def move_to_player(self, player: Player) -> None:
         if player.rect.x < self.rect.x:
             self.change_action("run")
             self.direction = "l"
@@ -53,7 +63,7 @@ class Chaser(Enemy):
         elif player.rect.x == self.rect.x:
             self.movement[0] = 0
 
-    def return_to_spawnpoint(self):
+    def return_to_spawnpoint(self) -> None:
         self.move_burst_increase = 0
         if self.rect.x < self.spawn_point[0]:
             self.change_action("run")
@@ -66,7 +76,7 @@ class Chaser(Enemy):
             self.flip = True
             self.movement[0] -= self.true_velocity
 
-    def move(self, player, tiles, dt):
+    def move(self, player: Player, tiles: list[pygame.Rect], dt: float) -> None:
         if self.stunned:
             self.stun_cd = max(0.0, self.stun_cd - dt)
 
@@ -99,7 +109,7 @@ class Chaser(Enemy):
         self.movement[1] += self.y_momentum
         self.move_with_tile_collisions(dt, tiles)
 
-    def attack(self, player, scroll, dt):
+    def attack(self, player: Player, scroll: Scroll, dt: float) -> None:
         if self.stunned:
             return
         if self.attack_cd > 0:
@@ -109,11 +119,11 @@ class Chaser(Enemy):
                 player.take_dmg(scroll)
                 self.attack_cd = 0.5
 
-    def stun(self):
+    def stun(self) -> None:
         self.stunned = True
         self.stun_cd = 1 / 3
 
-    def move_burst(self, dt):
+    def move_burst(self, dt: float) -> None:
         if self.move_burst_increase <= 0:
             self.move_burst_increase = 120
         else:

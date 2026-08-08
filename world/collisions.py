@@ -1,8 +1,10 @@
 import pygame
 
 
-def collision_test(rect: pygame.Rect, tiles: list[pygame.Rect]) -> list[pygame.Rect]:
-    hit_list = []
+def collision_test(
+    rect: pygame.Rect | pygame.FRect, tiles: list[pygame.Rect]
+) -> list[pygame.Rect]:
+    hit_list: list[pygame.Rect] = []
     for tile in tiles:
         if rect.colliderect(tile):
             hit_list.append(tile)
@@ -10,8 +12,8 @@ def collision_test(rect: pygame.Rect, tiles: list[pygame.Rect]) -> list[pygame.R
 
 
 def move_collisions(
-    rect: pygame.FRect, movement: list[int], tiles: list[pygame.Rect], dt: float
-) -> tuple[pygame.Rect, dict[str, bool]]:
+    rect: pygame.FRect, movement: list[float], tiles: list[pygame.Rect], dt: float
+) -> tuple[pygame.FRect, dict[str, bool]]:
     collision_types = {"top": False, "bottom": False, "left": False, "right": False}
     x_movement(rect, movement, dt, tiles, collision_types)
     y_movement(rect, movement, dt, tiles, collision_types)
@@ -19,10 +21,10 @@ def move_collisions(
 
 
 def x_movement(
-    rect: pygame.Rect,
-    movement: list[int],
+    rect: pygame.FRect,
+    movement: list[float],
     dt: float,
-    tiles,
+    tiles: list[pygame.Rect],
     collision_types: dict[str, bool],
 ) -> None:
     rect.x += movement[0] * dt
@@ -37,8 +39,8 @@ def x_movement(
 
 
 def y_movement(
-    rect: pygame.Rect,
-    movement: list[int],
+    rect: pygame.FRect,
+    movement: list[float],
     dt: float,
     tiles: list[pygame.Rect],
     collision_types: dict[str, bool],

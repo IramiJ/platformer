@@ -1,20 +1,24 @@
+from collections.abc import Sequence
+
 import pygame
 
 from world.coordinates import pixel_to_tile
 
 
 class Minimap:
-    def __init__(self):
+    def __init__(self) -> None:
         self.size = [40, 30]
         self.pos = [280, 0]
-        self.map_array = [[0 for _ in range(self.size[0])] for _ in range(self.size[1])]
+        self.map_array: list[list[int | str]] = [
+            [0 for _ in range(self.size[0])] for _ in range(self.size[1])
+        ]
         self.minimap_surface = pygame.Surface(self.size)
         self.border_color = (200, 200, 200)
         self.border = pygame.Rect(0, 0, self.size[0], self.size[1])
         self.NON_RENDER_TILES = {"-1"}
-        self.center = [0, 0]
+        self.center: list[int] = [0, 0]
 
-    def update_map(self, player_pos: list[int], tilemap: list[list[str]]) -> None:
+    def update_map(self, player_pos: Sequence[float], tilemap: list[list[str]]) -> None:
         self.center = [
             pixel_to_tile(player_pos[0]),
             pixel_to_tile(player_pos[1]),
@@ -36,7 +40,7 @@ class Minimap:
 
                 self.map_array[local_y][local_x] = tile
 
-    def to_show(self):
+    def to_show(self) -> None:
         for i, row in enumerate(self.map_array):
             for j, tile in enumerate(row):
                 if tile == "-1":
@@ -46,7 +50,7 @@ class Minimap:
         self.minimap_surface.set_at((20, 15), (0, 255, 0))
         pygame.draw.rect(self.minimap_surface, self.border_color, self.border, 1)
 
-    def render(self, display):
+    def render(self, display: pygame.Surface) -> None:
         self.minimap_surface.fill((0, 0, 0))
         self.to_show()
         display.blit(self.minimap_surface, self.pos)

@@ -9,13 +9,13 @@ SHAKE_SAMPLE_INTERVAL = 1.0 / REFERENCE_TICKS_PER_SECOND
 
 
 class Scroll:
-    def __init__(self):
-        self.true_scroll = [0, 0]
-        self.shake_offset = [0, 0]
-        self.shake_timer = 0
-        self.shake_sample_timer = 0
-        self.shake_strength = 0
-        self.render_scroll = [
+    def __init__(self) -> None:
+        self.true_scroll: list[float] = [0, 0]
+        self.shake_offset: list[float] = [0, 0]
+        self.shake_timer: float = 0
+        self.shake_sample_timer: float = 0
+        self.shake_strength: int = 0
+        self.render_scroll: list[float] = [
             a + b for a, b in zip(self.true_scroll, self.shake_offset)
         ]
 
@@ -40,7 +40,7 @@ class Scroll:
             a + b for a, b in zip(self.true_scroll, self.shake_offset)
         ]
 
-    def shake(self, dt) -> None:
+    def shake(self, dt: float) -> None:
         if self.shake_timer > 0:
             self.shake_sample_timer -= dt
             while self.shake_sample_timer < 0:

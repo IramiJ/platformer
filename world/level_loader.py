@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, TypedDict
 
 import pygame
 
@@ -13,16 +13,30 @@ from world.tilemap import read_csv, validate_tilemap
 from .coordinates import tile_position_to_pixel, tile_to_pixel
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
+
     from entities.enemies.enemies import Enemies
     from entities.player.player import Player
+    from ui.win_screen import WinScreen
     from world.texts import Texts
+
+
+class LevelData(TypedDict):
+    id: int
+    map: str
+    spawn: list[int]
+    max_y: int
+    enemies: dict[str, list[list[int]]]
+    checkpoints: list[list[int]]
+    end_coordinates: list[int]
+    texts: dict[str, list[int]]
 
 
 class LevelValidationError(ValueError):
     pass
 
 
-def is_position(value) -> bool:
+def is_position(value: object) -> bool:
     return (
         isinstance(value, list)
         and len(value) == 2
@@ -30,8 +44,8 @@ def is_position(value) -> bool:
     )
 
 
-def validate_level(data: dict, filename: str) -> None:
-    errors = []
+def validate_level(data: Mapping[str, object], filename: str | Path) -> None:
+    errors: list[str] = []
 
     required_fields = {
         "id": int,
@@ -77,7 +91,7 @@ def validate_level(data: dict, filename: str) -> None:
         raise LevelValidationError(f"Invalid Leveldata: {filename}\n{details}")
 
 
-def validate_enemies(enemies, errors):
+def validate_enemies(enemies: object, errors: list[str]) -> None:
     if not isinstance(enemies, dict):
         return
 
@@ -96,7 +110,7 @@ def validate_enemies(enemies, errors):
                 errors.append(f"'enemies.{enemy_name}[{index}] musst be [x, y]")
 
 
-def validate_texts(texts, errors):
+def validate_texts(texts: object, errors: list[str]) -> None:
     if not isinstance(texts, dict):
         errors.append("field 'texts' is not a dictionary")
         return
@@ -116,12 +130,14 @@ class LevelLoader:
 
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.id = 1
         self.max_y_px = 0
-        self.end_rect = None
+        self.end_rect: pygame.Rect | None = None
+        self.data: LevelData
+        self.map: list[list[str]]
 
-    def load_level(self, json_file: str) -> None:
+    def load_level(self, json_file: str | Path) -> None:
         with open(json_file, "r") as file:
             self.data = json.load(file)
         validate_level(self.data, json_file)
@@ -143,7 +159,11 @@ class LevelLoader:
 
 
 def update_level(
-    player: Player, level: LevelLoader, enemies: Enemies, texts: Texts, win_screen
+    player: Player,
+    level: LevelLoader,
+    enemies: Enemies,
+    texts: Texts,
+    win_screen: WinScreen,
 ) -> bool:
     if not player.rect.colliderect(level.end_rect):
         return False

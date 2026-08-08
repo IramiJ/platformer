@@ -3,7 +3,6 @@ from __future__ import annotations
 import csv
 import math
 import os
-from pathlib import Path
 from typing import TYPE_CHECKING
 
 import pygame
@@ -12,11 +11,13 @@ from core.paths import require_asset_dir
 from core.settings import TILE_SIZE
 
 if TYPE_CHECKING:
+    from pathlib import Path
+
     from world.scrolling import Scroll
 
 
-def read_csv(filename: str) -> list[list[str]]:
-    tilemap = []
+def read_csv(filename: str | Path) -> list[list[str]]:
+    tilemap: list[list[str]] = []
     with open(os.path.join(filename)) as data:
         data = csv.reader(data, delimiter=",")
         for row in data:
@@ -29,7 +30,7 @@ def last_x(tilemap: list[list[str]]) -> int:
 
 
 def load_tiles(path: str | Path) -> dict[str, pygame.Surface]:
-    tiles_by_id = {}
+    tiles_by_id: dict[str, pygame.Surface] = {}
     files = os.listdir(path)
     for file in files:
         name = str(int(file.split(".")[0]))
@@ -93,7 +94,7 @@ def update_tile_rects(
             tile_rects.append(pygame.Rect(world_x, world_y, TILE_SIZE, TILE_SIZE))
 
 
-def validate_tilemap(tilemap: list[list[str]]):
+def validate_tilemap(tilemap: list[list[str]]) -> None:
     if not tilemap:
         raise ValueError("Tilemap must be non empty")
     length = len(tilemap[0])

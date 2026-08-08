@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import pygame
 
 from core.paths import require_asset_dir, require_asset_file
@@ -5,9 +9,12 @@ from entities.animations import load_animation
 from entities.entity import Entity
 from ui.font_renderer import Font
 
+if TYPE_CHECKING:
+    from entities.player.player import Player
+
 
 class Ammo:
-    def __init__(self):
+    def __init__(self) -> None:
         self.small_font = Font(require_asset_file("fonts/small_font.png"))
         self.pistol_img = pygame.image.load(
             require_asset_file("weapons/cd_pistol.png")
@@ -19,14 +26,14 @@ class Ammo:
             require_asset_dir("cooldown/idle"), [8 for x in range(15)], self.cd_obj
         )
 
-    def render_ammo(self, display, player):
+    def render_ammo(self, display: pygame.Surface, player: Player) -> None:
         self.render_pistol(display)
         if not player.bow.reloading:
             self.render_ammo_amount(display, player)
         else:
             self.draw_reload_img(display, player)
 
-    def draw_reload_img(self, display, player):
+    def draw_reload_img(self, display: pygame.Surface, player: Player) -> None:
         animation = self.cd_obj.animation_database[self.cd_obj.action]
         progress = 1.0 - player.bow.reload_cd / player.bow.max_reload_cd
         progress = max(0.0, min(progress, 1.0))
@@ -35,8 +42,8 @@ class Ammo:
         img = self.cd_obj.animation_frames[img_id]
         display.blit(img, (self.cd_obj.x, self.cd_obj.y))
 
-    def render_ammo_amount(self, display, player):
+    def render_ammo_amount(self, display: pygame.Surface, player: Player) -> None:
         self.small_font.render(display, str(player.bow.ammo), (self.amount_padding, 15))
 
-    def render_pistol(self, display):
+    def render_pistol(self, display: pygame.Surface) -> None:
         display.blit(self.pistol_img, [0, 15])

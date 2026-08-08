@@ -1,16 +1,18 @@
+import pygame
+
 from core.paths import require_asset_file
 from ui.font_renderer import Font
 
 
 class WinScreen:
-    def __init__(self):
+    def __init__(self) -> None:
         self.small_font = Font(require_asset_file("fonts/small_font.png"))
         self.large_font = Font(require_asset_file("fonts/large_font.png"))
         self.displaying = False
 
-    def render(self, surf):
+    def render(self, surf: pygame.Surface) -> None:
         surf.fill((0, 0, 0))
         self.large_font.render(surf, "YOU WON", (130, 0))
 
-    def change_displaying(self):
+    def change_displaying(self) -> None:
         self.displaying = not self.displaying

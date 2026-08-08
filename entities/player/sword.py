@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import math
+from typing import TYPE_CHECKING
 
 import pygame
 
@@ -8,16 +11,20 @@ from entities.animations import ANIMATION_TICKS_PER_SECOND
 from entities.entity import Entity
 from entities.particles import Particle
 
+if TYPE_CHECKING:
+    from entities.player.player import Player
+    from world.scrolling import Scroll
+
 
 class Sword(Entity):
-    def __init__(self, x, y):
+    def __init__(self, x: float, y: float) -> None:
         super().__init__(x, y, 21, 7)
         self.loc = [x, y]
         self.img = pygame.image.load(
             require_asset_file("weapons/broken_sword.png")
         ).convert()
         self.img.set_colorkey((0, 0, 0))
-        self.particles = []
+        self.particles: list[Particle] = []
         self.flip = False
         self.particle_cd = 1 / 60
         self.load_slice_animation()
@@ -46,12 +53,12 @@ class Sword(Entity):
             "idle": [0, 0, 0],
         }
 
-    def add_particles(self, dt):
+    def add_particles(self, dt: float) -> None:
         self.particle_cd = max(0.0, self.particle_cd - dt)
         if self.particle_cd <= 0:
             self.spawn_particles()
 
-    def spawn_particles(self):
+    def spawn_particles(self) -> None:
         for i in range(4):
             p = Particle(
                 require_asset_file("particles/sword_particle.png"),
@@ -66,16 +73,16 @@ class Sword(Entity):
                 self.particles.append(p)
         self.particle_cd = 1.0
 
-    def update_particles(self, dt):
+    def update_particles(self, dt: float) -> None:
         for particle in self.particles:
             particle.update(dt)
         self.particles = [particle for particle in self.particles if particle.alive]
 
-    def load_slice_animation(self):
+    def load_slice_animation(self) -> None:
         path = require_asset_dir("weapons/sword/slice")
         dur = [1 for x in range(11)]
         animation_name = path.name
-        self.slice_animation = []
+        self.slice_animation: list[pygame.Surface] = []
         for number, duration in enumerate(dur):
             animation_frame_id = f"{animation_name}{number}"
             img_loc = path / f"{animation_frame_id}.png"
@@ -86,7 +93,7 @@ class Sword(Entity):
             for i in range(duration):
                 self.slice_animation.append(animation_image)
 
-    def draw_slice(self, display: pygame.Surface, scroll):
+    def draw_slice(self, display: pygame.Surface, scroll: Scroll) -> None:
         if not self.flip:
             display.blit(
                 pygame.transform.flip(
@@ -110,68 +117,67 @@ class Sword(Entity):
                 ],
             )
 
-    def update_slice_frame(self, dt):
+    def update_slice_frame(self, dt: float) -> None:
         self.slice_frame = (self.slice_frame + ANIMATION_TICKS_PER_SECOND * dt) % len(
             self.slice_animation
         )
 
     def draw(
         self,
-        player_dash_state,
-        display,
-        scroll,
-        player_frame,
-        player_action,
-    ):
+        player_dash_state: bool,
+        display: pygame.Surface,
+        scroll: Scroll,
+        player_frame: float,
+        player_action: str,
+    ) -> None:
         frame = self.get_animation_frame(player_frame, player_action)
         angle = self.angles[player_action][frame]
 
         if player_dash_state:
             self.draw_slice(display, scroll)
-        """
-        Particle spawning belongs in update logic.
-        """
         self.draw_particles(display, scroll)
         self.draw_rotated(display, scroll, angle)
 
-    def update(self, player, dt):
-        self.update_location(player.flip, player.rect, player.frame, player.action)
+    def update(self, player: Player, dt: float) -> None:
+        self.update_location(player)
         self.set_flip(player.flip)
         self.update_particles(dt)
 
         if player.mode == "melee" and player.dashing:
             self.update_slice_frame(dt)
 
-    def set_flip(self, flip):
+    def set_flip(self, flip: bool) -> None:
         self.flip = flip
 
-    def update_location(self, player_flip, player_rect, player_frame, player_action):
-        frame = self.get_animation_frame(player_frame, player_action)
-        if player_flip:
+    def update_location(self, player: Player) -> None:
+        frame = self.get_animation_frame(player.frame, player.action)
+        if player.flip:
             self.loc = [
-                player_rect.left
+                player.rect.left
                 - self.img.get_width()
-                + (24 - self.offsets[player_action][frame][0]),
-                player_rect.y + self.offsets[player_action][frame][1] - 2,
+                + (24 - self.offsets[player.action][frame][0]),
+                player.rect.y + self.offsets[player.action][frame][1] - 2,
             ]
         else:
             self.loc = [
-                player_rect.right - (24 - self.offsets[player_action][frame][0]),
-                player_rect.y + self.offsets[player_action][frame][1] - 2,
+                player.rect.right - (24 - self.offsets[player.action][frame][0]),
+                player.rect.y + self.offsets[player.action][frame][1] - 2,
             ]
 
-    def draw_particles(self, display, scroll):
+    def draw_particles(self, display: pygame.Surface, scroll: Scroll) -> None:
         for particle in self.particles:
             particle.render(display, scroll)
 
-    def get_animation_frame(self, player_frame, player_action):
+    def get_animation_frame(self, player_frame: float, player_action: str) -> int:
         if player_action == "run":
             return math.floor(player_frame / 4)
         elif player_action == "idle":
             return math.floor(player_frame / 20)
         return 0
 
-    def draw_rotated(self, display, scroll, angle):
+    def draw_rotated(
+        self, display: pygame.Surface, scroll: Scroll, angle: float
+    ) -> None:
         img = pygame.transform.flip(self.img, self.flip, False)
 
         if self.flip:

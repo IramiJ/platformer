@@ -47,7 +47,7 @@ def shop():
 def test_shop_purchase_deducts_coins_and_adds_buff(shop):
     player = FakePlayer(coin_amount=15)
 
-    shop.buy_on_press(pygame.Rect(1, 1, 1, 1), "double coin", player, player.buffs)
+    shop.buy_on_press(pygame.Rect(1, 1, 1, 1), "double coin", player)
 
     assert player.coin_amount == 5
     assert player.buffs == {"double coin": 30}
@@ -61,7 +61,7 @@ def test_shop_rejects_invalid_purchase(shop, coin_amount, active_buffs):
     player = FakePlayer(coin_amount=coin_amount)
     player.buffs = active_buffs.copy()
 
-    shop.buy_on_press(pygame.Rect(1, 1, 1, 1), "double coin", player, player.buffs)
+    shop.buy_on_press(pygame.Rect(1, 1, 1, 1), "double coin", player)
 
     assert player.coin_amount == coin_amount
     assert player.buffs == active_buffs

@@ -7,7 +7,7 @@ WIND_BLEND_PER_REFERENCE_TICK = 0.05
 
 
 class Wind:
-    def __init__(self):
+    def __init__(self) -> None:
         self.current = 0.0
         self.target = 0.0
         self.timer = 0.0
@@ -16,13 +16,13 @@ class Wind:
         self.winding = False
         self.leaf_spawn_rate = 5
 
-    def update(self, dt):
+    def update(self, dt: float) -> None:
         self.timer += dt
         while self.timer + 1e-12 >= WIND_SIMULATION_STEP:
             self.update_reference_step(WIND_SIMULATION_STEP)
             self.timer -= WIND_SIMULATION_STEP
 
-    def update_reference_step(self, dt):
+    def update_reference_step(self, dt: float) -> None:
         if self.winding:
             self.wind_up()
             self.winding = False
@@ -38,6 +38,6 @@ class Wind:
 
         self.current += (self.target - self.current) * WIND_BLEND_PER_REFERENCE_TICK
 
-    def wind_up(self):
+    def wind_up(self) -> None:
         self.gust_strength = random.uniform(-6.0, -3.0)
         self.gust_time = random.uniform(0.8, 2.0)

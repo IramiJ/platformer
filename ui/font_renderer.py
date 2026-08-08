@@ -1,7 +1,12 @@
+from collections.abc import Sequence
+from pathlib import Path
+
 import pygame
 
 
-def clip(surf, x, y, x_size, y_size):
+def clip(
+    surf: pygame.Surface, x: float, y: float, x_size: int, y_size: int
+) -> pygame.Surface:
     handle_surf = surf.copy()
     clip_r = pygame.Rect(x, y, x_size, y_size)
     handle_surf.set_clip(clip_r)
@@ -10,7 +15,7 @@ def clip(surf, x, y, x_size, y_size):
 
 
 class Font:
-    def __init__(self, path):
+    def __init__(self, path: str | Path) -> None:
         self.spacing = 1
         self.character_order = [
             "A",
@@ -101,7 +106,7 @@ class Font:
         font_img.convert()
         font_img.set_colorkey((0, 0, 0))
         current_char_width = 0
-        self.characters = {}
+        self.characters: dict[str, pygame.Surface] = {}
         character_count = 0
         for x in range(font_img.get_width()):
             c = font_img.get_at((x, 0))
@@ -120,7 +125,7 @@ class Font:
                 current_char_width += 1
         self.space_width = self.characters["A"].get_width()
 
-    def render(self, surf, text, loc):
+    def render(self, surf: pygame.Surface, text: str, loc: Sequence[float]) -> None:
         x_offset = 0
         for char in text:
             if char != " ":

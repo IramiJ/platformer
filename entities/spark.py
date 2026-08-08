@@ -1,14 +1,27 @@
+from __future__ import annotations
+
 import math
+from typing import TYPE_CHECKING
 
 import pygame
 
 from core.settings import REFERENCE_TICKS_PER_SECOND
 
+if TYPE_CHECKING:
+    from world.scrolling import Scroll
+
 SPARK_SPEED_DECAY_PER_REFERENCE_TICK = 0.1
 
 
 class Spark:
-    def __init__(self, loc, angle, speed, color, scale=1):
+    def __init__(
+        self,
+        loc: list[float],
+        angle: float,
+        speed: float,
+        color: tuple[int, int, int],
+        scale: float = 1,
+    ) -> None:
         self.loc = loc
         self.angle = angle
         self.speed = speed
@@ -16,7 +29,7 @@ class Spark:
         self.color = color
         self.alive = True
 
-    def point_towards(self, angle, rate):
+    def point_towards(self, angle: float, rate: float) -> None:
         rotate_direction = (
             (angle - self.angle + math.pi * 3) % (math.pi * 2)
         ) - math.pi
@@ -29,7 +42,7 @@ class Spark:
         else:
             self.angle += rate * rotate_sign
 
-    def calculate_movement(self, dt, speed=None):
+    def calculate_movement(self, dt: float, speed: float | None = None) -> list[float]:
         if speed is None:
             speed = self.speed
         return [
@@ -37,13 +50,19 @@ class Spark:
             math.sin(self.angle) * speed * dt,
         ]
 
-    def velocity_adjust(self, friction, force, terminal_velocity, dt):
+    def velocity_adjust(
+        self,
+        friction: float,
+        force: float,
+        terminal_velocity: float,
+        dt: float,
+    ) -> None:
         movement = self.calculate_movement(dt)
         movement[1] = min(terminal_velocity, movement[1] + force * dt)
         movement[0] *= friction
         self.angle = math.atan2(movement[1], movement[0])
 
-    def move(self, dt):
+    def move(self, dt: float) -> None:
         decay_per_second = (
             SPARK_SPEED_DECAY_PER_REFERENCE_TICK * REFERENCE_TICKS_PER_SECOND
         )
@@ -71,7 +90,7 @@ class Spark:
         if self.speed <= 0:
             self.alive = False
 
-    def draw(self, surf, scroll):
+    def draw(self, surf: pygame.Surface, scroll: Scroll) -> None:
         if self.alive:
             points = [
                 [

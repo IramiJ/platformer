@@ -1,15 +1,23 @@
+from __future__ import annotations
+
 import random
+from typing import TYPE_CHECKING
 
 import pygame
 
 from core.settings import REFERENCE_TICKS_PER_SECOND
+
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from world.scrolling import Scroll
 
 PARTICLE_GRAVITY = 0.01 * REFERENCE_TICKS_PER_SECOND**2
 PARTICLE_JITTER_INTERVAL = 1.0 / REFERENCE_TICKS_PER_SECOND
 
 
 class Particle:
-    def __init__(self, img, loc, duration):
+    def __init__(self, img: str | Path, loc: list[float], duration: float) -> None:
         self.img = pygame.image.load(img).convert()
         self.img.set_colorkey((0, 0, 0))
         self.loc = loc
@@ -23,14 +31,14 @@ class Particle:
         self.y_velocity = 0.2 * REFERENCE_TICKS_PER_SECOND
         self.jitter_timer = 0.0
 
-    def update(self, dt):
+    def update(self, dt: float) -> None:
         self.increase_velocity(dt)
         self.update_location(dt)
         self.duration = max(0.0, self.duration - dt)
         if self.duration <= 0:
             self.alive = False
 
-    def render(self, display, scroll):
+    def render(self, display: pygame.Surface, scroll: Scroll) -> None:
         display.blit(
             self.img,
             [
@@ -39,12 +47,12 @@ class Particle:
             ],
         )
 
-    def update_location(self, dt):
+    def update_location(self, dt: float) -> None:
         self.loc[0] += self.x_velocity * dt
         self.loc[1] += self.y_velocity * dt
         self.rect.topleft = self.loc
 
-    def increase_velocity(self, dt):
+    def increase_velocity(self, dt: float) -> None:
         self.y_velocity += PARTICLE_GRAVITY * dt
         self.jitter_timer -= dt
         while self.jitter_timer < 0:

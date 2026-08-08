@@ -3,6 +3,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from core.logic_variables import LogicVariables
+    from entities.enemies.enemy import Enemy
     from world.scrolling import Scroll
 
 import math
@@ -22,22 +24,22 @@ from world.collisions import move_collisions
 
 
 class Player(Entity):
-    def __init__(self, x, y, width, height):
+    def __init__(self, x: float, y: float, width: int, height: int) -> None:
         super().__init__(x, y, width, height)
-        self.spawn_point = [self.rect.x, self.rect.y]
+        self.spawn_point: list[float] = [self.rect.x, self.rect.y]
         self.moving_left = False
         self.moving_right = False
         self.coin_amount = 1000
         self.y_momentum = 0
         self.velocity = 180
         self.jump_momentum = -600
-        self.buffs = {}
+        self.buffs: dict[str, float] = {}
         self.air_timer = 0
         self.double_coin_buff = False
-        self.animation_database = {}
-        self.scroll = [0, 0]
-        self.movement = [0, 0]
-        self.animation_frames = {}
+        self.animation_database: dict[str, list[str]] = {}
+        self.scroll: list[float] = [0, 0]
+        self.movement: list[float] = [0, 0]
+        self.animation_frames: dict[str, pygame.Surface] = {}
         self.dashing = False
         self.dash_timer = 0
         self.dash_duration = 1 / 3
@@ -68,14 +70,24 @@ class Player(Entity):
         self.respawn = False
         self.histstop_timer = 0
 
-    def update(self, tile_rects: list[pygame.Rect], enemy_list, max_y: int, dt: float):
+    def update(
+        self,
+        tile_rects: list[pygame.Rect],
+        enemy_list: list[Enemy],
+        max_y: int,
+        dt: float,
+    ) -> None:
         self.update_movements(tile_rects, enemy_list, max_y, dt)
         self.update_frames(dt)
         self.bow.update(self, dt)
         self.sword.update(self, dt)
 
     def update_movements(
-        self, tile_rects: list[pygame.Rect], enemy_list, max_y: int, dt: float
+        self,
+        tile_rects: list[pygame.Rect],
+        enemy_list: list[Enemy],
+        max_y: int,
+        dt: float,
     ) -> None:
         self.update_mode_properties()
         self.apply_buffs(dt)
@@ -94,7 +106,7 @@ class Player(Entity):
         if self.rect.y > max_y:
             self.set_respawn_location()
 
-    def remove_buffs(self, buff_list):
+    def remove_buffs(self, buff_list: list[str]) -> None:
         for buff in buff_list:
             if buff not in self.buffs:
                 if buff == "speed boost":
@@ -104,7 +116,7 @@ class Player(Entity):
                 elif buff == "double coin":
                     self.double_coin_buff = False
 
-    def apply_buffs(self, dt):
+    def apply_buffs(self, dt: float) -> None:
         c = self.buffs.copy()
         for buff in c:
             if self.buffs[buff] > 0:
@@ -120,7 +132,7 @@ class Player(Entity):
             else:
                 self.buffs.pop(buff)
 
-    def update_frames(self, dt: float):
+    def update_frames(self, dt: float) -> None:
         animation = self.animation_database[self.action]
         self.frame = (self.frame + ANIMATION_TICKS_PER_SECOND * dt) % len(animation)
         self.img_id = animation[math.floor(self.frame)]
@@ -173,7 +185,13 @@ class Player(Entity):
             self.dash_duration = 1 / 6
             self.dmg = 1
 
-    def attack(self, enemy, logic_variables, sparks: list[Spark], dt: float) -> None:
+    def attack(
+        self,
+        enemy: Enemy,
+        logic_variables: LogicVariables,
+        sparks: list[Spark],
+        dt: float,
+    ) -> None:
         if (
             self.dmg_cd <= 0
             and self.dashing
@@ -185,7 +203,9 @@ class Player(Entity):
             self.match_damage_cooldown()
             self.heal_on_stun(enemy, sparks)
 
-    def attack_on_hit(self, enemy, logic_variables, sparks):
+    def attack_on_hit(
+        self, enemy: Enemy, logic_variables: LogicVariables, sparks: list[Spark]
+    ) -> None:
         enemy.take_dmg(self.dmg)
         self.activate_hitstop(logic_variables)
         sparks.append(
@@ -198,7 +218,7 @@ class Player(Entity):
             )
         )
 
-    def heal_on_stun(self, enemy, sparks: list[Spark]) -> None:
+    def heal_on_stun(self, enemy: Enemy, sparks: list[Spark]) -> None:
         if enemy.stunned:
             sparks.append(
                 Spark(
@@ -216,11 +236,11 @@ class Player(Entity):
     def match_damage_cooldown(self) -> None:
         self.dmg_cd = self.dash_cooldown
 
-    def manage_attack_cd(self, dt) -> None:
+    def manage_attack_cd(self, dt: float) -> None:
         if self.dmg_cd > 0:
             self.dmg_cd = max(0.0, self.dmg_cd - dt)
 
-    def take_dmg(self, scroll) -> None:
+    def take_dmg(self, scroll: Scroll) -> None:
         self.hp -= 1
         scroll.shake_timer = 1 / 6
         scroll.shake_strength = 3
@@ -229,7 +249,7 @@ class Player(Entity):
         self.rect.x = self.spawn_point[0]
         self.rect.y = self.spawn_point[1]
 
-    def activate_hitstop(self, logic_variables) -> None:
+    def activate_hitstop(self, logic_variables: LogicVariables) -> None:
         logic_variables.hitstop_timer = 1 / 20
 
     def heal(self, amount: int) -> None:
@@ -329,7 +349,7 @@ class Player(Entity):
         if collisions["top"]:
             self.y_momentum = 0
 
-    def draw_dash_cd(self, display, scroll):
+    def draw_dash_cd(self, display: pygame.Surface, scroll: Scroll) -> None:
         if self.dash_cooldown <= 0:
             return
 

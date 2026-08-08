@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import json
+from typing import TYPE_CHECKING
 
 import pygame
 
@@ -6,20 +9,23 @@ from core.paths import PROJECT_ROOT, require_asset_file, validate_asset_path
 from entities.animations import draw_constants
 from ui.font_renderer import Font
 
+if TYPE_CHECKING:
+    from entities.player.player import Player
+
 
 class Shop:
-    def __init__(self):
+    def __init__(self) -> None:
         self.small_font = Font(require_asset_file("fonts/small_font.png"))
         self.large_font = Font(require_asset_file("fonts/large_font.png"))
         with open(PROJECT_ROOT / "ui/shop.json", "r") as file:
-            self.data = json.load(file)
+            self.data: dict[str, dict[str, str]] = json.load(file)
         validate_shop_file(self.data)
         self.buy_cooldown = 0
         counter = 1
-        self.item_boxes = {}
+        self.item_boxes: dict[str, pygame.Rect] = {}
         self.displaying = False
-        self.imgs = {}
-        self.prices = {}
+        self.imgs: dict[str, tuple[pygame.Surface, list[int]]] = {}
+        self.prices: dict[str, str] = {}
         for entry in self.data:
             self.prices[entry] = str(self.data[entry]["price"])
             self.imgs[entry] = (
@@ -36,14 +42,14 @@ class Shop:
             )
             counter += 1
 
-    def render(self, surf, player_coin_amount):
+    def render(self, surf: pygame.Surface, player_coin_amount: int) -> None:
         surf.fill((0, 0, 0))
         self.large_font.render(surf, "SHOP", (150, 0))
         draw_constants(surf)
         self.draw_items(surf)
         self.large_font.render(surf, str(player_coin_amount), (16, 0))
 
-    def draw_items(self, surf):
+    def draw_items(self, surf: pygame.Surface) -> None:
         for item in self.imgs:
             self.small_font.render(surf, item, (0, self.imgs[item][1][1] - 8))
             self.large_font.render(
@@ -60,43 +66,43 @@ class Shop:
                 self.imgs[item][0], (self.item_boxes[item].x, self.item_boxes[item].y)
             )
 
-    def buy(self, player, buff_list):
+    def buy(self, player: Player) -> None:
         for item in self.imgs:
             if pygame.mouse.get_pressed()[0]:
                 mouse_rect = pygame.Rect(
                     pygame.mouse.get_pos()[0] / 2, pygame.mouse.get_pos()[1] / 2, 1, 1
                 )
-                self.buy_on_press(mouse_rect, item, player, buff_list)
+                self.buy_on_press(mouse_rect, item, player)
 
-    def buy_on_press(self, mouse_rect, item, player, buff_list):
+    def buy_on_press(self, mouse_rect: pygame.Rect, item: str, player: Player) -> None:
         if mouse_rect.colliderect(self.item_boxes[item]) and (
             player.coin_amount >= int(self.prices[item])
             and self.buy_cooldown == 0
-            and item not in buff_list
+            and item not in player.buffs
         ):
             player.coin_amount -= int(self.prices[item])
             self.buy_cooldown = 0
-            buff_list[item] = int(self.data[item]["duration"])
+            player.buffs[item] = int(self.data[item]["duration"])
 
-    def change_displaying(self):
+    def change_displaying(self) -> bool:
         self.displaying = not self.displaying
         return self.displaying
 
-    def show(self, display, player):
+    def show(self, display: pygame.Surface, player: Player) -> None:
         if self.displaying:
             self.render(display, player.coin_amount)
 
-    def update(self, player):
+    def update(self, player: Player) -> None:
         if not self.displaying:
             return
 
         player.moving_right = False
         player.moving_left = False
-        self.buy(player, player.buffs)
+        self.buy(player)
 
 
-def validate_shop_file(data):
-    errors = []
+def validate_shop_file(data: object) -> None:
+    errors: list[str] = []
 
     required_fields = {
         "price": str,

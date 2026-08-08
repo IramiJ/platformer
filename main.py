@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import time
+from typing import TYPE_CHECKING
 
 import pygame
 
@@ -30,11 +33,15 @@ from world.scrolling import Scroll
 from world.texts import Texts
 from world.tilemap import display_map, load_tiles, update_tile_rects
 
+if TYPE_CHECKING:
+    from entities.enemies.shooter_bullet import ShooterBullet
+    from entities.spark import Spark
+
 
 class Game:
-    def __init__(self):
+    def __init__(self) -> None:
         self.clock = pygame.time.Clock()
-        self.window_size = [640, 480]
+        self.window_size: list[int] = [640, 480]
         self.screen = pygame.display.set_mode(Settings.window_size)
         self.display = pygame.Surface(
             (self.window_size[0] // 2, self.window_size[1] // 2)
@@ -66,9 +73,9 @@ class Game:
         self.enemies = Enemies()
         self.ammo = Ammo()
         self.enemies.load_enemies(self.level)
-        self.bullets = []
-        self.sparks = []
-        self.tile_rects = []
+        self.bullets: list[ShooterBullet] = []
+        self.sparks: list[Spark] = []
+        self.tile_rects: list[pygame.Rect] = []
         self.minimap = Minimap()
         self.texts = Texts()
         self.texts.load_texts(self.level.data["texts"])
@@ -80,8 +87,12 @@ class Game:
         self.buff_renderer = BuffRenderer(self.small_font, self.shop.data)
         self.leafSystem = LeafSystem()
         self.tree = Tree([240, 320])
+        self.dt: float
+        self.dead: bool
+        self.overlay_active: bool
+        self.surf: pygame.Surface
 
-    def run(self):
+    def run(self) -> None:
         while True:
             self.update_dt()
             self.update_fps_counter()
@@ -96,7 +107,7 @@ class Game:
 
             self.present()
 
-    def render(self):
+    def render(self) -> None:
         if self.logic_variables.RENDER:
             self.fill_display()
             self.render_map()
@@ -115,10 +126,10 @@ class Game:
             self.render_fps_count()
             self.display_overlays()
 
-    def update_dt(self):
+    def update_dt(self) -> None:
         self.dt = self.clock.tick(Settings.fps) / 1000
 
-    def update_fps_counter(self):
+    def update_fps_counter(self) -> None:
         self.frames += 1
 
         if time.time() - self.last_time >= 1:
@@ -126,7 +137,7 @@ class Game:
             self.frames = 0
             self.last_time = time.time()
 
-    def evaluate_overlay_state(self):
+    def evaluate_overlay_state(self) -> None:
         self.dead = self.player.hp <= 0
         self.overlay_active = (
             self.shop.displaying
@@ -135,11 +146,11 @@ class Game:
             or self.dead
         )
 
-    def update_logic_variables(self):
+    def update_logic_variables(self) -> None:
         self.logic_variables.MOVEMENTS = not self.overlay_active
         self.logic_variables.RENDER = True
 
-    def display_overlays(self):
+    def display_overlays(self) -> None:
         if self.shop.displaying:
             self.shop.show(self.display, self.player)
         elif self.pause_screen.displaying:
@@ -149,62 +160,62 @@ class Game:
         elif self.dead:
             self.death_screen.render(self.display)
 
-    def move_bullets(self):
+    def move_bullets(self) -> None:
         for bullet in self.bullets:
             bullet.move(self.player, self.scroll, self.dt)
         self.bullets = [bullet for bullet in self.bullets if bullet.alive]
 
-    def render_bullets(self):
+    def render_bullets(self) -> None:
         for bullet in self.bullets:
             bullet.render(self.display, self.scroll.render_scroll)
 
-    def draw_sparks(self):
+    def draw_sparks(self) -> None:
         for i, spark in sorted(enumerate(self.sparks), reverse=True):
             spark.draw(self.display, self.scroll)
 
-    def move_sparks(self):
+    def move_sparks(self) -> None:
         for i, spark in sorted(enumerate(self.sparks), reverse=True):
             spark.move(self.dt)
         self.sparks = [spark for spark in self.sparks if spark.alive]
 
-    def render_fps_count(self):
+    def render_fps_count(self) -> None:
         self.large_font.render(self.display, f"fps: {self.current_fps}", [120, 0])
 
-    def show_remaining_enemies(self):
+    def show_remaining_enemies(self) -> None:
         self.small_font.render(
             self.display,
             f"{self.enemies.current_enemy_amount}/{self.enemies.max_enemy_amount} enemies left",
             [0, 25],
         )
 
-    def fill_display(self):
+    def fill_display(self) -> None:
         self.display.fill((0, 0, 0))
 
-    def render_map(self):
+    def render_map(self) -> None:
         display_map(self.display, self.scroll, self.level.map, self.tiles)
 
-    def update_tile_rects(self):
+    def update_tile_rects(self) -> None:
         self.tile_rects = []
         update_tile_rects(self.display, self.scroll, self.tile_rects, self.level.map)
 
-    def draw_render_surf(self):
+    def draw_render_surf(self) -> None:
         self.surf = pygame.transform.scale(self.display, Settings.window_size)
         self.screen.blit(self.surf, (0, 0))
 
-    def handle_input(self):
+    def handle_input(self) -> None:
         self.keyboard_event_handler.handle_keyboard_events(
             self.player, self.shop, self.pause_screen, self.win_screen
         )
 
-    def reload_on_respawn(self):
+    def reload_on_respawn(self) -> None:
         if self.player.respawn:
             self.reset_session()
 
-    def evaluate_game_state(self):
+    def evaluate_game_state(self) -> None:
         self.evaluate_overlay_state()
         self.update_logic_variables()
 
-    def update(self):
+    def update(self) -> None:
         if self.dead:
             self.reload_on_respawn()
             return
@@ -223,7 +234,7 @@ class Game:
 
         self.update_gameplay()
 
-    def update_gameplay(self):
+    def update_gameplay(self) -> None:
         self.update_tile_rects()
         self.player.update(
             self.tile_rects, self.enemies.enemies, self.level.max_y_px, self.dt
@@ -288,14 +299,14 @@ class Game:
         self.scroll.shake_offset = [0, 0]
         self.scroll.shake_sample_timer = 0
 
-    def initialize_loaded_level(self):
+    def initialize_loaded_level(self) -> None:
         self.enemies.load_enemies(self.level)
         self.texts.load_texts(self.level.data["texts"])
         initialize_player(self.player, self.level)
         self.reset_transient_state()
         self.update_tile_rects()
 
-    def reset_session(self):
+    def reset_session(self) -> None:
         self.level.id = 1
         self.player.hp = self.player.max_hp
         self.player.buffs.clear()
@@ -308,12 +319,12 @@ class Game:
         self.level.reload_level()
         self.initialize_loaded_level()
 
-    def present(self):
+    def present(self) -> None:
         self.draw_render_surf()
         pygame.display.update()
 
 
-def main():
+def main() -> None:
     game = Game()
     game.run()
 

@@ -1,17 +1,23 @@
+from __future__ import annotations
+
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pygame
 
 from core.paths import require_asset_file
 from core.settings import REFERENCE_TICKS_PER_SECOND
 
+if TYPE_CHECKING:
+    from entities.entity import Entity
+
 ANIMATION_TICKS_PER_SECOND = REFERENCE_TICKS_PER_SECOND
 
 
-def load_animation(path: str, dur: int, entity):
+def load_animation(path: str | Path, dur: list[int], entity: Entity) -> list[str]:
     path = Path(path)
     animation_name = path.name
-    animation_frame_data = []
+    animation_frame_data: list[str] = []
     for number, duration in enumerate(dur):
         animation_frame_id = f"{animation_name}{number}"
         img_loc = path / f"{animation_frame_id}.png"
@@ -25,7 +31,7 @@ def load_animation(path: str, dur: int, entity):
     return animation_frame_data
 
 
-def draw_constants(display):
+def draw_constants(display: pygame.Surface) -> None:
     coin_count = pygame.image.load(require_asset_file("constants/coins.png")).convert()
     coin_count.set_colorkey((0, 0, 0))
     display.blit(coin_count, (0, 0))

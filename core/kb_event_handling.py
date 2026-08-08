@@ -1,20 +1,30 @@
+from __future__ import annotations
+
 import json
 import sys
+from typing import TYPE_CHECKING
 
 import pygame
 
 from core.paths import PROJECT_ROOT
-from entities.player.player import Player
-from ui.pause_screen import PauseScreen
-from ui.shopping import Shop
-from ui.win_screen import WinScreen
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+    from pathlib import Path
+
+    from entities.player.player import Player
+    from ui.pause_screen import PauseScreen
+    from ui.shopping import Shop
+    from ui.win_screen import WinScreen
 
 
-def load_keybinds(path=PROJECT_ROOT / "core/keybinds.json"):
+def load_keybinds(
+    path: str | Path = PROJECT_ROOT / "core/keybinds.json",
+) -> dict[str, int]:
     with open(path, "r") as f:
         raw = json.load(f)
     validate_keybinds(raw)
-    binds = {}
+    binds: dict[str, int] = {}
     for action, key_name in raw.items():
         try:
             binds[action] = getattr(pygame, key_name)
@@ -24,8 +34,8 @@ def load_keybinds(path=PROJECT_ROOT / "core/keybinds.json"):
     return binds
 
 
-def validate_keybinds(data: dict) -> None:
-    errors = []
+def validate_keybinds(data: Mapping[str, object]) -> None:
+    errors: list[str] = []
 
     required_keys = [
         "right",
@@ -54,7 +64,7 @@ def validate_keybinds(data: dict) -> None:
 
 
 class KeyboardEventHandler:
-    def __init__(self):
+    def __init__(self) -> None:
         self.keybinds = load_keybinds()
 
     def handle_keyboard_events(
@@ -63,7 +73,7 @@ class KeyboardEventHandler:
         shop: Shop,
         pause_screen: PauseScreen,
         win_screen: WinScreen,
-    ):
+    ) -> None:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()

@@ -1,14 +1,22 @@
+from __future__ import annotations
+
 import math
+from typing import TYPE_CHECKING
 
 import pygame
 
 from core.paths import require_asset_file
 from entities.entity import SimpleEntity
 
+if TYPE_CHECKING:
+    from entities.enemies.enemy import Enemy
+    from entities.player.player import Player
+    from world.scrolling import Scroll
+
 
 class Bow:
-    def __init__(self, x, y):
-        self.offsets = {
+    def __init__(self, x: float, y: float) -> None:
+        self.offsets: dict[str, list[tuple[int, int]]] = {
             "run": [
                 (6, 16),
                 (5, 16),
@@ -25,14 +33,14 @@ class Bow:
             ],
             "idle": [(6, 16), (6, 16), (6, 17)],
         }
-        self.angles = {
+        self.angles: dict[str, list[int]] = {
             "run": [0, -10, -25, -45, -25, 0, 0, 10, 25, 45, 35, 25],
             "idle": [0, 0, 0],
         }
         self.loc = [x, y]
         self.img = pygame.image.load(require_asset_file("weapons/bow.png")).convert()
         self.img.set_colorkey((0, 0, 0))
-        self.arrows = []
+        self.arrows: list[Arrow] = []
         self.flip = False
         self.reloading = False
         self.add_ammo = False
@@ -46,53 +54,53 @@ class Bow:
         self.max_reload_cd = 2.0
         self.reload_cd = 0
 
-    def update(self, player, dt):
+    def update(self, player: Player, dt: float) -> None:
         self.update_cds(dt)
         self.set_flip(player)
-        self.update_location(player.flip, player.rect, player.frame, player.action)
+        self.update_location(player)
 
-    def draw(self, player, display, scroll):
+    def draw(self, player: Player, display: pygame.Surface, scroll: Scroll) -> None:
         frame = self.get_animation_frame(player.frame, player.action)
         angle = self.angles[player.action][frame]
         self.draw_rotated(display, scroll, angle)
 
-    def set_flip(self, player):
+    def set_flip(self, player: Player) -> None:
         self.flip = player.flip
 
-    def update_location(self, player_flip, player_rect, player_frame, player_action):
-        frame = self.get_animation_frame(player_frame, player_action)
-        if player_flip:
+    def update_location(self, player: Player) -> None:
+        frame = self.get_animation_frame(player.frame, player.action)
+        if player.flip:
             self.loc = [
-                player_rect.left
+                player.rect.left
                 - (self.img.get_width()) // 2
-                + (24 - self.offsets[player_action][frame][0]),
-                player_rect.y
-                + self.offsets[player_action][frame][1]
+                + (24 - self.offsets[player.action][frame][0]),
+                player.rect.y
+                + self.offsets[player.action][frame][1]
                 - self.img.get_height(),
             ]
         else:
             self.loc = [
-                player_rect.right
-                - (24 - self.offsets[player_action][frame][0])
+                player.rect.right
+                - (24 - self.offsets[player.action][frame][0])
                 - (self.img.get_width()) // 2,
-                player_rect.y
-                + self.offsets[player_action][frame][1]
+                player.rect.y
+                + self.offsets[player.action][frame][1]
                 - self.img.get_height(),
             ]
 
-    def get_animation_frame(self, player_frame, player_action):
+    def get_animation_frame(self, player_frame: float, player_action: str) -> int:
         if player_action == "run":
             return math.floor(player_frame / 4)
         elif player_action == "idle":
             return math.floor(player_frame / 20)
         return 0
 
-    def move_arrows(self, enemy_list, dt):
+    def move_arrows(self, enemy_list: list[Enemy], dt: float) -> None:
         for arrow in self.arrows:
             arrow.move(enemy_list, dt)
         self.arrows = [arrow for arrow in self.arrows if arrow.alive]
 
-    def update_cds(self, dt):
+    def update_cds(self, dt: float) -> None:
         if self.shoot_cd > 0:
             self.shoot_cd = max(0, self.shoot_cd - dt)
         if self.reload_cd > 0:
@@ -106,7 +114,7 @@ class Bow:
         if self.ammo <= 0 and not self.reloading:
             self.reload()
 
-    def add_arrow(self):
+    def add_arrow(self) -> None:
         if self.reload_cd <= 0 and self.shoot_cd <= 0:
             arrow_loc = self.loc.copy()
             flip = bool(self.flip)
@@ -114,12 +122,14 @@ class Bow:
             self.shoot_cd = self.max_shoot_cd
             self.ammo -= 1
 
-    def reload(self):
+    def reload(self) -> None:
         if not self.reloading:
             self.reload_cd = self.max_reload_cd
             self.reloading = True
 
-    def draw_rotated(self, display, scroll, angle):
+    def draw_rotated(
+        self, display: pygame.Surface, scroll: Scroll, angle: float
+    ) -> None:
         img = pygame.transform.flip(self.img, self.flip, False)
 
         if self.flip:
@@ -149,7 +159,7 @@ class Bow:
 
 
 class Arrow(SimpleEntity):
-    def __init__(self, loc, flip):
+    def __init__(self, loc: list[float], flip: bool) -> None:
         super().__init__(require_asset_file("weapons/arrow.png"), loc)
         self.start = self.loc.copy()
         self.base_img = self.img.copy()
@@ -159,7 +169,7 @@ class Arrow(SimpleEntity):
         self.flip = flip
         self.alive = True
 
-    def move(self, enemy_list, dt):
+    def move(self, enemy_list: list[Enemy], dt: float) -> None:
         self.dmg_entity(enemy_list)
         if not self.flip:
             self.loc[0] += self.velocity * dt
@@ -167,7 +177,7 @@ class Arrow(SimpleEntity):
             self.loc[0] -= self.velocity * dt
         self.check_alive()
 
-    def check_alive(self):
+    def check_alive(self) -> None:
         if (
             math.sqrt(
                 (self.loc[0] - self.start[0]) ** 2 + (self.loc[1] - self.start[1]) ** 2
@@ -176,7 +186,7 @@ class Arrow(SimpleEntity):
         ):
             self.alive = False
 
-    def dmg_entity(self, enemies):
+    def dmg_entity(self, enemies: list[Enemy]) -> None:
 
         if self.dmg_cd == 0:
             for enemy in enemies:
@@ -185,7 +195,7 @@ class Arrow(SimpleEntity):
                     enemy.stun()
                     self.dmg_cd = 1
 
-    def render(self, display, scroll):
+    def render(self, display: pygame.Surface, scroll: list[float]) -> None:
         display.blit(
             pygame.transform.flip(self.img, self.flip, False),
             (self.loc[0] - scroll[0], self.loc[1] - scroll[1]),
