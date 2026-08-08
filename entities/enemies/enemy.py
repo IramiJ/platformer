@@ -12,6 +12,12 @@ WHITE_FLASH_DURATION = 1.0 / REFERENCE_TICKS_PER_SECOND
 
 
 class Enemy(Entity):
+    """
+    The parent class for all enemies in the game.
+
+    Gives them more funcitonality than just a regular entity, such as animations, hp, damage management and collisions.
+    """
+
     def __init__(self, x: float, y: float, width: int, height: int) -> None:
         super().__init__(x, y, width, height)
         self.animation_database: dict[str, list[str]]

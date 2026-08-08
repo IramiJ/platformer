@@ -22,6 +22,8 @@ if TYPE_CHECKING:
 
 
 class LevelData(TypedDict):
+    """Holds all fields that are requiredin a level data file"""
+
     id: int
     map: str
     spawn: list[int]
@@ -33,7 +35,7 @@ class LevelData(TypedDict):
 
 
 class LevelValidationError(ValueError):
-    pass
+    """Custom error that is being thrown during level validation"""
 
 
 def is_position(value: object) -> bool:
@@ -45,6 +47,7 @@ def is_position(value: object) -> bool:
 
 
 def validate_level(data: Mapping[str, object], filename: str | Path) -> None:
+    """Takes care of the entire level validation process. At the end, every error is being thrown with proper error messages."""
     errors: list[str] = []
 
     required_fields = {
@@ -92,6 +95,7 @@ def validate_level(data: Mapping[str, object], filename: str | Path) -> None:
 
 
 def validate_enemies(enemies: object, errors: list[str]) -> None:
+    """Validates evreything regarding the enemies, including their names and their positions on the map"""
     if not isinstance(enemies, dict):
         return
 
@@ -111,6 +115,9 @@ def validate_enemies(enemies: object, errors: list[str]) -> None:
 
 
 def validate_texts(texts: object, errors: list[str]) -> None:
+    """
+    Validates all the big texts you can see on the screen in the indiviual levels.
+    """
     if not isinstance(texts, dict):
         errors.append("field 'texts' is not a dictionary")
         return
@@ -138,6 +145,11 @@ class LevelLoader:
         self.map: list[list[str]]
 
     def load_level(self, json_file: str | Path) -> None:
+        """
+        The level loader takes a JSON file and loads all data into a dictionary.
+
+        The level is also being validated here and all checks regarding the level are being ran here.
+        """
         with open(json_file, "r") as file:
             self.data = json.load(file)
         validate_level(self.data, json_file)
@@ -165,6 +177,13 @@ def update_level(
     texts: Texts,
     win_screen: WinScreen,
 ) -> bool:
+    """
+    First is being checked, whether or not the player has actually reached the end of the level.
+
+    After that, the next level is being loaded. Assuming there is no errors, the next level will be loaded properly.
+
+    If there is any errors, an error message will be thrown.
+    """
     if not player.rect.colliderect(level.end_rect):
         return False
     try:
@@ -190,12 +209,14 @@ def update_level(
 
 
 def initialize_player(player: Player, level: LevelLoader) -> None:
+    """Sets up all the important things regarding the player, such as his spawn point, and reseting all his movements"""
     player.spawn_point = tile_position_to_pixel(level.data["spawn"])
     player.rect.x, player.rect.y = tile_position_to_pixel(level.data["spawn"])
     player.movement = [0, 0]
 
 
 def reach_checkpoint(player: Player, level: LevelLoader) -> None:
+    """If the player touches a checkpoint, his spawnpoint will be set to the location of the checkpoint."""
     for checkpoint in level.data["checkpoints"]:
         if player.rect.collidepoint(
             (checkpoint[0] * TILE_SIZE, checkpoint[1] * TILE_SIZE)

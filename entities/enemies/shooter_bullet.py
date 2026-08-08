@@ -14,6 +14,10 @@ if TYPE_CHECKING:
 
 
 class ShooterBullet(SimpleEntity):
+    """
+    The bullet that the Shooter enemy shoots
+    """
+
     def __init__(self, loc: list[float], player: Player) -> None:
         super().__init__(require_asset_file("enemies/shooter/bullet.png"), loc)
         self.start = self.loc.copy()

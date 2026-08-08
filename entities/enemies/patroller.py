@@ -15,6 +15,10 @@ if TYPE_CHECKING:
 
 
 class Patroller(Enemy):
+    """
+    A simple enemy walking left and right, while also having bursts in his movements.
+    """
+
     def __init__(self, x: int, y: int, width: int, height: int) -> None:
         super().__init__(x, y, width, height)
         self.spawn_point = (self.x, self.y)

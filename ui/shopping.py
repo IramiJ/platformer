@@ -14,6 +14,10 @@ if TYPE_CHECKING:
 
 
 class Shop:
+    """
+    The shop, where the player can buy items
+    """
+
     def __init__(self) -> None:
         self.small_font = Font(require_asset_file("fonts/small_font.png"))
         self.large_font = Font(require_asset_file("fonts/large_font.png"))

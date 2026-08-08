@@ -15,6 +15,10 @@ if TYPE_CHECKING:
 
 
 class Chaser(Enemy):
+    """
+    Chases the enemy once he is within a certain aggression range
+    """
+
     def __init__(self, x: float, y: float, width: int, height: int) -> None:
         super().__init__(x, y, width, height)
         self.spawn_point = (self.x, self.y)

@@ -21,6 +21,9 @@ if TYPE_CHECKING:
 def load_keybinds(
     path: str | Path = PROJECT_ROOT / "core/keybinds.json",
 ) -> dict[str, int]:
+    """
+    Takes the keybinds.json file from this directory and returns valid pygame keybinds.
+    """
     with open(path, "r") as f:
         raw = json.load(f)
     validate_keybinds(raw)
@@ -35,6 +38,9 @@ def load_keybinds(
 
 
 def validate_keybinds(data: Mapping[str, object]) -> None:
+    """
+    Makes sure all necessary keybinds are there and all keys are syntactically correct
+    """
     errors: list[str] = []
 
     required_keys = [
@@ -64,6 +70,11 @@ def validate_keybinds(data: Mapping[str, object]) -> None:
 
 
 class KeyboardEventHandler:
+    """
+    Takes care of all everything regarding actual clicks on the keyboard, such as jumps or attacks.
+    Uses the Keybinds in the keybinds.json file of the same directory.
+    """
+
     def __init__(self) -> None:
         self.keybinds = load_keybinds()
 

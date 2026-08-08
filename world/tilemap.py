@@ -17,6 +17,7 @@ if TYPE_CHECKING:
 
 
 def read_csv(filename: str | Path) -> list[list[str]]:
+    """Reads the CSV data of the map and returns a 2D-array containing all the tile IDs"""
     tilemap: list[list[str]] = []
     with open(os.path.join(filename)) as data:
         data = csv.reader(data, delimiter=",")
@@ -30,6 +31,7 @@ def last_x(tilemap: list[list[str]]) -> int:
 
 
 def load_tiles(path: str | Path) -> dict[str, pygame.Surface]:
+    """Takes the asset path of the tiles and returns a dict, which maps the tile ID to the actual image of the tile."""
     tiles_by_id: dict[str, pygame.Surface] = {}
     files = os.listdir(path)
     for file in files:
@@ -52,6 +54,11 @@ def display_map(
     tilemap: list[list[str]],
     tile_dict: dict[str, pygame.Surface],
 ) -> None:
+    """
+    Determines, which tiles need to be shown on the screen.
+
+    Then, it displays all the necessary tiles on the screen.
+    """
 
     scroll_x, scroll_y = scroll.render_scroll
     screen_w, screen_h = display.get_size()
@@ -81,6 +88,9 @@ def update_tile_rects(
     tile_rects: list[pygame.Rect],
     tilemap: list[list[str]],
 ) -> None:
+    """
+    Updates all the rects with which the player can collide, building a 2D-array of all tiles the player can collide with.
+    """
 
     for y in range(len(tilemap)):
         row = tilemap[y]
@@ -95,6 +105,7 @@ def update_tile_rects(
 
 
 def validate_tilemap(tilemap: list[list[str]]) -> None:
+    """Runs the tilemap through multiple checks to see if the data is actually valid."""
     if not tilemap:
         raise ValueError("Tilemap must be non empty")
     length = len(tilemap[0])

@@ -24,6 +24,12 @@ from world.collisions import move_collisions
 
 
 class Player(Entity):
+    """
+    Owns the player with all his attributes.
+
+    Through composition, the player is coupled to bow and sword.
+    """
+
     def __init__(self, x: float, y: float, width: int, height: int) -> None:
         super().__init__(x, y, width, height)
         self.spawn_point: list[float] = [self.rect.x, self.rect.y]
@@ -117,6 +123,9 @@ class Player(Entity):
                     self.double_coin_buff = False
 
     def apply_buffs(self, dt: float) -> None:
+        """
+        Applies all the buffs the player currently has and removes the buff from the buff list once they are expired.
+        """
         c = self.buffs.copy()
         for buff in c:
             if self.buffs[buff] > 0:
@@ -192,6 +201,9 @@ class Player(Entity):
         sparks: list[Spark],
         dt: float,
     ) -> None:
+        """
+        This function takes care of the melee attack the player has: dashing through an opponent while being in melee form.
+        """
         if (
             self.dmg_cd <= 0
             and self.dashing
@@ -219,6 +231,9 @@ class Player(Entity):
         )
 
     def heal_on_stun(self, enemy: Enemy, sparks: list[Spark]) -> None:
+        """
+        Takes care of the player healing: if the enemy is stunned, he heals for 2 hp, else he heals for 1hp
+        """
         if enemy.stunned:
             sparks.append(
                 Spark(
@@ -259,6 +274,9 @@ class Player(Entity):
             self.hp = self.max_hp
 
     def handle_movements(self, tile_rects: list[pygame.Rect], dt: float) -> None:
+        """
+        Handles everything regarding the player movements including the dash, the jump, basic left and right movements and collisions
+        """
         self.movement = [0, 0]
         if self.dashing:
             self.handle_dash(dt)
@@ -279,11 +297,6 @@ class Player(Entity):
         )
 
         self.handle_y_collisions(collisions, dt)
-        """
-        Tail points
-        self.tail.update_points(dt)
-        self.update_tail_points(dt)
-        """
 
     def update_tail_points(self, dt: float) -> None:
         for i in range(len(self.tail.points)):

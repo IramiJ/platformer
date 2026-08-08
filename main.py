@@ -39,6 +39,14 @@ if TYPE_CHECKING:
 
 
 class Game:
+    """Owns the main pygame runtime and coordinates all game systems.
+
+    Game wires together input, rendering, level loading, player state, enemies,
+    projectiles, UI overlays, camera scrolling, and transient visual effects.
+    It controls the frame loop and decides which systems update depending on
+    pause, shop, death, win, and hitstop state.
+    """
+
     def __init__(self) -> None:
         self.clock = pygame.time.Clock()
         self.window_size: list[int] = [640, 480]
@@ -93,6 +101,7 @@ class Game:
         self.surf: pygame.Surface
 
     def run(self) -> None:
+        """Run the main game loop until the process exits."""
         while True:
             self.update_dt()
             self.update_fps_counter()
@@ -108,6 +117,9 @@ class Game:
             self.present()
 
     def render(self) -> None:
+        """
+        Takes care of all the render logic, such as the player, the enemies, the UI, projectiles and so on.
+        """
         if self.logic_variables.RENDER:
             self.fill_display()
             self.render_map()
@@ -208,14 +220,23 @@ class Game:
         )
 
     def reload_on_respawn(self) -> None:
+        """
+        When respawning, resets the entire game session to the beginning
+        """
         if self.player.respawn:
             self.reset_session()
 
     def evaluate_game_state(self) -> None:
+        """
+        Determines which overlay needs to be displayed
+        """
         self.evaluate_overlay_state()
         self.update_logic_variables()
 
     def update(self) -> None:
+        """
+        Takes care of all non-render logic, such as gameplay updates, UI updates and hitstops.
+        """
         if self.dead:
             self.reload_on_respawn()
             return
@@ -235,6 +256,9 @@ class Game:
         self.update_gameplay()
 
     def update_gameplay(self) -> None:
+        """
+        Takes care of all the updates surrounding the player, the map the enemies, projectiles, the level and the minimap
+        """
         self.update_tile_rects()
         self.player.update(
             self.tile_rects, self.enemies.enemies, self.level.max_y_px, self.dt
@@ -266,6 +290,9 @@ class Game:
         reach_checkpoint(self.player, self.level)
 
     def reset_transient_state(self) -> None:
+        """
+        Clear temporary effects and movement state after respawn or level changes.
+        """
         # Clearing projectiles
         self.bullets.clear()
         self.player.bow.arrows.clear()
@@ -300,6 +327,7 @@ class Game:
         self.scroll.shake_sample_timer = 0
 
     def initialize_loaded_level(self) -> None:
+        """Initializes everything regarding the level, such as enemies, the player, the texts on the screen and the map"""
         self.enemies.load_enemies(self.level)
         self.texts.load_texts(self.level.data["texts"])
         initialize_player(self.player, self.level)
@@ -307,6 +335,7 @@ class Game:
         self.update_tile_rects()
 
     def reset_session(self) -> None:
+        """Resets everything to the beginning level, as if you were to restart the game entirely"""
         self.level.id = 1
         self.player.hp = self.player.max_hp
         self.player.buffs.clear()

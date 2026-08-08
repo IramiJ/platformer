@@ -23,6 +23,10 @@ if TYPE_CHECKING:
 
 
 class Enemies:
+    """
+    Manages all the enemies in the game
+    """
+
     def __init__(self) -> None:
         self.enemy_types: dict[str, type[Enemy]] = {
             "Patroller": Patroller,
@@ -52,6 +56,9 @@ class Enemies:
         sparks: list[Spark],
         dt: float,
     ) -> None:
+        """
+        Makes updates to all the enemies regarding attacks, damage, moves and their alive/dead cycle
+        """
         for enemy in self.enemies:
             enemy.update_dmg_timer(dt)
             if self.enemy_is_active(enemy, player):
@@ -90,6 +97,9 @@ class Enemies:
     """
 
     def load_enemies(self, level: LevelLoader) -> None:
+        """
+        Loads all enemies of the level loader into the enemy list of this class
+        """
         self.enemies = []
         enemies = level.data["enemies"]
 

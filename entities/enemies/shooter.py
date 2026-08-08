@@ -17,6 +17,10 @@ if TYPE_CHECKING:
 
 
 class Shooter(Enemy):
+    """
+    An enemy that stands still, but always shoots 3 bullets as their attack
+    """
+
     def __init__(self, x: float, y: float, width: int, height: int) -> None:
         super().__init__(x, y, width, height)
         self.spawn_point = [self.x, self.y]
