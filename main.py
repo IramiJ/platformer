@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 import pygame
 
+from core.asset_cache import load_font
 from core.kb_event_handling import KeyboardEventHandler
 from core.logic_variables import LogicVariables
 from core.paths import PROJECT_ROOT, require_asset_dir, require_asset_file
@@ -15,7 +16,6 @@ from entities.player.buff_renderer import BuffRenderer
 from entities.player.player import Player
 from entities.player.render_ammo import Ammo
 from ui.death_screen import DeathScreen
-from ui.font_renderer import Font
 from ui.minimap import Minimap
 from ui.pause_screen import PauseScreen
 from ui.shopping import Shop
@@ -71,8 +71,8 @@ class Game:
             0,
             0,
         )
-        self.small_font = Font(require_asset_file("fonts/small_font.png"))
-        self.large_font = Font(require_asset_file("fonts/large_font.png"))
+        self.small_font = load_font("fonts/small_font.png")
+        self.large_font = load_font("fonts/large_font.png")
         self.logic_variables = LogicVariables()
         self.shop = Shop()
         self.pause_screen = PauseScreen()

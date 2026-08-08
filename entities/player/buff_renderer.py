@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 import pygame
 
-from core.paths import require_asset_file
+from core.asset_cache import load_image
 
 if TYPE_CHECKING:
     from entities.player.player import Player
@@ -18,10 +18,7 @@ class BuffRenderer:
         self.buff_list = buff_list
         self.imgs: dict[str, pygame.Surface] = {}
         for buff in buff_list:
-            self.imgs[buff] = pygame.image.load(
-                require_asset_file(buff_list[buff]["asset_path"])
-            ).convert()
-            self.imgs[buff].set_colorkey((0, 0, 0))
+            self.imgs[buff] = load_image(buff_list[buff]["asset_path"])
 
     def render_buffs(self, display: pygame.Surface, player: Player) -> None:
         y_offset = 0

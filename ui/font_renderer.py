@@ -3,6 +3,8 @@ from pathlib import Path
 
 import pygame
 
+from core.asset_cache import load_image
+
 
 def clip(
     surf: pygame.Surface, x: float, y: float, x_size: int, y_size: int
@@ -102,9 +104,7 @@ class Font:
             ">",
             ";",
         ]
-        font_img = pygame.image.load(path)
-        font_img.convert()
-        font_img.set_colorkey((0, 0, 0))
+        font_img = load_image(path)
         current_char_width = 0
         self.characters: dict[str, pygame.Surface] = {}
         character_count = 0

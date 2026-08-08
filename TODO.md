@@ -71,7 +71,7 @@
 
 ## 6. Measure and improve performance
 
-- [ ] Add a shared asset cache for images, fonts, and animations.
+- [x] Add a shared asset cache for images, fonts, and animations.
 - [ ] Preload leaf surfaces instead of loading an image for every spawned leaf.
 - [ ] Load shop and HUD images once instead of during rendering.
 - [ ] Reuse render surfaces where possible instead of allocating them every frame.

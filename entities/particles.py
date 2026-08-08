@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 import pygame
 
+from core.asset_cache import load_image
 from core.settings import REFERENCE_TICKS_PER_SECOND
 
 if TYPE_CHECKING:
@@ -18,8 +19,7 @@ PARTICLE_JITTER_INTERVAL = 1.0 / REFERENCE_TICKS_PER_SECOND
 
 class Particle:
     def __init__(self, img: str | Path, loc: list[float], duration: float) -> None:
-        self.img = pygame.image.load(img).convert()
-        self.img.set_colorkey((0, 0, 0))
+        self.img = load_image(img)
         self.loc = loc
         self.max_duration = duration
         self.duration = float(self.max_duration)

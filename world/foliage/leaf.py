@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 import pygame
 
+from core.asset_cache import load_image
 from core.settings import REFERENCE_TICKS_PER_SECOND
 
 if TYPE_CHECKING:
@@ -20,8 +21,7 @@ WIND_ACCELERATION = 0.02 * REFERENCE_TICKS_PER_SECOND**2
 
 class Leaf:
     def __init__(self, img: str | Path, loc: list[float], duration: float) -> None:
-        self.img = pygame.image.load(img).convert()
-        self.img.set_colorkey((0, 0, 0))
+        self.img = load_image(img)
 
         self.loc = [float(loc[0]), float(loc[1])]
         self.max_duration = duration

@@ -5,9 +5,9 @@ from typing import TYPE_CHECKING
 
 import pygame
 
-from core.paths import PROJECT_ROOT, require_asset_file, validate_asset_path
+from core.asset_cache import load_font, load_image
+from core.paths import PROJECT_ROOT, validate_asset_path
 from entities.animations import draw_constants
-from ui.font_renderer import Font
 
 if TYPE_CHECKING:
     from entities.player.player import Player
@@ -19,8 +19,8 @@ class Shop:
     """
 
     def __init__(self) -> None:
-        self.small_font = Font(require_asset_file("fonts/small_font.png"))
-        self.large_font = Font(require_asset_file("fonts/large_font.png"))
+        self.small_font = load_font("fonts/small_font.png")
+        self.large_font = load_font("fonts/large_font.png")
         with open(PROJECT_ROOT / "ui/shop.json", "r") as file:
             self.data: dict[str, dict[str, str]] = json.load(file)
         validate_shop_file(self.data)
@@ -33,9 +33,7 @@ class Shop:
         for entry in self.data:
             self.prices[entry] = str(self.data[entry]["price"])
             self.imgs[entry] = (
-                pygame.image.load(
-                    require_asset_file(self.data[entry]["asset_path"])
-                ).convert(),
+                load_image(self.data[entry]["asset_path"]),
                 [0, 32 * counter],
             )
             self.item_boxes[entry] = pygame.Rect(

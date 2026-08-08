@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 import pygame
 
-from core.paths import require_asset_file
+from core.asset_cache import load_image
 from core.settings import REFERENCE_TICKS_PER_SECOND
 
 from .leaf import Leaf
@@ -20,8 +20,7 @@ LEAF_SPAWNS_PER_SECOND = REFERENCE_TICKS_PER_SECOND / 11.0
 
 class Tree:
     def __init__(self, loc: list[float]) -> None:
-        self.img = pygame.image.load(require_asset_file("foliage/tree.png")).convert()
-        self.img.set_colorkey((0, 0, 0))
+        self.img = load_image("foliage/tree.png")
         self.loc = loc
         self.leaf_spawn_timer = self.next_leaf_spawn_delay()
 

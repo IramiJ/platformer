@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 
 import pygame
 
+from core.asset_cache import load_image
 from core.paths import require_asset_dir
 from core.settings import TILE_SIZE
 
@@ -36,8 +37,7 @@ def load_tiles(path: str | Path) -> dict[str, pygame.Surface]:
     files = os.listdir(path)
     for file in files:
         name = str(int(file.split(".")[0]))
-        tiles_by_id[name] = pygame.image.load(path / file).convert()
-        tiles_by_id[name].set_colorkey((0, 0, 0))
+        tiles_by_id[name] = load_image(path / file)
     return tiles_by_id
 
 

@@ -1,13 +1,12 @@
 import pygame
 
-from core.paths import require_asset_file
-from ui.font_renderer import Font
+from core.asset_cache import load_font
 
 
 class PauseScreen:
     def __init__(self) -> None:
-        self.small_font = Font(require_asset_file("fonts/small_font.png"))
-        self.large_font = Font(require_asset_file("fonts/large_font.png"))
+        self.small_font = load_font("fonts/small_font.png")
+        self.large_font = load_font("fonts/large_font.png")
         self.displaying = False
 
     def render(self, surf: pygame.Surface) -> None:

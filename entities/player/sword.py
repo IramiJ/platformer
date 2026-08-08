@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 import pygame
 
+from core.asset_cache import load_image
 from core.paths import require_asset_dir, require_asset_file
 from core.settings import REFERENCE_TICKS_PER_SECOND
 from entities.animations import ANIMATION_TICKS_PER_SECOND
@@ -20,10 +21,7 @@ class Sword(Entity):
     def __init__(self, x: float, y: float) -> None:
         super().__init__(x, y, 21, 7)
         self.loc = [x, y]
-        self.img = pygame.image.load(
-            require_asset_file("weapons/broken_sword.png")
-        ).convert()
-        self.img.set_colorkey((0, 0, 0))
+        self.img = load_image("weapons/broken_sword.png")
         self.particles: list[Particle] = []
         self.flip = False
         self.particle_cd = 1 / 60
@@ -88,8 +86,7 @@ class Sword(Entity):
             img_loc = path / f"{animation_frame_id}.png"
             if not img_loc.is_file():
                 raise FileNotFoundError(f"Missing sword slice frame: {img_loc}")
-            animation_image = pygame.image.load(img_loc).convert_alpha()
-            animation_image.set_colorkey((0, 0, 0))
+            animation_image = load_image(img_loc, alpha=True)
             for i in range(duration):
                 self.slice_animation.append(animation_image)
 

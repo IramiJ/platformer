@@ -2,13 +2,13 @@ from pathlib import Path
 
 import pygame
 
+from core.asset_cache import load_image
+
 
 class HpBar:
     def __init__(self, bg: str | Path, frame: str | Path, x: float, y: float) -> None:
-        self.bg = pygame.image.load(bg).convert()
-        self.bg.set_colorkey((0, 0, 0))
-        self.frame = pygame.image.load(frame).convert()
-        self.frame.set_colorkey((0, 0, 0))
+        self.bg = load_image(bg)
+        self.frame = load_image(frame)
         self.x = x
         self.y = y
         self.width = self.frame.get_width()

@@ -4,10 +4,10 @@ from typing import TYPE_CHECKING
 
 import pygame
 
-from core.paths import require_asset_dir, require_asset_file
+from core.asset_cache import load_font, load_image
+from core.paths import require_asset_dir
 from entities.animations import load_animation
 from entities.entity import Entity
-from ui.font_renderer import Font
 
 if TYPE_CHECKING:
     from entities.player.player import Player
@@ -15,11 +15,8 @@ if TYPE_CHECKING:
 
 class Ammo:
     def __init__(self) -> None:
-        self.small_font = Font(require_asset_file("fonts/small_font.png"))
-        self.pistol_img = pygame.image.load(
-            require_asset_file("weapons/cd_pistol.png")
-        ).convert()
-        self.pistol_img.set_colorkey((0, 0, 0))
+        self.small_font = load_font("fonts/small_font.png")
+        self.pistol_img = load_image("weapons/cd_pistol.png")
         self.amount_padding = self.pistol_img.get_width() + 5
         self.cd_obj = Entity(self.amount_padding, 9, 16, 16)
         self.cd_obj.animation_database["idle"] = load_animation(

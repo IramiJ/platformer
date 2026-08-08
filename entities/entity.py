@@ -2,6 +2,8 @@ from pathlib import Path
 
 import pygame
 
+from core.asset_cache import load_image
+
 
 class Entity:
     def __init__(self, x: float, y: float, width: int, height: int) -> None:
@@ -28,7 +30,7 @@ class Entity:
 class SimpleEntity:
     def __init__(self, img: str | Path, loc: list[float]) -> None:
         self.loc = loc
-        self.img = pygame.image.load(img).convert()
+        self.img = load_image(img)
 
     def render(self, surf: pygame.Surface, scroll: list[float]) -> None:
         surf.blit(self.img, (self.loc[0] - scroll[0], self.loc[1] - scroll[1]))

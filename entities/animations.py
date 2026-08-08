@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 import pygame
 
-from core.paths import require_asset_file
+from core.asset_cache import load_image, load_image_file
 from core.settings import REFERENCE_TICKS_PER_SECOND
 
 if TYPE_CHECKING:
@@ -23,8 +23,7 @@ def load_animation(path: str | Path, dur: list[int], entity: Entity) -> list[str
         img_loc = path / f"{animation_frame_id}.png"
         if not img_loc.is_file():
             raise FileNotFoundError(f"Missing animation frame: {img_loc}")
-        animation_image = pygame.image.load(str(img_loc)).convert_alpha()
-        animation_image.set_colorkey((0, 0, 0))
+        animation_image = load_image_file(str(img_loc), alpha=True)
         entity.animation_frames[animation_frame_id] = animation_image.copy()
         for i in range(duration):
             animation_frame_data.append(animation_frame_id)
@@ -32,6 +31,5 @@ def load_animation(path: str | Path, dur: list[int], entity: Entity) -> list[str
 
 
 def draw_constants(display: pygame.Surface) -> None:
-    coin_count = pygame.image.load(require_asset_file("constants/coins.png")).convert()
-    coin_count.set_colorkey((0, 0, 0))
+    coin_count = load_image("constants/coins.png")
     display.blit(coin_count, (0, 0))

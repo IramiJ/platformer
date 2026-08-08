@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 import pygame
 
+from core.asset_cache import load_image
 from core.paths import require_asset_file
 from entities.entity import SimpleEntity
 
@@ -38,8 +39,7 @@ class Bow:
             "idle": [0, 0, 0],
         }
         self.loc = [x, y]
-        self.img = pygame.image.load(require_asset_file("weapons/bow.png")).convert()
-        self.img.set_colorkey((0, 0, 0))
+        self.img = load_image("weapons/bow.png")
         self.arrows: list[Arrow] = []
         self.flip = False
         self.reloading = False
@@ -47,10 +47,7 @@ class Bow:
         self.max_shoot_cd = 0.5
         self.shoot_cd = 1 / 60
         self.ammo = 5
-        self.ammo_img = pygame.image.load(
-            require_asset_file("weapons/cd_pistol.png")
-        ).convert()
-        self.ammo_img.set_colorkey((0, 0, 0))
+        self.ammo_img = load_image("weapons/cd_pistol.png")
         self.max_reload_cd = 2.0
         self.reload_cd = 0
 

@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from core.paths import require_asset_file
-from ui.font_renderer import Font
+from core.asset_cache import load_font
 from world.coordinates import tile_to_pixel
 
 if TYPE_CHECKING:
@@ -15,7 +14,7 @@ if TYPE_CHECKING:
 class Texts:
     def __init__(self) -> None:
         self.strings: dict[str, list[int]] = {}
-        self.large_font = Font(require_asset_file("fonts/large_font.png"))
+        self.large_font = load_font("fonts/large_font.png")
 
     def load_texts(self, data: dict[str, list[int]]) -> None:
         self.strings = data
