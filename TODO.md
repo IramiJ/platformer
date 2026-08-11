@@ -72,9 +72,9 @@
 ## 6. Measure and improve performance
 
 - [x] Add a shared asset cache for images, fonts, and animations.
-- [ ] Preload leaf surfaces instead of loading an image for every spawned leaf.
-- [ ] Load shop and HUD images once instead of during rendering.
-- [ ] Reuse render surfaces where possible instead of allocating them every frame.
+- [x] Preload leaf surfaces instead of loading an image for every spawned leaf.
+- [x] Load shop and HUD images once instead of during rendering.
+- [x] Reuse render surfaces where possible instead of allocating them every frame.
 - [ ] Profile frame time, rendering, entity updates, and asset loading.
 - [ ] Record before/after measurements for every claimed optimization.
 - [ ] Verify stable gameplay at the target frame rate with multiple enemies and particles active.

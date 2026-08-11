@@ -7,7 +7,6 @@ import pygame
 
 from core.asset_cache import load_font, load_image
 from core.paths import PROJECT_ROOT, validate_asset_path
-from entities.animations import draw_constants
 
 if TYPE_CHECKING:
     from entities.player.player import Player
@@ -28,6 +27,7 @@ class Shop:
         counter = 1
         self.item_boxes: dict[str, pygame.Rect] = {}
         self.displaying = False
+        self.coin_img = load_image("constants/coins.png")
         self.imgs: dict[str, tuple[pygame.Surface, list[int]]] = {}
         self.prices: dict[str, str] = {}
         for entry in self.data:
@@ -47,7 +47,7 @@ class Shop:
     def render(self, surf: pygame.Surface, player_coin_amount: int) -> None:
         surf.fill((0, 0, 0))
         self.large_font.render(surf, "SHOP", (150, 0))
-        draw_constants(surf)
+        surf.blit(self.coin_img, (0, 0))
         self.draw_items(surf)
         self.large_font.render(surf, str(player_coin_amount), (16, 0))
 

@@ -55,6 +55,7 @@ class Game:
             (self.window_size[0] // 2, self.window_size[1] // 2)
         )
         pygame.display.set_caption(Settings.caption)
+        self.surf = pygame.Surface(Settings.window_size)
 
         self.tiles = load_tiles(require_asset_dir("tiles"))
         self.level = LevelLoader()
@@ -211,7 +212,7 @@ class Game:
         update_tile_rects(self.display, self.scroll, self.tile_rects, self.level.map)
 
     def draw_render_surf(self) -> None:
-        self.surf = pygame.transform.scale(self.display, Settings.window_size)
+        pygame.transform.scale(self.display, Settings.window_size, self.surf)
         self.screen.blit(self.surf, (0, 0))
 
     def handle_input(self) -> None:

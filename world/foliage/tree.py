@@ -11,8 +11,6 @@ from core.settings import REFERENCE_TICKS_PER_SECOND
 from .leaf import Leaf
 
 if TYPE_CHECKING:
-    from pathlib import Path
-
     from world.scrolling import Scroll
 
 LEAF_SPAWNS_PER_SECOND = REFERENCE_TICKS_PER_SECOND / 11.0
@@ -37,7 +35,7 @@ class Tree:
         return random.expovariate(LEAF_SPAWNS_PER_SECOND)
 
     def generate_leaves(
-        self, leaf_imgs: list[Path], leaf_list: list[Leaf], dt: float
+        self, leaf_imgs: list[pygame.Surface], leaf_list: list[Leaf], dt: float
     ) -> None:
         self.leaf_spawn_timer -= dt
 
@@ -45,7 +43,9 @@ class Tree:
             self.spawn_leaf(leaf_imgs, leaf_list)
             self.leaf_spawn_timer += self.next_leaf_spawn_delay()
 
-    def spawn_leaf(self, leaf_imgs: list[Path], leaf_list: list[Leaf]) -> None:
+    def spawn_leaf(
+        self, leaf_imgs: list[pygame.Surface], leaf_list: list[Leaf]
+    ) -> None:
         loc = self.loc.copy()
         loc[0] += random.randint(0, 40)
         loc[1] += random.randint(0, 10)
