@@ -100,5 +100,5 @@
 - [ ] Add test and CI badges after the workflow is passing.
 - [ ] Create a downloadable release and verify it on a clean machine.
 - [ ] Publish the build on GitHub Releases or itch.io.
-- [ ] Merge the stabilized `feature/rework` branch into the default `main` branch.
+- [x] Merge the stabilized `feature/rework` branch into the default `main` branch.
 - [ ] Tag the recruiter-ready version as the first public release.
