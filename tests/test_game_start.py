@@ -25,10 +25,7 @@ try:
 
     game = Game()
     game.update_dt()
-    game.evaluate_game_state()
-    game.update()
-    game.render()
-    game.present()
+    game.run_frame()
 
     assert pygame.display.get_driver() == 'dummy'
     assert game.level.id == 1

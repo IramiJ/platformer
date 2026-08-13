@@ -9,6 +9,7 @@ from core.asset_cache import load_font
 from core.kb_event_handling import KeyboardEventHandler
 from core.logic_variables import LogicVariables
 from core.paths import PROJECT_ROOT, require_asset_dir, require_asset_file
+from core.profiler import Profiler
 from core.settings import Settings
 from entities.enemies.enemies import Enemies
 from entities.hp_bar import HpBar
@@ -47,7 +48,8 @@ class Game:
     pause, shop, death, win, and hitstop state.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, profiling: bool = False) -> None:
+        self.profiler = Profiler(enabled=profiling)
         self.clock = pygame.time.Clock()
         self.window_size: list[int] = [640, 480]
         self.screen = pygame.display.set_mode(Settings.window_size)
@@ -57,45 +59,55 @@ class Game:
         pygame.display.set_caption(Settings.caption)
         self.surf = pygame.Surface(Settings.window_size)
 
-        self.tiles = load_tiles(require_asset_dir("tiles"))
-        self.level = LevelLoader()
-        self.level.load_level(PROJECT_ROOT / "world/levels/level1.json")
-        self.player = Player(
-            tile_to_pixel(self.level.data["spawn"][0]),
-            tile_to_pixel(self.level.data["spawn"][1]),
-            24,
-            24,
-        )
-        self.hp_bar = HpBar(
-            require_asset_file("hp_bar/hp_bar_bg.png"),
-            require_asset_file("hp_bar/hp_bar_frame.png"),
-            0,
-            0,
-        )
-        self.small_font = load_font("fonts/small_font.png")
-        self.large_font = load_font("fonts/large_font.png")
+        with self.profiler.measure("assets.tiles"):
+            self.tiles = load_tiles(require_asset_dir("tiles"))
+        with self.profiler.measure("level.load"):
+            self.level = LevelLoader()
+            self.level.load_level(PROJECT_ROOT / "world/levels/level1.json")
+        with self.profiler.measure("assets.player"):
+            self.player = Player(
+                tile_to_pixel(self.level.data["spawn"][0]),
+                tile_to_pixel(self.level.data["spawn"][1]),
+                24,
+                24,
+            )
+        with self.profiler.measure("assets.hud"):
+            self.hp_bar = HpBar(
+                require_asset_file("hp_bar/hp_bar_bg.png"),
+                require_asset_file("hp_bar/hp_bar_frame.png"),
+                0,
+                0,
+            )
+            self.small_font = load_font("fonts/small_font.png")
+            self.large_font = load_font("fonts/large_font.png")
         self.logic_variables = LogicVariables()
-        self.shop = Shop()
-        self.pause_screen = PauseScreen()
-        self.death_screen = DeathScreen()
-        self.win_screen = WinScreen()
-        self.enemies = Enemies()
-        self.ammo = Ammo()
-        self.enemies.load_enemies(self.level)
+        with self.profiler.measure("assets.overlays"):
+            self.shop = Shop()
+            self.pause_screen = PauseScreen()
+            self.death_screen = DeathScreen()
+            self.win_screen = WinScreen()
+        with self.profiler.measure("assets.enemies"):
+            self.enemies = Enemies()
+            self.enemies.load_enemies(self.level)
+        with self.profiler.measure("assets.ammo"):
+            self.ammo = Ammo()
         self.bullets: list[ShooterBullet] = []
         self.sparks: list[Spark] = []
         self.tile_rects: list[pygame.Rect] = []
         self.minimap = Minimap()
-        self.texts = Texts()
-        self.texts.load_texts(self.level.data["texts"])
+        with self.profiler.measure("assets.texts"):
+            self.texts = Texts()
+            self.texts.load_texts(self.level.data["texts"])
         self.scroll = Scroll()
         self.frames = 0
         self.current_fps = 0
         self.last_time = time.time()
         self.keyboard_event_handler = KeyboardEventHandler()
-        self.buff_renderer = BuffRenderer(self.small_font, self.shop.data)
-        self.leafSystem = LeafSystem()
-        self.tree = Tree([240, 320])
+        with self.profiler.measure("assets.buffs"):
+            self.buff_renderer = BuffRenderer(self.small_font, self.shop.data)
+        with self.profiler.measure("assets.foliage"):
+            self.leafSystem = LeafSystem()
+            self.tree = Tree([240, 320])
         self.dt: float
         self.dead: bool
         self.overlay_active: bool
@@ -105,17 +117,27 @@ class Game:
         """Run the main game loop until the process exits."""
         while True:
             self.update_dt()
+            self.run_frame()
+            self.profiler.finish_frame()
+
+    def run_frame(self) -> None:
+        """Process one frame after ``dt`` has been set."""
+        with self.profiler.measure("cpu_frame"):
             self.update_fps_counter()
 
-            self.handle_input()
+            with self.profiler.measure("input"):
+                self.handle_input()
 
             self.evaluate_game_state()
 
-            self.update()
+            with self.profiler.measure("update"):
+                self.update()
 
-            self.render()
+            with self.profiler.measure("render"):
+                self.render()
 
-            self.present()
+            with self.profiler.measure("present"):
+                self.present()
 
     def render(self) -> None:
         """
@@ -264,15 +286,16 @@ class Game:
         self.player.update(
             self.tile_rects, self.enemies.enemies, self.level.max_y_px, self.dt
         )
-        self.enemies.update_enemies(
-            self.player,
-            self.bullets,
-            self.scroll,
-            self.tile_rects,
-            self.logic_variables,
-            self.sparks,
-            self.dt,
-        )
+        with self.profiler.measure("enemies"):
+            self.enemies.update_enemies(
+                self.player,
+                self.bullets,
+                self.scroll,
+                self.tile_rects,
+                self.logic_variables,
+                self.sparks,
+                self.dt,
+            )
         self.scroll.player_scrolling(self.player, self.level, self.dt)
         self.move_bullets()
         self.move_sparks()
@@ -354,11 +377,13 @@ class Game:
         pygame.display.update()
 
 
-def main() -> None:
-    game = Game()
+def main(profiling: bool = False) -> None:
+    game = Game(profiling=profiling)
     game.run()
 
 
 if __name__ == "__main__":
+    import sys
+
     pygame.init()
-    main()
+    main(profiling="--profile" in sys.argv[1:])

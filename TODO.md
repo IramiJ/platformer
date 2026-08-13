@@ -75,9 +75,9 @@
 - [x] Preload leaf surfaces instead of loading an image for every spawned leaf.
 - [x] Load shop and HUD images once instead of during rendering.
 - [x] Reuse render surfaces where possible instead of allocating them every frame.
-- [ ] Profile frame time, rendering, entity updates, and asset loading.
-- [ ] Record before/after measurements for every claimed optimization.
-- [ ] Verify stable gameplay at the target frame rate with multiple enemies and particles active.
+- [x] Profile frame time, rendering, entity updates, and asset loading.
+- [x] Record before/after measurements for every claimed optimization.
+- [x] Verify stable gameplay at the target frame rate with multiple enemies and particles active.
 
 ## 7. Prepare the repository for applications
 
