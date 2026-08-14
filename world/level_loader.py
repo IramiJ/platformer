@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 
 
 class LevelData(TypedDict):
-    """Holds all fields that are requiredin a level data file"""
+    """Holds all fields that are required in a level data file"""
 
     id: int
     map: str
@@ -66,7 +66,7 @@ def validate_level(data: Mapping[str, object], filename: str | Path) -> None:
             errors.append(f"Required field '{field} is missing")
         elif not isinstance(data[field], expected_type):
             errors.append(
-                f"'{field}' must be {expected_type.__name__}, but type ist {type(data[field]).__name__}"
+                f"'{field}' must be {expected_type.__name__}, but type is {type(data[field]).__name__}"
             )
     if "spawn" in data and not is_position(data["spawn"]):
         errors.append("'spawn' must be a position like [1, 1]")
@@ -91,11 +91,11 @@ def validate_level(data: Mapping[str, object], filename: str | Path) -> None:
 
     if errors:
         details = "\n".join(f"- {error}" for error in errors)
-        raise LevelValidationError(f"Invalid Leveldata: {filename}\n{details}")
+        raise LevelValidationError(f"Invalid level data: {filename}\n{details}")
 
 
 def validate_enemies(enemies: object, errors: list[str]) -> None:
-    """Validates evreything regarding the enemies, including their names and their positions on the map"""
+    """Validates everything regarding the enemies, including their names and their positions on the map"""
     if not isinstance(enemies, dict):
         return
 
@@ -106,17 +106,17 @@ def validate_enemies(enemies: object, errors: list[str]) -> None:
             errors.append(f"Unknown enemy type: '{enemy_name}'")
 
         if not isinstance(positions, list):
-            errors.append(f"'enemies.{enemy_name}' musst be a list")
+            errors.append(f"'enemies.{enemy_name}' must be a list")
             continue
 
         for index, position in enumerate(positions):
             if not is_position(position):
-                errors.append(f"'enemies.{enemy_name}[{index}] musst be [x, y]")
+                errors.append(f"'enemies.{enemy_name}[{index}] must be [x, y]")
 
 
 def validate_texts(texts: object, errors: list[str]) -> None:
     """
-    Validates all the big texts you can see on the screen in the indiviual levels.
+    Validates all the big texts you can see on the screen in the individual levels.
     """
     if not isinstance(texts, dict):
         errors.append("field 'texts' is not a dictionary")
@@ -130,7 +130,7 @@ def validate_texts(texts: object, errors: list[str]) -> None:
 
 
 class LevelLoader:
-    """Load Level configuartion and tilemap data from disk.
+    """Load Level configuration and tilemap data from disk.
 
     Coordinates in level JSON files are stored in tile-space.
     Derived runtime values such as 'max_y_px' are converted to pixel space when the level is loaded
@@ -202,7 +202,7 @@ def update_level(
         print(f"Level file has invalid encoding: {error}")
         return False
     except OSError as error:
-        print(f"Error while readinf the level files: {error}")
+        print(f"Error while reading the level files: {error}")
         return False
 
     return True

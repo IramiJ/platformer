@@ -74,7 +74,7 @@ class Player(Entity):
         self.action = "idle"
         self.mode = "melee"
         self.respawn = False
-        self.histstop_timer = 0
+        self.hitstop_timer = 0
 
     def update(
         self,
@@ -232,7 +232,7 @@ class Player(Entity):
 
     def heal_on_stun(self, enemy: Enemy, sparks: list[Spark]) -> None:
         """
-        Takes care of the player healing: if the enemy is stunned, he heals for 2 hp, else he heals for 1hp
+        Takes care of the player healing: if the enemy is stunned, he heals for 2 hp, else he heals for 1 hp
         """
         if enemy.stunned:
             sparks.append(

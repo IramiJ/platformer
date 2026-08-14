@@ -31,7 +31,7 @@ def assert_invalid_level(level_data, *expected_messages):
         validate_level(level_data, "test-level.json")
 
     error_message = str(error.value)
-    assert "Invalid Leveldata: test-level.json" in error_message
+    assert "Invalid level data: test-level.json" in error_message
     for expected_message in expected_messages:
         assert expected_message in error_message
 
@@ -131,7 +131,7 @@ def test_validate_level_rejects_enemy_positions_that_are_not_lists():
     level_data = make_valid_level()
     level_data["enemies"]["Patroller"] = {"x": 51, "y": 8}
 
-    assert_invalid_level(level_data, "'enemies.Patroller' musst be a list")
+    assert_invalid_level(level_data, "'enemies.Patroller' must be a list")
 
 
 def test_validate_level_rejects_invalid_enemy_positions():
@@ -140,8 +140,8 @@ def test_validate_level_rejects_invalid_enemy_positions():
 
     assert_invalid_level(
         level_data,
-        "'enemies.Shooter[1] musst be [x, y]",
-        "'enemies.Shooter[2] musst be [x, y]",
+        "'enemies.Shooter[1] must be [x, y]",
+        "'enemies.Shooter[2] must be [x, y]",
     )
 
 

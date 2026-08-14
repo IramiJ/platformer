@@ -15,7 +15,7 @@ class Enemy(Entity):
     """
     The parent class for all enemies in the game.
 
-    Gives them more funcitonality than just a regular entity, such as animations, hp, damage management and collisions.
+    Gives them more functionality than just a regular entity, such as animations, hp, damage management and collisions.
     """
 
     def __init__(self, x: float, y: float, width: int, height: int) -> None:

@@ -18,7 +18,7 @@ def move_collisions(
     rect: pygame.FRect, movement: list[float], tiles: list[pygame.Rect], dt: float
 ) -> tuple[pygame.FRect, dict[str, bool]]:
     """
-    Moves a rect in both the x and y direction seperately, while also making sure that collisions are being resolved
+    Moves a rect in both the x and y direction separately, while also making sure that collisions are being resolved
     """
     collision_types = {"top": False, "bottom": False, "left": False, "right": False}
     x_movement(rect, movement, dt, tiles, collision_types)

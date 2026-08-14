@@ -111,7 +111,7 @@ def validate_tilemap(tilemap: list[list[str]]) -> None:
     length = len(tilemap[0])
     for row in tilemap:
         if not row:
-            raise ValueError("All rows must be non emtpy")
+            raise ValueError("All rows must be non empty")
         if len(row) != length:
             raise ValueError("All rows in tile map must be equally wide")
         for tile in row:
