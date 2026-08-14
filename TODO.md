@@ -81,22 +81,22 @@
 
 ## 7. Prepare the repository for applications
 
-- [ ] Choose a distinctive project name and one-sentence pitch.
-- [ ] Update the README feature list to match the implemented game.
-- [ ] Remove completed features from the planned-improvements section.
-- [ ] Add a controls table for keyboard and mouse input.
-- [ ] Document installation with a virtual environment and `requirements.txt` or `pyproject.toml`.
-- [ ] Document the supported Python version and tested operating systems.
-- [ ] Place a short polished gameplay GIF directly below the README introduction.
+- [x] Choose a distinctive project name and one-sentence pitch.
+- [x] Update the README feature list to match the implemented game.
+- [x] Remove completed features from the planned-improvements section.
+- [x] Add a controls table for keyboard and mouse input.
+- [x] Document installation with a virtual environment and `requirements.txt` or `pyproject.toml`.
+- [x] Document the supported Python version and tested operating systems.
+- [x] Place a short polished gameplay GIF directly below the README introduction.
 - [ ] Capture clean screenshots of movement, combat, the shop, and a level transition.
-- [ ] Add a small architecture diagram.
-- [ ] Add a section describing important design decisions and trade-offs.
-- [ ] Link to representative code for the game loop, level system, enemy registry, collisions, and tile culling.
-- [ ] Replace unverified performance claims with measured results.
-- [ ] Add project status, development period, personal responsibilities, and key learnings.
-- [ ] Add a license for the source code.
-- [ ] Verify and document the ownership and license of every included asset.
-- [ ] Remove any asset whose origin or usage rights are unclear.
+- [x] Add a small architecture diagram.
+- [x] Add a section describing important design decisions and trade-offs.
+- [x] Link to representative code for the game loop, level system, enemy registry, collisions, and tile culling.
+- [x] Replace unverified performance claims with measured results.
+- [x] Add project status, development period, personal responsibilities, and key learnings.
+- [x] Add a license for the source code.
+- [x] Verify and document the ownership and license of every included asset.
+- [x] Remove any asset whose origin or usage rights are unclear.
 - [ ] Add test and CI badges after the workflow is passing.
 - [ ] Create a downloadable release and verify it on a clean machine.
 - [ ] Publish the build on GitHub Releases or itch.io.
