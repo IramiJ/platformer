@@ -230,3 +230,5 @@ Key learnings:
 
 - Add audio and music.
 - Add save/load support.
+- Add a final boss
+- Finish ramp collision support
