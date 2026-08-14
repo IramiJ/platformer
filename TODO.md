@@ -88,7 +88,7 @@
 - [x] Document installation with a virtual environment and `requirements.txt` or `pyproject.toml`.
 - [x] Document the supported Python version and tested operating systems.
 - [x] Place a short polished gameplay GIF directly below the README introduction.
-- [ ] Capture clean screenshots of movement, combat, the shop, and a level transition.
+- [x] Capture clean screenshots of movement, combat, the shop, and a level transition.
 - [x] Add a small architecture diagram.
 - [x] Add a section describing important design decisions and trade-offs.
 - [x] Link to representative code for the game loop, level system, enemy registry, collisions, and tile culling.

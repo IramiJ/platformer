@@ -63,9 +63,13 @@ The code was primarily written by the project author. AI tools were used as an a
 
 ## Screenshots
 
-![Gameplay screenshot](docs/gameplay.png)
+| Movement | Combat |
+| :---: | :---: |
+| ![The player running through an outdoor level](docs/movement.png) | ![The player fighting a patroller enemy](docs/combat.png) |
 
-![Shop screenshot](docs/shop.png)
+| Shop | Level transition |
+| :---: | :---: |
+| ![The in-game upgrade shop](docs/shop.png) | ![The gate at the end of a level](docs/level_end.png) |
 
 ## Controls
 
@@ -220,7 +224,3 @@ Key learnings:
 
 - Add audio and music.
 - Add save/load support.
-- Capture updated screenshots for movement, combat, shop, and level transitions.
-- Add CI/test badges once the public repository URL and passing workflow are final.
-- Package a downloadable release and tag the first public version.
-- Publish on GitHub Releases or itch.io.
