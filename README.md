@@ -1,5 +1,9 @@
 # Sparkbound
 
+[![CI](https://github.com/IramiJ/sparkbound/actions/workflows/format_and_test.yml/badge.svg?branch=main)](https://github.com/IramiJ/sparkbound/actions/workflows/format_and_test.yml)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 Sparkbound is a fast 2D action-platformer where a sword-and-bow adventurer fights from open wilds into a dungeon, chaining arrows, sword dashes, upgrades, and hit sparks to defeat strange enemies blocking the way.
 
 Built in Python with pygame-ce, Sparkbound is a solo project focused on custom real-time game systems, modular entity architecture, deterministic gameplay logic, and measurable performance work without using an external game engine.

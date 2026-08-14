@@ -97,7 +97,7 @@
 - [x] Add a license for the source code.
 - [x] Verify and document the ownership and license of every included asset.
 - [x] Remove any asset whose origin or usage rights are unclear.
-- [ ] Add test and CI badges after the workflow is passing.
+- [x] Add test and CI badges after the workflow is passing.
 - [ ] Create a downloadable release and verify it on a clean machine.
 - [ ] Publish the build on GitHub Releases or itch.io.
 - [x] Merge the stabilized `feature/rework` branch into the default `main` branch.
