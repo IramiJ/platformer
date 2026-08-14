@@ -10,6 +10,12 @@ Built in Python with pygame-ce, Sparkbound is a solo project focused on custom r
 
 ![Sparkbound gameplay](docs/gameplay.gif)
 
+## Download
+
+[Download Sparkbound for Windows](https://github.com/IramiJ/platformer/releases/latest/download/Sparkbound.exe)
+
+No Python installation is required.
+
 ## Project Status
 
 Sparkbound is a playable portfolio build with level transitions, combat, enemy AI, shop upgrades, pause/death/win overlays, minimap rendering, profiling, and automated tests in place.
